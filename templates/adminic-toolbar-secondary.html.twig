@@ -1,0 +1,15 @@
+{{ attach_library('adminic_toolbar/adminic_toolbar') }}
+<div class="toolbar__secondary">
+  {% if title %}
+  <div class="toolbar__header">
+    {% if title_link %}
+      <a href="{{ url(title_link) }}">{{ title }}</a>
+    {% else %}
+      <a href="{{ url('/') }}">{{ title }}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% for section in sections %}
+    {{ section }}
+  {% endfor %}
+</div>

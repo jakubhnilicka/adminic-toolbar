@@ -1,0 +1,321 @@
+body.adminic-toolbar-primary {
+  margin-left: 48px;
+}
+body.adminic-toolbar-secondary {
+  margin-left: 248px;
+}
+body.adminic-toolbar-top {
+  margin-top: 48px;
+}
+@media only screen and (min-width: 40em) {
+  body.adminic-toolbar-primary {
+    margin-left: 160px;
+  }
+  body.adminic-toolbar-secondary {
+    margin-left: 400px;
+  }
+}
+
+.toolbar__primary a,
+.toolbar__secondary a {
+  border-bottom: none;
+
+}
+.toolbar__primary a:hover,
+.toolbar__secondary a:hover,
+.toolbar__primary a:active,
+.toolbar__secondary a:active,
+.toolbar__primary a:focus,
+.toolbar__secondary a:focus{
+  border-bottom-style: none;
+  text-decoration: none;
+}
+.toolbar__primary {
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
+  position: fixed;
+  background-color: #19212E;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 999999;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__primary {
+    width: 160px;
+  }
+}
+
+.toolbar__secondary {
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
+  position: fixed;
+  background-color: #F2F3F4;
+  top: 0;
+  left: 48px;
+  width: 200px;
+  height: 100vh;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 999998;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__secondary {
+    left: 160px;
+    width: 240px;
+  }
+}
+.toolbar__top {
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
+  height: 16px;
+  line-height: 16px;
+  padding: 16px;
+  background-color: #F5F6F7;
+  font-size: 12px;
+  color: #999;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 999997;
+}
+body.adminic-toolbar-primary .toolbar__top {
+  left: 48px;
+}
+body.adminic-toolbar-secondary .toolbar__top {
+  left: 248px;
+}
+@media only screen and (min-width: 40em) {
+  body.adminic-toolbar-primary .toolbar__top {
+    left: 160px;
+  }
+  body.adminic-toolbar-secondary .toolbar__top {
+    left: 400px;
+  }
+}
+.toolbar__top h1 {
+  margin: 0 16px 0 0;
+  line-height: 16px;
+  padding: 0;
+  display: inline-block;
+  font-size: 14px;
+}
+.toolbar__header {
+  height: 48px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.toolbar__primary .toolbar__header {
+  background-color: #2461E3;
+  color: #FFFFFF;
+}
+.toolbar__secondary .toolbar__header {
+  background-color: #EBECED;
+  color: #919BAD;
+}
+
+.toolbar__header a {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 16px;
+  color: inherit;
+  padding: 16px 16px 16px 56px;
+  -webkit-transition: background-color 0.2s; /* Safari */
+  transition: background-color 0.2s;
+  letter-spacing: 0.05em;
+  align-items: center;
+  justify-content: left;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.toolbar__primary .toolbar__header a {
+  visibility: hidden;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__primary .toolbar__header a {
+      visibility: visible;
+  }
+}
+.toolbar__primary .toolbar__header a {
+  text-transform: uppercase;
+}
+.toolbar__primary .toolbar__header a:hover {
+  background-color: #2056C9;
+}
+.toolbar__secondary .toolbar__header a:hover {
+  background-color: #E3E4E6;
+}
+.toolbar__primary .toolbar__header a:before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  visibility: visible;
+  background-image: url('../images/drupal-logo.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center center;
+}
+.toolbar__header a:hover:before {
+  background-color: #2056C9;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__header a:before {
+    left: 16px;
+  }
+}
+
+.toolbar__section {
+   margin-bottom: 16px;
+}
+.toolbar__section.bottom {
+
+}
+.toolbar__section__header {
+  line-height: 16px;
+  padding: 8px 16px;
+  color: #676E7A;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-top: 1px solid #333;
+  margin-top: -1px;
+  text-indent: -99999px;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__primary .toolbar__section__header {
+    border-top: none;
+    margin-top: 0;
+    text-indent: 0;
+  }
+}
+.toolbar__secondary .toolbar__section__header {
+  border-top: none;
+  margin-top: 0;
+  text-indent: 0;
+}
+.toolbar__section__navigation {}
+.toolbar__section__navigation ul {
+  margin: 0;
+  padding: 0;
+}
+.toolbar__section__navigation li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+.toolbar__section__navigation li a {
+  text-decoration: none;
+  line-height: 16px;
+  padding: 8px 16px 8px 56px;
+  font-size: 12px;
+  color: #919BAD;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  flex-flow: row nowrap;
+  justify-content: left;
+}
+.toolbar__primary .toolbar__section__navigation li a {
+  visibility: hidden;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__primary .toolbar__section__navigation li a {
+    visibility: visible;
+  }
+}
+.toolbar__section__navigation li a.active {
+  color: #FFFFFF;
+  font-weight: bold;
+  letter-spacing: 0.025em;
+}
+.toolbar__section__navigation li a:hover {
+  color: #1D99F1;
+}
+.toolbar__section__navigation li a:before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background-color: transparent;
+  -webkit-transition: background-color 0.2s; /* Safari */
+  transition: background-color 0.2s;
+  margin-right: 8px;
+  position: absolute;
+  left: 12px;
+  visibility: visible;
+}
+@media only screen and (min-width: 40em) {
+  .toolbar__section__navigation li a:before {
+    left: 16px;
+  }
+}
+.toolbar__section__navigation li a:hover:before {
+  background-color: #303743;
+}
+
+.toolbar__secondary .toolbar__section__navigation li a.active {
+  color: #333;
+
+}
+
+
+
+/* Icons */
+.icon:before {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 60% auto;
+  background-attachment: scroll;
+  background-color: transparent;
+  -webkit-filter: brightness(200%); /* Safari 6.0 - 9.0 */
+  filter: brightness(200%);
+  opacity: 0.5;
+}
+#tab-systemadmin-content:before {
+  background-image: url('/core/misc/icons/787878/file.svg');
+}
+#tab-viewmediamedia-page-list:before {
+  background-image: url('/core/misc/icons/787878/file.svg');
+}
+#tab-systemadmin-structure:before {
+  background-image: url('/core/misc/icons/787878/orgchart.svg');
+}
+#tab-entityusercollection:before {
+  background-image: url('/core/misc/icons/787878/people.svg');
+}
+#tab-blockadmin-display:before {
+  background-image: url('/core/misc/icons/787878/paintbrush.svg');
+}
+#tab-systemthemes-page:before {
+  background-image: url('/core/misc/icons/787878/paintbrush.svg');
+}
+#tab-systemmodules-list:before {
+  background-image: url('/core/misc/icons/787878/puzzlepiece.svg');
+}
+#tab-systemadmin-config:before {
+  background-image: url('/core/misc/icons/787878/wrench.svg');
+}
+#tab-systemadmin-reports:before {
+  background-image: url('/core/misc/icons/787878/barchart.svg');
+}
+#tab-helpmain:before {
+  background-image: url('/core/misc/icons/787878/questionmark-disc.svg');
+}
+#entity-user-canonical:before {
+  background-image: url('/core/misc/icons/787878/questionmark-disc.svg');
+}

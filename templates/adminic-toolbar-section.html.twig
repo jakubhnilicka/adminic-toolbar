@@ -1,0 +1,14 @@
+{% if links %}
+<div class="toolbar__section">
+    {% if title %}
+    <div class="toolbar__section__header">{{ title }}</div>
+    {% endif %}
+    <nav class="toolbar__section__navigation">
+      <ul>
+        {% for link in links %}
+          <li>{{ link }}</li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+{% endif %}

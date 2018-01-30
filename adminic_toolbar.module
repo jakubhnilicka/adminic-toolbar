@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function adminic_toolbar_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['adminic_toolbar_top'] = [
+    'variables' => [
+      'info' => NULL,
+    ],
+  ];
+
+  $items['adminic_toolbar_primary'] = [
+    'variables' => [
+      'title' => NULL,
+      'sections' => NULL,
+    ],
+  ];
+
+  $items['adminic_toolbar_secondary'] = [
+    'variables' => [
+      'title' => NULL,
+      'title_link' => NULL,
+      'sections' => NULL,
+    ],
+  ];
+
+  $items['adminic_toolbar_section'] = [
+    'variables' => [
+      'title' => NULL,
+      'links' => NULL,
+    ],
+  ];
+
+  $items['adminic_toolbar_section_tab'] = [
+    'variables' => [
+      'title' => NULL,
+      'route' => NULL,
+      'active' => FALSE,
+    ],
+  ];
+
+  $items['adminic_toolbar_section_link'] = [
+    'variables' => [
+      'title' => NULL,
+      'route' => NULL,
+      'active' => FALSE,
+    ],
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_page_top().
+ *
+ * Add adminic toolbar to the top of the page automatically.
+ *
+ * {@inheritdoc}
+ */
+function adminic_toolbar_page_top(array &$page_top) {
+  /** @var \Drupal\adminic_toolbar\AdminicToolbar $adminic_toolbar */
+  $adminic_toolbar = \Drupal::service('adminic_toolbar');
+
+  $toolbarPrimary = $adminic_toolbar->getToolbarPrimary();
+  $toolbarSecondary = $adminic_toolbar->getToolbarSecondary();
+  $toolbarTop = $adminic_toolbar->getToolbarTop();
+
+  $page_top['adminic_toolbar_primary'] = $toolbarPrimary;
+  $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
+  $page_top['adminic_toolbar_top'] = $toolbarTop;
+}
+
+function adminic_toolbar_preprocess_html(&$variables) {
+  // Remove default toolbar.
+  // TODO: Remove libraries for toolbar.
+  if (isset($variables['page_top']['toolbar'])) {
+    unset($variables['page_top']['toolbar']);
+  }
+  if (isset($variables['page_top']['adminic_toolbar_primary'])) {
+    $variables['attributes']['class'][] = 'adminic-toolbar-primary';
+  }
+  if (isset($variables['page_top']['adminic_toolbar_secondary'])) {
+    $variables['attributes']['class'][] = 'adminic-toolbar-secondary';
+  }
+  if (isset($variables['page_top']['adminic_toolbar_top'])) {
+    $variables['attributes']['class'][] = 'adminic-toolbar-top';
+  }
+}

@@ -1,0 +1,4 @@
+services:
+  adminic_toolbar:
+    class: Drupal\adminic_toolbar\AdminicToolbar
+    arguments: ['@router.route_provider', '@current_route_match', '@module_handler', '@access_manager', '@current_user']

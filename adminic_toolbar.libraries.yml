@@ -1,0 +1,5 @@
+adminic_toolbar:
+  version: VERSION
+  css:
+    component:
+      css/adminic_toolbar.css: {}
