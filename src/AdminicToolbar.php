@@ -149,8 +149,13 @@ class AdminicToolbar {
     $config = \Drupal::config('system.site');
     $adminic_toolbar_top[] = [
       '#type' => 'html_tag',
-      '#tag' => 'h1',
+      '#tag' => 'div',
       '#value' => $config->get('name'),
+      '#attributes' => [
+        'class' => [
+          'site-title',
+        ],
+      ],
     ];
     $adminic_toolbar_top[] = [
       '#type' => 'markup',
