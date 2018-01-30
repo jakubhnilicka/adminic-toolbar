@@ -42,6 +42,7 @@ body.adminic-toolbar-top {
   flex-direction: column;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
   z-index: 999999;
+  overflow-y: scroll;
 }
 @media only screen and (min-width: 40em) {
   .toolbar__primary {
@@ -59,6 +60,7 @@ body.adminic-toolbar-top {
   height: 100vh;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
   z-index: 999998;
+  overflow-y: scroll;
 }
 @media only screen and (min-width: 40em) {
   .toolbar__secondary {
