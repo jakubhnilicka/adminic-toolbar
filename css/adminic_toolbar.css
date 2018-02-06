@@ -344,46 +344,38 @@ body.adminic-toolbar-secondary .toolbar__top {
 /**
  * Icon images.
  */
-#tab-systemadmin-content:before {
+#tab-content:before {
   background-image: url('../images/content.svg');
 }
 
-#tab-viewmediamedia-page-list:before {
-  background-image: url('../images/content.svg');
-}
-
-#tab-systemadmin-structure:before {
+#tab-structure:before {
   background-image: url('../images/structure.svg');
 }
 
-#tab-entityusercollection:before {
+#tab-users:before {
   background-image: url('../images/people.svg');
 }
 
-#tab-blockadmin-display:before {
+#tab-blocks:before {
   background-image: url('../images/layout.svg');
 }
 
-#tab-systemthemes-page:before {
+#tab-appearance:before {
   background-image: url('../images/appearance.svg');
 }
 
-#tab-systemmodules-list:before {
+#tab-extend:before {
   background-image: url('../images/extend.svg');
 }
 
-#tab-systemadmin-config:before {
+#tab-configuration:before {
   background-image: url('../images/configuration.svg');
 }
 
-#tab-systemadmin-reports:before {
+#tab-reports:before {
   background-image: url('../images/reports.svg');
 }
 
-#tab-helpmain:before {
+#tab-help:before {
   background-image: url('../images/help.svg');
-}
-
-#entity-user-canonical:before {
-  background-image: url('../images/people.svg');
 }

@@ -360,10 +360,10 @@ class AdminicToolbar {
       ],
     ];
 
-    $adminic_toolbar_top[] = [
+    /*$adminic_toolbar_top[] = [
       '#type' => 'markup',
       '#markup' => 'Route: ' . $current_route_name,
-    ];
+    ];*/
 
     if ($adminic_toolbar_top) {
       return [
@@ -422,6 +422,7 @@ class AdminicToolbar {
     $secondaryWrappers = [];
     foreach ($tabs as $tab) {
       $sections = $this->getTabSections($tab);
+
       $secondaryWrappers[$tab->getId()] = [
         'title' => $tab->getTitle(),
         'route' => $tab->getRoute(),
@@ -442,11 +443,15 @@ class AdminicToolbar {
       }
     );
 
-    $secondarySections = array_map(function($section) {
-      return $this->getSecondarySection($section);
-    }, $secondarySections);
+    $renderedSections = [];
+    foreach ($secondarySections as $key => $secondarySection) {
+      $ss = $this->getSecondarySection($secondarySection);
+      if ($ss != NULL) {
+        $renderedSections[$key] = $ss;
+      }
+    }
 
-    return $secondarySections;
+    return $renderedSections;
   }
 
   /**
@@ -501,18 +506,17 @@ class AdminicToolbar {
       }
     );
 
+    if(empty($sectionValidLinks)) {
+      return NULL;
+    }
+
     /** @var \Drupal\adminic_toolbar\Components\Link $link */
     $sectionLinks = [];
     foreach ($sectionValidLinks as $link) {
       $sectionLinks[] = $link->getRenderArray();
     }
-
-    if ($sectionLinks) {
-      $section->setLinks($sectionLinks);
-      return $section->getRenderArray();
-    }
-
-    return NULL;
+    $section->setLinks($sectionLinks);
+    return $section->getRenderArray();
   }
 
   /**
