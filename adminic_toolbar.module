@@ -64,9 +64,9 @@ function adminic_toolbar_page_top(array &$page_top) {
   /** @var \Drupal\adminic_toolbar\AdminicToolbar $adminic_toolbar */
   $adminic_toolbar = \Drupal::service('adminic_toolbar');
 
-  $toolbarPrimary = $adminic_toolbar->getToolbarPrimary();
-  $toolbarSecondary = $adminic_toolbar->getToolbarSecondary();
-  $toolbarTop = $adminic_toolbar->getToolbarTop();
+  $toolbarPrimary = $adminic_toolbar->getPrimaryToolbar();
+  $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
+  $toolbarTop = $adminic_toolbar->getTopToolbar();
 
   $page_top['adminic_toolbar_primary'] = $toolbarPrimary;
   $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;

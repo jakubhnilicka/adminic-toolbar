@@ -35,6 +35,7 @@ body.adminic-toolbar-top {
 .toolbar__secondary a:focus {
   border-bottom: none;
   text-decoration: none;
+  color: inherit;
 }
 
 .toolbar__primary,
@@ -131,9 +132,6 @@ body.adminic-toolbar-secondary .toolbar__top {
 
 .toolbar__primary .toolbar__header a {
   visibility: hidden;
-}
-
-.toolbar__primary .toolbar__header a {
   text-transform: uppercase;
 }
 
@@ -156,6 +154,20 @@ body.adminic-toolbar-secondary .toolbar__top {
   left: 12px;
   visibility: visible;
   background: url('../images/drupal-logo.svg') no-repeat center;
+  background-size: 100% auto;
+}
+
+.toolbar__secondary .toolbar__header a:before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  visibility: visible;
+  background: url('../images/back.svg') no-repeat center;
   background-size: 100% auto;
 }
 
@@ -247,6 +259,7 @@ body.adminic-toolbar-secondary .toolbar__top {
   margin-right: 8px;
   position: absolute;
   left: 12px;
+  top: 3px;
   visibility: visible;
 }
 
@@ -262,7 +275,7 @@ body.adminic-toolbar-secondary .toolbar__top {
 /* Icons */
 .icon:before {
   background: transparent no-repeat scroll center ;
-  background-size: 90% auto;
+  background-size: 100% auto;
 }
 
 /**
@@ -337,7 +350,7 @@ body.adminic-toolbar-secondary .toolbar__top {
 }
 
 #tab-blockadmin-display:before {
-  background-image: url('../images/appearance.svg');
+  background-image: url('../images/layout.svg');
 }
 
 #tab-systemthemes-page:before {

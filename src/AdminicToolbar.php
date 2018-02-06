@@ -2,6 +2,9 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\adminic_toolbar\Components\Link;
+use Drupal\adminic_toolbar\Components\Section;
+use Drupal\adminic_toolbar\Components\Tab;
 use Drupal\Core\Access\AccessManager;
 use Drupal\Core\Discovery\YamlDiscovery;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -20,11 +23,6 @@ class AdminicToolbar {
    * @var array
    */
   private $config;
-
-  /**
-   * @var array
-   */
-  private $activeTab = NULL;
 
   /**
    * @var array
@@ -52,6 +50,48 @@ class AdminicToolbar {
   private $currentUser;
 
   /**
+   * List of links.
+   *
+   * @var array|NULL
+   */
+  private $links;
+
+  /**
+   * List of active links.
+   *
+   * @var array|NULL
+   */
+  private $activeLinks;
+
+  /**
+   * List of sections.
+   *
+   * @var array|NULL
+   */
+  private $sections;
+
+  /**
+   * List of active sections.
+   *
+   * @var array|NULL
+   */
+  private $activeSections;
+
+  /**
+   * List of tabs.
+   *
+   * @var array|NULL
+   */
+  private $tabs;
+
+  /**
+   * List of active tabs.
+   *
+   * @var array|NULL
+   */
+  private $activeTabs;
+
+  /**
    * AdminicToolbar constructor.
    *
    * @param \Drupal\Core\Routing\RouteProvider $routeProvider
@@ -75,101 +115,18 @@ class AdminicToolbar {
     $this->moduleHandler = $moduleHandler;
     $this->accessManager = $accessManager;
     $this->currentUser = $currentUser;
+    $this->create();
+  }
+
+  /**
+   * Parse all necessary data.
+   */
+  protected function create() {
     $this->config = $this->loadConfig();
     $this->routes = $this->getAvailableRoutes();
-    $this->activeTab = $this->setActiveTab();
-  }
-
-  /**
-   * Get render array for primary toolbar.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  public function getToolbarPrimary() {
-    $primarySections = $this->getPrimarySections();
-
-    $sections = [];
-    foreach ($primarySections as $section) {
-      $sections[] = $this->getPrimarySection($section);
-    }
-
-    if ($sections) {
-      return [
-        '#theme' => 'adminic_toolbar_primary',
-        '#title' => 'Drupal', // TODO: Enable to modify custom title.
-        '#sections' => $sections,
-      ];
-    }
-    return NULL;
-  }
-
-  /**
-   * Get render array for secondary toolbar.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  public function getToolbarSecondary() {
-    $secondarySections = $this->getSecondarySections();
-
-    $sections = [];
-    foreach ($secondarySections as $section) {
-      $secondarySection = $this->getSecondarySection($section);
-      if(!empty($secondarySection)) {
-        $sections[] = $secondarySection;
-      }
-    }
-
-    if ($sections) {
-      $activeLink = $this->getActiveLink();
-      $activeSection = $this->getActiveSection($activeLink);
-      $activeTab = $this->getActiveTab($activeSection);
-
-      return [
-        '#theme' => 'adminic_toolbar_secondary',
-        '#title' => $this->getTabTitle($activeTab),
-        '#title_link' => $this->getTabRoute($activeTab),
-        '#sections' => $sections,
-      ];
-    }
-  }
-
-  /**
-   * Get render array for top toolbar.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  public function getToolbarTop() {
-
-    $current_route_name = $this->currentRouteMatch->getRouteName();
-
-    $adminic_toolbar_top = [];
-    $config = \Drupal::config('system.site');
-    $adminic_toolbar_top[] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => $config->get('name'),
-      '#attributes' => [
-        'class' => [
-          'site-title',
-        ],
-      ],
-    ];
-    $adminic_toolbar_top[] = [
-      '#type' => 'markup',
-      '#markup' => 'Route: ' . $current_route_name,
-    ];
-
-    if ($adminic_toolbar_top) {
-      return [
-        '#theme' => 'adminic_toolbar_top',
-        '#info' => $adminic_toolbar_top,
-      ];
-    }
-
-    return NULL;
+    $this->links = $this->getLinks();
+    $this->sections = $this->getSections();
+    $this->tabs = $this->getTabs();
   }
 
   /**
@@ -184,488 +141,6 @@ class AdminicToolbar {
     return $toolbarData;
   }
 
-  /**
-   * Get all defined tabs from all config files.
-   *
-   * @return array
-   *   Array of tabs.
-   */
-  protected function getTabs() {
-    // Get main sections
-    $tabs = [];
-    $config = $this->config;
-
-    foreach ($config as $configFile) {
-      if (isset($configFile['tabs'])) {
-        foreach ($configFile['tabs'] as $tab) {
-          $id = $tab['id'];
-          $section = isset($tab['section']) ? $tab['section'] : NULL;
-          $route = $tab['route'];
-          $title = isset($tab['title']) ? $tab['title'] : NULL;
-          $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
-          if ($disabled == FALSE) {
-            $tabs[$id] = [
-              'id' => $id,
-              'section' => $section,
-              'route' => $route,
-              'title' => $title,
-            ];
-          }
-        }
-      }
-    }
-    return $tabs;
-  }
-
-  /**
-   * Get all defined sections from all config files.
-   *
-   * @return array
-   *   Array of sections.
-   */
-  protected function getSections(): array {
-    $sections = [];
-    $config = $this->config;
-
-    foreach ($config as $configFile) {
-      if (isset($configFile['sections'])) {
-        foreach ($configFile['sections'] as $section) {
-          $id = $section['id'];
-          $title = isset($section['title']) ? $section['title'] : NULL;
-          $tab = isset($section['tab']) ? $section['tab'] : NULL;
-          $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
-          if ($disabled == FALSE) {
-            $sections[$id] = ['id' => $id, 'tab' => $tab, 'title' => $title];
-          }
-        }
-      }
-    }
-    return $sections;
-  }
-
-  /**
-   * Get all defined links from all config files.
-   *
-   * @return array
-   *   Array of links.
-   */
-  protected function getLinks(): array {
-    // Get main sections
-    $links = [];
-    $config = $this->config;
-
-    foreach ($config as $configFile) {
-      if (isset($configFile['links'])) {
-        foreach ($configFile['links'] as $link) {
-          $section = $link['section'];
-          $route = $link['route'];
-          $title = isset($link['title']) ? $link['title'] : NULL;
-          $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
-          if ($disabled == FALSE) {
-            $key = sprintf('%s.%s', $section, $route);
-            $links[$key] = [
-              'section' => $section,
-              'route' => $route,
-              'title' => $title,
-            ];
-          }
-        }
-      }
-    }
-    return $links;
-  }
-
-  /**
-   * Tabs
-   */
-  /**
-   * Get renderable array for tab.
-   *
-   * @param $tab
-   *   Tab.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  protected function getTab($tab) {
-    $routeName = $this->getLinkRoute($tab);
-    if ($this->isRouteValid($routeName) && $this->isRouteAccessible($routeName) && !$this->isTabDisabled($tab)) {
-      return [
-        '#theme' => 'adminic_toolbar_section_tab',
-        '#title' => $this->getTabTitle($tab),
-        '#route' => $this->getTabRoute($tab),
-        '#active' => $this->isTabActive($tab),
-      ];
-    }
-    return NULL;
-  }
-
-  /**
-   * Get tab title.
-   *
-   * @param $tab
-   *   Tab.
-   *
-   * @return mixed
-   *   Return tab title.
-   */
-  protected function getTabTitle($tab) {
-    if (empty($tab['title'])) {
-      return $this->routes[$this->getTabRoute($tab)];
-    }
-    return $tab['title'];
-  }
-
-  /**
-   * Get tab route.
-   *
-   * @param $tab
-   *   Tab.
-   *
-   * @return mixed
-   *   Return tab route.
-   */
-  protected function getTabRoute($tab) {
-    return $tab['route'];
-  }
-
-  /**
-   * Check if tab is disabled.
-   *
-   * @param $tab
-   *   Tab.
-   *
-   * @return bool
-   *   True if route is disabled or flase.
-   */
-  protected function isTabDisabled($tab) {
-    // Autogenerate titles
-    if (empty($tab['disabled'])) {
-      return FALSE;
-    }
-    $disabled = $tab['disabled'] == TRUE ? TRUE : FALSE;
-    return $disabled;
-  }
-
-  /**
-   * Check if tab is active.
-   *
-   * @param $tab
-   *   Tab.
-   *
-   * @return boolean
-   *   Return true if tab is active or false.
-   */
-  protected function isTabActive($tab) {
-    if (empty($this->activeTab)) {
-      return FALSE;
-    }
-    if ($this->activeTab['id'] == $tab['id']) {
-      return TRUE;
-    }
-    return FALSE;
-  }
-
-  /**
-   * Get active tab defined by active session.
-   *
-   * @param $activeSection
-   *   Active section.
-   *
-   * @return array
-   *   Return first active tab.
-   */
-  protected function getActiveTab($activeSection) {
-    $tabs = $this->getTabs();
-    $current_route_name = $this->currentRouteMatch->getRouteName();
-
-    if ($activeSection == FALSE) {
-      $activeTabs = array_filter(
-        $tabs, function ($tab) use ($current_route_name) {
-          return $tab['route'] == $current_route_name;
-        }
-      );
-    }
-    else {
-      $activeTabs = array_filter(
-        $tabs, function ($tab) use ($activeSection) {
-          return $tab['id'] == $activeSection['tab'];
-        }
-      );
-    }
-
-    $activeTab = reset($activeTabs);
-    return $activeTab;
-  }
-
-  protected function setActiveTab() {
-    $activeLink = $this->getActiveLink();
-    $activeSection = $this->getActiveSection($activeLink);
-    return $this->getActiveTab($activeSection);
-  }
-
-  /**
-   * Sections
-   */
-  /**
-   * Get sections defined for primary toolbar.
-   *
-   * @return array
-   *   Array of sections.
-   */
-  protected function getPrimarySections(): array {
-    $sections = $this->getSections();
-    $primarySections = array_filter(
-      $sections, function ($section) {
-        return $section['tab'] == NULL;
-      }
-    );
-    return $primarySections;
-  }
-
-  /**
-   * Get sections defined for secondary toolbar.
-   *
-   * @return array
-   *   Array of sections.
-   */
-  protected function getSecondarySections(): array {
-    $sections = $this->getSections();
-
-    $secondarySections = [];
-    if (!empty($this->activeTab)) {
-      $activeTab = $this->activeTab;
-      $secondarySections = array_filter(
-        $sections, function ($section) use ($activeTab) {
-          $tab = $section['tab'];
-          return !empty($tab) && $tab == $activeTab['id'];
-        }
-      );
-    }
-
-    return $secondarySections;
-  }
-
-  /**
-   * Get renderable array for primary section.
-   *
-   * @param array $section
-   *   Section.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  protected function getPrimarySection(array $section) {
-    $tabs = $this->getTabs();
-    $sectionId = $section['id'];
-    $sectionValidLinks = array_filter(
-      $tabs, function ($tab) use ($sectionId) {
-        return $tab['section'] == $sectionId;
-      }
-    );
-    $sectionLinks = [];
-    foreach ($sectionValidLinks as $link) {
-      $sectionLinks[] = $this->getTab($link);
-    }
-
-    return [
-      '#theme' => 'adminic_toolbar_section',
-      '#title' => $this->getSectionTitle($section),
-      '#links' => $sectionLinks,
-    ];
-  }
-
-  /**
-   * Get renderable array for secondary section.
-   *
-   * @param array $section
-   *   Section.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  protected function getSecondarySection(array $section) {
-    $links = $this->getLinks();
-    $sectionId = $section['id'];
-    $sectionValidLinks = array_filter(
-      $links, function ($link) use ($sectionId) {
-        return $link['section'] == $sectionId;
-      }
-    );
-    $sectionLinks = [];
-    foreach ($sectionValidLinks as $link) {
-      $sectionLinks[] = $this->getLink($link);
-    }
-    if (!empty($sectionLinks)) {
-      return [
-        '#theme' => 'adminic_toolbar_section',
-        '#title' => $this->getSectionTitle($section),
-        '#links' => $sectionLinks,
-      ];
-    }
-    //return NULL;
-  }
-
-  /**
-   * Get active section defined by active link.
-   *
-   * @param $activeLink
-   *   Active link.
-   *
-   * @return array
-   *   Return first active section.
-   */
-  protected function getActiveSection($activeLink) {
-    $sections = $this->getSections();
-    // Active links
-    $activeSections = array_filter(
-      $sections, function ($section) use ($activeLink) {
-      return $section['id'] == $activeLink['section'];
-    }
-    );
-
-    $activeSection = reset($activeSections);
-    return $activeSection;
-  }
-
-  /**
-   * Get section title.
-   *
-   * @param array $section
-   *   Section.
-   *
-   * @return string|null
-   *   Retrun section title or null.
-   */
-  protected function getSectionTitle(array $section) {
-    $sectionTitle = isset($section['title']) ? $section['title'] : NULL;
-    return $sectionTitle;
-  }
-
-  /**
-   * Get section type.
-   *
-   * @param array $section
-   *   Section.
-   *
-   * @return string
-   *   Retrun section type.
-   */
-  protected function getSectionType(array $section) {
-    return 'adminic_toolbar_section';
-  }
-
-  /**
-   * Links
-   */
-  /**
-   * Get active link defined by current route.
-   *
-   * @return array
-   *   Return first active link.
-   */
-  protected function getActiveLink() {
-    $current_route_name = $this->currentRouteMatch->getRouteName();
-    $links = $this->getLinks();
-    $activeLinks = array_filter(
-      $links, function ($link) use ($current_route_name) {
-        return $link['route'] == $current_route_name;
-      }
-    );
-
-    $activeLink = reset($activeLinks);
-    return $activeLink;
-  }
-
-  /**
-   * Get renderable array for link.
-   *
-   * @param $link
-   *   Link.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  protected function getLink($link) {
-    $routeName = $this->getLinkRoute($link);
-    if ($this->isRouteValid($routeName) && $this->isRouteAccessible($routeName) && !$this->isLinkDisabled($link)) {
-      return [
-        '#theme' => 'adminic_toolbar_section_link',
-        '#title' => $this->getLinkTitle($link),
-        '#route' => $this->getLinkRoute($link),
-        '#active' => $this->isLinkActive($link),
-      ];
-    }
-    return NULL;
-  }
-
-  /**
-   * Get link title.
-   *
-   * @param $link
-   *   Link.
-   *
-   * @return mixed
-   *   Return link title.
-   */
-  protected function getLinkTitle($link) {
-    if (empty($link['title'])) {
-      return $this->routes[$this->getLinkRoute($link)];
-    }
-    return $link['title'];
-  }
-
-  /**
-   * Get link route.
-   *
-   * @param $link
-   *   Link.
-   *
-   * @return mixed
-   *   Return link route.
-   */
-  protected function getLinkRoute($link) {
-    return $link['route'];
-  }
-
-  /**
-   * Check if link is active.
-   *
-   * @param $link
-   *   Link.
-   *
-   * @return boolean
-   *   Return true if link is active or false.
-   */
-  protected function isLinkActive($link) {
-    $current_route_name = $this->currentRouteMatch->getRouteName();
-    if ($this->getLinkRoute($link) == $current_route_name) {
-      return TRUE;
-    }
-    return FALSE;
-  }
-
-  /**
-   * Check if link is disabled.
-   *
-   * @param $link
-   *   Link.
-   *
-   * @return bool
-   *   True if route is disabled or flase.
-   */
-  protected function isLinkDisabled($link) {
-    // Autogenerate titles
-    if (empty($link['disabled'])) {
-      return FALSE;
-    }
-    $disabled = $link['disabled'] == TRUE ? TRUE : FALSE;
-    return $disabled;
-  }
-
-  /**
-   * Routes
-   */
   /**
    * Get available routes from system.
    *
@@ -682,6 +157,367 @@ class AdminicToolbar {
     }
 
     return $routes;
+  }
+
+  /**
+   * Get all defined links from all config files.
+   *
+   * @return array
+   *   Array of links.
+   */
+  protected function getLinks(): array {
+    $config = $this->config;
+    $links = [];
+    $activeLinks = [];
+    $currentRouteName = $this->currentRouteMatch->getRouteName();
+
+    foreach ($config as $configFile) {
+      if (isset($configFile['links'])) {
+        foreach ($configFile['links'] as $link) {
+          $section = $link['section'];
+          $route = $link['route'];
+          $title = isset($link['title']) ? $link['title'] : $this->routes[$route];
+          $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
+          $isValid = $this->isRouteValid($route);
+          $active = FALSE;
+          if ($disabled == FALSE && $isValid) {
+            $key = sprintf('%s.%s', $section, $route);
+            $newLink = new Link($section, $route, $title, $active);
+            $links[$key] = $newLink;
+            if ($route == $currentRouteName) {
+              $newLink->setActive();
+              $activeLinks[$key] = $newLink;
+            }
+          }
+        }
+      }
+    }
+
+    $this->activeLinks = empty($activeLinks) ? NULL : $activeLinks;
+    return $links;
+  }
+
+  /**
+   * Get all defined sections from all config files.
+   *
+   * @return array
+   *   Array of sections.
+   */
+  protected function getSections(): array {
+    $config = $this->config;
+    $sections = [];
+    $activeSections = [];
+    /** @var \Drupal\adminic_toolbar\Components\Link $activeLink */
+    $activeLink = $this->getActiveLink();
+
+    foreach ($config as $configFile) {
+      if (isset($configFile['sections'])) {
+        foreach ($configFile['sections'] as $section) {
+          $id = $section['id'];
+          $title = isset($section['title']) ? $section['title'] : NULL;
+          $tab = isset($section['tab']) ? $section['tab'] : NULL;
+          $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
+          if ($disabled == FALSE) {
+            $newSection = new Section($id, $title, $tab);
+            $sections[$id] = $newSection;
+            if ($activeLink && $id == $activeLink->getSection()) {
+              $activeSections[] = $newSection;
+            }
+          }
+        }
+      }
+    }
+    $this->activeSections = empty($activeSections) ? NULL : $activeSections;
+    return $sections;
+  }
+
+  /**
+   * Get all defined tabs from all config files.
+   *
+   * @return array
+   *   Array of tabs.
+   */
+  protected function getTabs() {
+    $config = $this->config;
+    $tabs = [];
+    $activeTabs = [];
+    /** @var \Drupal\adminic_toolbar\Components\Section $activeSections */
+    $activeSections =$this->getActiveSection();
+    $currentRouteName = $this->currentRouteMatch->getRouteName();
+
+    foreach ($config as $configFile) {
+      if (isset($configFile['tabs'])) {
+        foreach ($configFile['tabs'] as $tab) {
+          $id = $tab['id'];
+          $section = isset($tab['section']) ? $tab['section'] : NULL;
+          $route = $tab['route'];
+          $title = isset($tab['title']) ? $tab['title'] : $this->routes[$route];
+          $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
+          $isValid = $this->isRouteValid($route);
+          $active = FALSE;
+          if ($disabled == FALSE && $isValid) {
+            $newTab = new Tab($id, $section, $route, $title, $active);
+            if ($activeSections && $id == $activeSections->getTab()) {
+              $newTab->setActive();
+              $activeTabs[$id] = $newTab;
+            }
+            elseif ($route == $currentRouteName) {
+              $newTab->setActive();
+              $activeTabs[$id] = $newTab;
+            }
+            $tabs[$id] = $newTab;
+          }
+        }
+      }
+    }
+    $this->activeTabs = empty($activeTabs) ? NULL : $activeTabs;
+    return $tabs;
+  }
+
+  /**
+   * Get render array for primary toolbar.
+   *
+   * @return array|null
+   *   Retrun renderable array or null.
+   */
+  public function getPrimaryToolbar() {
+    $primarySections = $this->getPrimarySections();
+
+    $sections = [];
+    foreach ($primarySections as $section) {
+      $sections[] = $this->getPrimarySection($section);
+    }
+
+    if ($sections) {
+      return [
+        '#theme' => 'adminic_toolbar_primary',
+        '#title' => 'Drupal',
+        '#sections' => $sections,
+      ];
+    }
+    return NULL;
+  }
+
+  /**
+   * Get render array for secondary toolbar.
+   *
+   * @return array|null
+   *   Retrun renderable array or null.
+   */
+  public function getSecondaryToolbar() {
+    $secondarySections = $this->getSecondarySections();
+
+    $sections = [];
+    foreach ($secondarySections as $section) {
+      $secondarySection = $this->getSecondarySection($section);
+      if(!empty($secondarySection)) {
+        $sections[] = $secondarySection;
+      }
+    }
+
+    if ($sections) {
+      /** @var \Drupal\adminic_toolbar\Components\Tab $activeTab */
+      $activeTab = $this->getActiveTab();
+
+      return [
+        '#theme' => 'adminic_toolbar_secondary',
+        '#title' => $activeTab->getTitle(),
+        '#title_link' => $activeTab->getRoute(),
+        '#sections' => $sections,
+      ];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get render array for top toolbar.
+   *
+   * @return array|null
+   *   Retrun renderable array or null.
+   */
+  public function getTopToolbar() {
+
+    $current_route_name = $this->currentRouteMatch->getRouteName();
+
+    $adminic_toolbar_top = [];
+    // TODO: move config to constructor.
+    $config = \Drupal::config('system.site');
+
+    $adminic_toolbar_top[] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => $config->get('name'),
+      '#attributes' => [
+        'class' => [
+          'site-title',
+        ],
+      ],
+    ];
+
+    $adminic_toolbar_top[] = [
+      '#type' => 'markup',
+      '#markup' => 'Route: ' . $current_route_name,
+    ];
+
+    if ($adminic_toolbar_top) {
+      return [
+        '#theme' => 'adminic_toolbar_top',
+        '#info' => $adminic_toolbar_top,
+      ];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get sections defined for primary toolbar.
+   *
+   * @return array
+   *   Array of sections.
+   */
+  protected function getPrimarySections(): array {
+    $sections = $this->sections;
+
+    $primarySections = array_filter(
+      $sections, function ($section) {
+        return $section->getTab() == NULL;
+      }
+    );
+
+    return $primarySections;
+  }
+
+  /**
+   * Get sections defined for secondary toolbar.
+   *
+   * @return array
+   *   Array of sections.
+   */
+  protected function getSecondarySections(): array {
+    $sections = $this->sections;
+
+    $secondarySections = [];
+    if ($this->getActiveTab()) {
+      /** @var \Drupal\adminic_toolbar\Components\Tab $activeTab */
+      $activeTab = $this->getActiveTab();
+      $secondarySections = array_filter(
+        $sections, function ($section) use ($activeTab) {
+          $tab = $section->getTab();
+          return !empty($tab) && $tab == $activeTab->getId();
+        }
+      );
+    }
+
+    return $secondarySections;
+  }
+
+  /**
+   * Get renderable array for primary section.
+   *
+   * @param \Drupal\adminic_toolbar\Components\Section $section
+   *   Section.
+   *
+   * @return array|null
+   *   Retrun renderable array or null.
+   */
+  protected function getPrimarySection(Section $section) {
+    $tabs = $this->tabs;
+    $sectionId = $section->getId();
+
+    $sectionValidTabs = array_filter(
+      $tabs, function ($tab) use ($sectionId) {
+        return $tab->getSection() == $sectionId;
+      }
+    );
+
+    $sectionTabs = [];
+    /** @var \Drupal\adminic_toolbar\Components\Tab $tab */
+    foreach ($sectionValidTabs as $tab) {
+      $sectionTabs[] = $tab->getRenderArray();
+    }
+
+    if ($sectionTabs) {
+      $section->setLinks($sectionTabs);
+      return $section->getRenderArray();
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get renderable array for secondary section.
+   *
+   * @param \Drupal\adminic_toolbar\Components\Section $section
+   *   Section.
+   *
+   * @return array|null
+   *   Retrun renderable array or null.
+   */
+  protected function getSecondarySection(Section $section) {
+    $links = $this->links;
+    $sectionId = $section->getId();
+
+    $sectionValidLinks = array_filter(
+      $links, function ($link) use ($sectionId) {
+        return $link->getSection() == $sectionId;
+      }
+    );
+
+    /** @var \Drupal\adminic_toolbar\Components\Link $link */
+    $sectionLinks = [];
+    foreach ($sectionValidLinks as $link) {
+      $sectionLinks[] = $link->getRenderArray();
+    }
+
+    if ($sectionLinks) {
+      $section->setLinks($sectionLinks);
+      return $section->getRenderArray();
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get active link defined by current route.
+   *
+   * @return array
+   *   Return first active link.
+   */
+  protected function getActiveLink() {
+    $activeLinks = $this->activeLinks;
+    if ($activeLinks) {
+      return reset($activeLinks);
+    }
+    return NULL;
+  }
+
+  /**
+   * Get active section defined by active link.
+   *
+   * @return array
+   *   Return first active section.
+   */
+  protected function getActiveSection() {
+    $activeSections = $this->activeSections;
+    if ($activeSections) {
+      return reset($activeSections);
+    }
+    return NULL;
+  }
+
+  /**
+   * Get active tab defined by active session.
+   *
+   * @return array
+   *   Return first active tab.
+   */
+  protected function getActiveTab() {
+    $activeTabs = $this->activeTabs;
+    if ($activeTabs) {
+      return reset($activeTabs);
+    }
+    return NULL;
   }
 
   /**
