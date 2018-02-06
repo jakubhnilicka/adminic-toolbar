@@ -19,6 +19,10 @@
           $('#' + sectinWrapperId).addClass('active');
         }
       });
+      $('.toolbar_secondary_wrapper .toolbar__header a').on('click', function(e) {
+        e.preventDefault();
+        $(this).parent().parent().removeClass('active');
+      });
     }
   };
 
