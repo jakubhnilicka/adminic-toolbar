@@ -115,6 +115,7 @@ class Tab {
       '#title' => $this->getTitle(),
       '#route' => $this->getRoute(),
       '#active' => $this->isActive(),
+      '#id' => $this->getId(),
     ];
   }
 

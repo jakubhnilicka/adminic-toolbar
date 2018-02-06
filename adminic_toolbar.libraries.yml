@@ -3,3 +3,8 @@ adminic_toolbar:
   css:
     component:
       css/adminic_toolbar.css: {}
+  js:
+    js/adminic-toolbar.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

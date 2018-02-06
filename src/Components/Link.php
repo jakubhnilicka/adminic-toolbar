@@ -46,6 +46,10 @@ class Link {
     return $this->section;
   }
 
+  public function setSection($section) {
+    $this->section = $section;
+  }
+
   /**
    * Get link route.
    *
@@ -54,6 +58,9 @@ class Link {
    */
   public function getRoute() {
     return $this->route;
+  }
+  public function setRoute($route) {
+    $this->route = $route;
   }
 
   /**
@@ -64,6 +71,9 @@ class Link {
    */
   public function getTitle() {
     return $this->title;
+  }
+  public function setTitle($title) {
+    $this->title = $title;
   }
 
   /**
@@ -81,6 +91,10 @@ class Link {
    */
   public function setActive() {
     $this->active = TRUE;
+  }
+
+  public function setInactive() {
+    $this->active = FALSE;
   }
 
   /**

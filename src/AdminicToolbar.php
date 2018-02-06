@@ -176,17 +176,19 @@ class AdminicToolbar {
         foreach ($configFile['links'] as $link) {
           $section = $link['section'];
           $route = $link['route'];
-          $title = isset($link['title']) ? $link['title'] : $this->routes[$route];
-          $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
           $isValid = $this->isRouteValid($route);
-          $active = FALSE;
-          if ($disabled == FALSE && $isValid) {
-            $key = sprintf('%s.%s', $section, $route);
-            $newLink = new Link($section, $route, $title, $active);
-            $links[$key] = $newLink;
-            if ($route == $currentRouteName) {
-              $newLink->setActive();
-              $activeLinks[$key] = $newLink;
+          if ($isValid) {
+            $title = isset($link['title']) ? $link['title'] : $this->routes[$route];
+            $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
+            $active = FALSE;
+            if ($disabled == FALSE && $isValid) {
+              $key = sprintf('%s.%s', $section, $route);
+              $newLink = new Link($section, $route, $title, $active);
+              $links[$key] = $newLink;
+              if ($route == $currentRouteName) {
+                $newLink->setActive();
+                $activeLinks[$key] = $newLink;
+              }
             }
           }
         }
@@ -251,21 +253,23 @@ class AdminicToolbar {
           $id = $tab['id'];
           $section = isset($tab['section']) ? $tab['section'] : NULL;
           $route = $tab['route'];
-          $title = isset($tab['title']) ? $tab['title'] : $this->routes[$route];
-          $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
           $isValid = $this->isRouteValid($route);
-          $active = FALSE;
-          if ($disabled == FALSE && $isValid) {
-            $newTab = new Tab($id, $section, $route, $title, $active);
-            if ($activeSections && $id == $activeSections->getTab()) {
-              $newTab->setActive();
-              $activeTabs[$id] = $newTab;
+          if ($isValid) {
+            $title = isset($tab['title']) ? $tab['title'] : $this->routes[$route];
+            $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
+            $active = FALSE;
+            if ($disabled == FALSE && $isValid) {
+              $newTab = new Tab($id, $section, $route, $title, $active);
+              if ($activeSections && $id == $activeSections->getTab()) {
+                $newTab->setActive();
+                $activeTabs[$id] = $newTab;
+              }
+              elseif ($route == $currentRouteName) {
+                $newTab->setActive();
+                $activeTabs[$id] = $newTab;
+              }
+              $tabs[$id] = $newTab;
             }
-            elseif ($route == $currentRouteName) {
-              $newTab->setActive();
-              $activeTabs[$id] = $newTab;
-            }
-            $tabs[$id] = $newTab;
           }
         }
       }
@@ -305,25 +309,26 @@ class AdminicToolbar {
    *   Retrun renderable array or null.
    */
   public function getSecondaryToolbar() {
-    $secondarySections = $this->getSecondarySections();
-
-    $sections = [];
-    foreach ($secondarySections as $section) {
-      $secondarySection = $this->getSecondarySection($section);
-      if(!empty($secondarySection)) {
-        $sections[] = $secondarySection;
+    $secondaryWrappers = $this->getSecondaryWrappers();
+    $activeTab = reset($this->activeTabs);
+    $wrappers = [];
+    foreach ($secondaryWrappers as $key => $wrapper) {
+      if ($wrapper['sections']) {
+        $wrappers[] = [
+          '#theme' => 'adminic_toolbar_secondary_wrapper',
+          '#title' => $wrapper['title'],
+          '#title_link' => $wrapper['route'],
+          '#sections' => $wrapper['sections'],
+          '#active' => $key == $activeTab->getId(),
+          '#id' => $key,
+        ];
       }
     }
 
-    if ($sections) {
-      /** @var \Drupal\adminic_toolbar\Components\Tab $activeTab */
-      $activeTab = $this->getActiveTab();
-
+    if (!empty($wrappers)) {
       return [
         '#theme' => 'adminic_toolbar_secondary',
-        '#title' => $activeTab->getTitle(),
-        '#title_link' => $activeTab->getRoute(),
-        '#sections' => $sections,
+        '#wrappers' => $wrappers,
       ];
     }
 
@@ -408,6 +413,38 @@ class AdminicToolbar {
         }
       );
     }
+
+    return $secondarySections;
+  }
+
+  protected function getSecondaryWrappers() {
+    $tabs = $this->tabs;
+    $secondaryWrappers = [];
+    foreach ($tabs as $tab) {
+      $sections = $this->getTabSections($tab);
+      $secondaryWrappers[$tab->getId()] = [
+        'title' => $tab->getTitle(),
+        'route' => $tab->getRoute(),
+        'sections' => $sections
+      ];
+    }
+
+    return $secondaryWrappers;
+  }
+
+  protected function getTabSections($tab): array {
+    $sections = $this->sections;
+
+    $secondarySections = array_filter(
+      $sections, function ($section) use ($tab) {
+      $sectionTab = $section->getTab();
+        return !empty($sectionTab) && $sectionTab == $tab->getId();
+      }
+    );
+
+    $secondarySections = array_map(function($section) {
+      return $this->getSecondarySection($section);
+    }, $secondarySections);
 
     return $secondarySections;
   }

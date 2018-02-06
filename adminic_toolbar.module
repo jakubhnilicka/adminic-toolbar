@@ -21,9 +21,17 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
 
   $items['adminic_toolbar_secondary'] = [
     'variables' => [
+      'wrappers' => NULL,
+    ],
+  ];
+
+  $items['adminic_toolbar_secondary_wrapper'] = [
+    'variables' => [
       'title' => NULL,
       'title_link' => NULL,
       'sections' => NULL,
+      'active' => FALSE,
+      'id' => FALSE,
     ],
   ];
 
@@ -39,6 +47,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'route' => NULL,
       'active' => FALSE,
+      'id' => NULL,
     ],
   ];
 

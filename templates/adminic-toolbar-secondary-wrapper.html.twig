@@ -1,0 +1,18 @@
+{% if sections %}
+  <div class="toolbar_secondary_wrapper {{ active ? 'active' }}" id="toolbar-{{ id|clean_class }}">
+    {% if title %}
+    <div class="toolbar__header">
+      {% if title_link %}
+        <a href="{{ url(title_link) }}">{{ title }}</a>
+      {% else %}
+        <a href="{{ url('/') }}">{{ title }}</a>
+      {% endif %}
+    </div>
+    {% endif %}
+    <div class="toolbar__content">
+      {% for section in sections %}
+        {{ section }}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

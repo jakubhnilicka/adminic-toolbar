@@ -11,7 +11,7 @@ tabs:
 
 sections:
   # Primary Tabs
-  - {id: 'default', title: 'Content'}
+  - {id: 'default'}
   - {id: 'general', title: 'General'}
   # Content Tab
   - {id: 'content.default', tab: 'content'}
@@ -48,7 +48,7 @@ links:
   - {section: 'content.default', route: 'system.admin_content'}
   - {section: 'content.default', route: 'comment.admin'}
   - {section: 'content.default', route: 'view.media.media_page_list'}
-  - {section: 'content.default', route: 'entity.block_content.collection'}
+  - {section: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}
   - {section: 'content.default', route: 'view.files.page_1'}
   # Structure Tab
   - {section: 'structure.default', route: 'book.admin'}
@@ -64,7 +64,7 @@ links:
   - {section: 'structure.default', route: 'field_permissions.reports'}
   - {section: 'structure.default', route: 'entity.taxonomy_vocabulary.collection'}
   - {section: 'structure.default', route: 'entity.view.collection'}
-  - {section: 'structure.default', route: 'entity.block_content_type.collection'}
+  - {section: 'structure.default', route: 'entity.block_content_type.collection', title: 'Block types'}
   # People Tab
   - {section: 'users.default', route: 'entity.user.collection'}
   - {section: 'users.default', route: 'user.admin_permissions'}
