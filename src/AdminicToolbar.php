@@ -124,11 +124,13 @@ class AdminicToolbar {
    * Parse all necessary data.
    */
   protected function create() {
-    $this->config = $this->loadConfig();
-    $this->routes = $this->getAvailableRoutes();
-    $this->links = $this->getLinks();
-    $this->sections = $this->getSections();
-    $this->tabs = $this->getTabs();
+    if ($this->userCanAccessToolbar()) {
+      $this->config = $this->loadConfig();
+      $this->routes = $this->getAvailableRoutes();
+      $this->links = $this->getLinks();
+      $this->sections = $this->getSections();
+      $this->tabs = $this->getTabs();
+    }
   }
 
   /**
@@ -287,6 +289,9 @@ class AdminicToolbar {
    *   Retrun renderable array or null.
    */
   public function getPrimaryToolbar() {
+    if (!$this->userCanAccessToolbar()) {
+      return NULL;
+    }
     $primarySections = $this->getPrimarySections();
 
     $sections = [];
@@ -311,6 +316,9 @@ class AdminicToolbar {
    *   Retrun renderable array or null.
    */
   public function getSecondaryToolbar() {
+    if (!$this->userCanAccessToolbar()) {
+      return NULL;
+    }
     $secondaryWrappers = $this->getSecondaryWrappers();
     $activeTab = $this->getActiveTab();
     $wrappers = [];
@@ -348,7 +356,9 @@ class AdminicToolbar {
    *   Retrun renderable array or null.
    */
   public function getTopToolbar() {
-
+    if (!$this->userCanAccessToolbar()) {
+      return NULL;
+    }
     $current_route_name = $this->currentRouteMatch->getRouteName();
 
     $adminic_toolbar_top = [];
@@ -594,4 +604,7 @@ class AdminicToolbar {
     return $this->accessManager->checkNamedRoute($routeName, [], $this->currentUser);
   }
 
+  protected function userCanAccessToolbar() {
+    return $this->currentUser->hasPermission('can use adminic toolbar');
+  }
 }
