@@ -195,6 +195,9 @@ body.adminic-toolbar-secondary .toolbar__top {
   margin-top: 0;
   text-indent: 0;
 }
+.toolbar__section__content {
+  padding: 8px 16px;
+}
 
 .toolbar__section__navigation {
 }

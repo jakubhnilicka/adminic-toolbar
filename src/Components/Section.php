@@ -12,17 +12,21 @@ class Section {
 
   private $tab;
 
+  private $callback;
+
   /**
    * Section constructor.
    *
    * @param $id
    * @param $title
    * @param $tab
+   * @param $callback
    */
-  public function __construct($id, $title, $tab) {
+  public function __construct($id, $title, $tab, $callback) {
     $this->id = $id;
     $this->title = $title;
     $this->tab = $tab;
+    $this->callback = $callback;
   }
 
   /**
@@ -56,6 +60,16 @@ class Section {
   }
 
   /**
+   * Get section callback.
+   *
+   * @return string
+   *   Retrun section callback.
+   */
+  public function getCallback() {
+    return $this->callback;
+  }
+
+  /**
    * Set section links.
    *
    * @param array $links
@@ -75,6 +89,9 @@ class Section {
     return $this->links;
   }
 
+  public function hasCallback() {
+    return !is_null($this->callback);
+  }
   /**
    * Return section render array.
    *

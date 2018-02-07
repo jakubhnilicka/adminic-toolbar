@@ -223,8 +223,9 @@ class AdminicToolbar {
           $title = isset($section['title']) ? $section['title'] : NULL;
           $tab = isset($section['tab']) ? $section['tab'] : NULL;
           $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
+          $callback = isset($section['callback']) ? $section['callback'] : NULL;
           if ($disabled == FALSE) {
-            $newSection = new Section($id, $title, $tab);
+            $newSection = new Section($id, $title, $tab, $callback);
             $sections[$id] = $newSection;
             if ($activeLink && $id == $activeLink->getSection()) {
               $activeSections[] = $newSection;
@@ -296,7 +297,14 @@ class AdminicToolbar {
 
     $sections = [];
     foreach ($primarySections as $section) {
-      $sections[] = $this->getPrimarySection($section);
+      if ($section->hasCallback()) {
+        $callback = $section->getCallback();
+        $return = call_user_func($callback);
+        $sections[] = $return;
+      }
+      else {
+        $sections[] = $this->getPrimarySection($section);
+      }
     }
 
     if ($sections) {
@@ -607,4 +615,5 @@ class AdminicToolbar {
   protected function userCanAccessToolbar() {
     return $this->currentUser->hasPermission('can use adminic toolbar');
   }
+
 }

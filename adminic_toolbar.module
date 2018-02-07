@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\user\Entity\User;
+
 /**
  * Implements hook_theme().
  */
@@ -59,6 +61,15 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['user_account'] = [
+    'variables' => [
+      'name' => NULL,
+      'edit_url' => NULL,
+      'profile_url' => NULL,
+      'logout_url' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -97,4 +108,22 @@ function adminic_toolbar_preprocess_html(&$variables) {
   if (isset($variables['page_top']['adminic_toolbar_top'])) {
     $variables['attributes']['class'][] = 'adminic-toolbar-top';
   }
+}
+
+function getUserAccount() {
+  /** @var \Drupal\Core\Session\AccountProxy $current_user */
+  $current_user = \Drupal::currentUser();
+  $name = $current_user->getAccountName();
+  $profile_url = sprintf('/user/%d', $current_user->id());
+  $edit_url = sprintf('/user/%d/edit', $current_user->id());
+  /** @var \Drupal\user\Entity\User $user */
+  //$user = User::load($current_user);
+  //$image = $user->get('user_picture');
+  return [
+    '#theme' => 'user_account',
+    '#name' => $name,
+    '#edit_url' => $edit_url,
+    '#profile_url' => $profile_url,
+    '#logout_url' => '/user/logout',
+  ];
 }
