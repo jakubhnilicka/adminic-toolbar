@@ -62,24 +62,24 @@ set:
   - {section: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}
   - {section: 'content.default', route: 'view.files.page_1'}
   - {section: 'content.default', route: 'path.admin_overview'}
+  - {section: 'content.default', route: 'book.admin'}
+  - {section: 'content.default', route: 'forum.overview'}
   # Media Tab
   - {section: 'media.settings', route: 'blazy.settings'}
   - {section: 'media.settings', route: 'image_widget_crop.crop_widget_settings'}
-
   - {section: 'media.settings', route: 'entity.image_style.collection'}
   - {section: 'media.settings', route: 'crop.overview_types'}
   - {section: 'media.settings', route: 'entity.slick.collection'}
   - {section: 'media.settings', route: 'entity.responsive_image_style.collection'}
   - {section: 'media.settings', route: 'system.image_toolkit_settings'}
-
   # Structure Tab
-  - {section: 'structure.default', route: 'book.admin'}
+  - {section: 'structure.default', route: 'book.settings'}
   - {section: 'structure.default', route: 'entity.comment_type.collection'}
   - {section: 'structure.default', route: 'entity.contact_form.collection'}
   - {section: 'structure.default', route: 'entity.node_type.collection'}
   - {section: 'structure.default', route: 'entity.entity_view_mode.collection'}
   - {section: 'structure.default', route: 'entity.entity_form_mode.collection'}
-  - {section: 'structure.default', route: 'forum.overview'}
+  - {section: 'structure.default', route: 'forum.settings'}
   - {section: 'structure.default', route: 'entity.media_bundle.collection'}
   - {section: 'structure.default', route: 'entity.menu.collection'}
   - {section: 'structure.default', route: 'entity.paragraphs_type.collection'}
@@ -105,7 +105,9 @@ set:
   # Configuration Tab
   - {section: 'configuration.system', route: 'system.site_information_settings'}
   - {section: 'configuration.system', route: 'system.cron_settings'}
+  - {section: 'configuration.system', route: 'entity.action.collection'}
   - {section: 'configuration.system', route: 'system.file_system_settings'}
+  - {section: 'configuration.system', route: 'ban.admin_page'}
   - {section: 'structure.content_authoring', route: 'entity.entity_browser.collection'}
   - {section: 'structure.content_authoring', route: 'filter.admin_overview'}
   - {section: 'structure.content_authoring', route: 'entity.embed_button.collection'}
@@ -117,8 +119,8 @@ set:
   - {section: 'configuration.development', route: 'devel.admin_settings'}
   - {section: 'configuration.development', route: 'migrate_drupal_ui.upgrade'}
   - {section: 'configuration.search_and_metadata', route: 'entity.search_page.collection'}
-
   - {section: 'configuration.web_services', route: 'system.rss_feeds_settings'}
+  - {section: 'configuration.web_services', route: 'aggregator.admin_overview'}
   - {section: 'configuration.workflow', route: 'entity.workflow.collection'}
   # Language Tab
   - {section: 'language.default', route: 'system.regional_settings'}
@@ -141,4 +143,5 @@ set:
   - {section: 'reports.default', route: 'dblog.page_not_found'}
   - {section: 'reports.default', route: 'dblog.search'}
   - {section: 'reports.default', route: 'views_ui.reports_plugins'}
+  - {section: 'reports.default', route: 'statistics.settings'}
   # Help Tab
