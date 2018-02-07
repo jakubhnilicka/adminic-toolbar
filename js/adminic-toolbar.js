@@ -14,7 +14,7 @@
         hideSecondaryToolbar()
       }
 
-      $('.toolbar__primary a').on('click', function (e) {
+      $('.toolbar__primary a').not('.dropdown a').on('click', function (e) {
         $('.toolbar__primary a').removeClass('active');
 
         var $tab = $(this);
@@ -35,10 +35,17 @@
         }
       });
 
-      /*$('.toolbar_secondary_wrapper .toolbar__header a').on('click', function(e) {
-        e.preventDefault();
-        $(this).parent().parent().removeClass('active');
-      });*/
+      // Dropdown toggle
+      $('.dropdown-toggle').on('click', function(e){
+        $(this).next('.dropdown').toggle();
+      });
+
+      $(document).on('click', function(e) {
+        var target = e.target;
+        if (!$(target).is('.dropdown-toggle') && !$(target).parents().is('.dropdown-toggle')) {
+          $('.dropdown').hide();
+        }
+      });
 
       function showSecondaryToolbar() {
         $toolbarSecondary.show();

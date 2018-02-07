@@ -196,6 +196,7 @@ body.adminic-toolbar-secondary .toolbar__top {
   text-indent: 0;
 }
 .toolbar__section__content {
+  position: relative;
   padding: 8px 16px;
 }
 
@@ -386,4 +387,55 @@ body.adminic-toolbar-secondary .toolbar__top {
 
 #tab-help:before {
   background-image: url('../images/help.svg');
+}
+
+
+.dropdown-toggle {
+  padding: .5em 1em;
+  background: #777;
+  border-radius: .2em .2em 0 0;
+}
+ul.dropdown {
+  display:none;
+  position: absolute;
+  top: 100%;
+  margin-top: .5em;
+  background: #777;
+  min-width: 12em;
+  padding: 0;
+  border-radius: 0 0 .2em .2em;}
+ul.dropdown li {
+  list-style-type: none;}
+ul.dropdown li a {
+  text-decoration: none;
+  padding: .5em 1em;
+  display: block;
+}
+
+
+.user_account--left {
+  float: left;
+  width: 32px;
+}
+.user_account--right {
+  float: right;
+  width: 88px;
+}
+.user_account--image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: white;
+}
+.user_account--right h3 {
+  font-size: 14px;
+  margin: 0 0 4px 0;
+  padding: 0;
+  color: #FFF;
+}
+
+.user_account--right a {
+  font-size: 12px;
+  color: #919BA9;
+  display: block;
 }
