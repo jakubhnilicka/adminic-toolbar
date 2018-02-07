@@ -415,17 +415,17 @@ ul.dropdown li a {
 
 .user_account--left {
   float: left;
-  width: 32px;
+  width: 24px;
 }
 .user_account--right {
   float: right;
-  width: 88px;
+  width: 80px;
 }
 .user_account--image {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background-color: white;
+  border: 1px solid #919BA9;
 }
 .user_account--right h3 {
   font-size: 14px;
