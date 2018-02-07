@@ -1,5 +1,7 @@
-
-tabs:
+set:
+  name: 'Default'
+  id: 'default'
+  tabs:
   - {id: 'content', section: 'default', route: 'system.admin_content'}
   - {id: 'media', section: 'default', route: 'system.admin_content', title: 'Media'}
   - {id: 'structure', section: 'default', route: 'system.admin_structure'}
@@ -12,7 +14,7 @@ tabs:
   - {id: 'reports', section: 'general', route: 'system.admin_reports'}
   - {id: 'help', section: 'general', route: 'help.main'}
 
-sections:
+  sections:
   # Primary Tabs
   - {id: 'default'}
   - {id: 'general', title: 'General'}
@@ -52,7 +54,7 @@ sections:
   # Help Tab
   - {id: 'help.default', tab: 'help'}
 
-links:
+  links:
   # Content Tab
   - {section: 'content.default', route: 'system.admin_content'}
   - {section: 'content.default', route: 'comment.admin'}
@@ -63,7 +65,7 @@ links:
   # Media Tab
   - {section: 'media.settings', route: 'blazy.settings'}
   - {section: 'media.settings', route: 'image_widget_crop.crop_widget_settings'}
-  - {section: 'media.settings', route: 'system.file_system_settings'}
+
   - {section: 'media.settings', route: 'entity.image_style.collection'}
   - {section: 'media.settings', route: 'crop.overview_types'}
   - {section: 'media.settings', route: 'entity.slick.collection'}
@@ -103,6 +105,7 @@ links:
   # Configuration Tab
   - {section: 'configuration.system', route: 'system.site_information_settings'}
   - {section: 'configuration.system', route: 'system.cron_settings'}
+  - {section: 'configuration.system', route: 'system.file_system_settings'}
   - {section: 'structure.content_authoring', route: 'entity.entity_browser.collection'}
   - {section: 'structure.content_authoring', route: 'filter.admin_overview'}
   - {section: 'structure.content_authoring', route: 'entity.embed_button.collection'}

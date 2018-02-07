@@ -91,6 +91,8 @@ class AdminicToolbar {
    */
   private $activeTabs;
 
+  private $activeSet = 'default';
+
   /**
    * AdminicToolbar constructor.
    *
@@ -172,8 +174,8 @@ class AdminicToolbar {
     $currentRouteName = $this->currentRouteMatch->getRouteName();
 
     foreach ($config as $configFile) {
-      if (isset($configFile['links'])) {
-        foreach ($configFile['links'] as $link) {
+      if ($configFile['set']['id'] == $this->activeSet && isset($configFile['set']['links'])) {
+        foreach ($configFile['set']['links'] as $link) {
           $section = $link['section'];
           $route = $link['route'];
           $isValid = $this->isRouteValid($route);
@@ -213,8 +215,8 @@ class AdminicToolbar {
     $activeLink = $this->getActiveLink();
 
     foreach ($config as $configFile) {
-      if (isset($configFile['sections'])) {
-        foreach ($configFile['sections'] as $section) {
+      if ($configFile['set']['id'] == $this->activeSet && isset($configFile['set']['sections'])) {
+        foreach ($configFile['set']['sections'] as $section) {
           $id = $section['id'];
           $title = isset($section['title']) ? $section['title'] : NULL;
           $tab = isset($section['tab']) ? $section['tab'] : NULL;
@@ -248,8 +250,8 @@ class AdminicToolbar {
     $currentRouteName = $this->currentRouteMatch->getRouteName();
 
     foreach ($config as $configFile) {
-      if (isset($configFile['tabs'])) {
-        foreach ($configFile['tabs'] as $tab) {
+      if ($configFile['set']['id'] == $this->activeSet && isset($configFile['set']['tabs'])) {
+        foreach ($configFile['set']['tabs'] as $tab) {
           $id = $tab['id'];
           $section = isset($tab['section']) ? $tab['section'] : NULL;
           $route = $tab['route'];
