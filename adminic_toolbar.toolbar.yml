@@ -1,11 +1,14 @@
+
 tabs:
   - {id: 'content', section: 'default', route: 'system.admin_content'}
+  - {id: 'media', section: 'default', route: 'system.admin_content', title: 'Media'}
   - {id: 'structure', section: 'default', route: 'system.admin_structure'}
   - {id: 'users', section: 'default', route: 'entity.user.collection'}
   - {id: 'blocks', section: 'general', route: 'block.admin_display'}
   - {id: 'appearance', section: 'general', route: 'system.themes_page'}
   - {id: 'extend', section: 'general', route: 'system.modules_list'}
   - {id: 'configuration', section: 'general', route: 'system.admin_config'}
+  - {id: 'language', section: 'general', route: 'system.regional_settings', title: 'Language'}
   - {id: 'reports', section: 'general', route: 'system.admin_reports'}
   - {id: 'help', section: 'general', route: 'help.main'}
 
@@ -15,8 +18,12 @@ sections:
   - {id: 'general', title: 'General'}
   # Content Tab
   - {id: 'content.default', tab: 'content'}
+  # Media Tab
+  - {id: 'media.default', tab: 'media'}
+  - {id: 'media.settings', tab: 'media', title: 'Settings'}
   # Structure Tab
   - {id: 'structure.default', tab: 'structure'}
+  - {id: 'structure.content_authoring', tab: 'structure', title: 'Content authoring'}
   # People Tab
   - {id: 'users.default', tab: 'users'}
   - {id: 'users.configuration', tab: 'users', title: 'Settings'}
@@ -30,14 +37,16 @@ sections:
   # Configuration Tab
   - {id: 'configuration.people', tab: 'configuration', title: 'People'}
   - {id: 'configuration.system', tab: 'configuration', title: 'System'}
-  - {id: 'configuration.content_authoring', tab: 'configuration', title: 'Content authoring'}
   - {id: 'configuration.user_interface', tab: 'configuration', title: 'User interface'}
   - {id: 'configuration.development', tab: 'configuration', title: 'Development'}
   - {id: 'configuration.media', tab: 'configuration', title: 'Media'}
   - {id: 'configuration.search_and_metadata', tab: 'configuration', title: 'Search and metadat'}
-  - {id: 'configuration.regional_and_language', tab: 'configuration', title: 'Regional and language'}
   - {id: 'configuration.web_services', tab: 'configuration', title: 'Web services'}
   - {id: 'configuration.workflow', tab: 'configuration', title: 'Workflow'}
+  # Language
+  - {id: 'language.default', tab: 'language'}
+  - {id: 'language.languages', tab: 'language', title: 'Languages'}
+  - {id: 'language.translation', tab: 'language', title: 'User interface translation'}
   # Status Report Tab
   - {id: 'reports.default', tab: 'reports'}
   # Help Tab
@@ -50,6 +59,17 @@ links:
   - {section: 'content.default', route: 'view.media.media_page_list'}
   - {section: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}
   - {section: 'content.default', route: 'view.files.page_1'}
+  - {section: 'content.default', route: 'path.admin_overview'}
+  # Media Tab
+  - {section: 'media.settings', route: 'blazy.settings'}
+  - {section: 'media.settings', route: 'image_widget_crop.crop_widget_settings'}
+  - {section: 'media.settings', route: 'system.file_system_settings'}
+  - {section: 'media.settings', route: 'entity.image_style.collection'}
+  - {section: 'media.settings', route: 'crop.overview_types'}
+  - {section: 'media.settings', route: 'entity.slick.collection'}
+  - {section: 'media.settings', route: 'entity.responsive_image_style.collection'}
+  - {section: 'media.settings', route: 'system.image_toolkit_settings'}
+
   # Structure Tab
   - {section: 'structure.default', route: 'book.admin'}
   - {section: 'structure.default', route: 'entity.comment_type.collection'}
@@ -77,14 +97,15 @@ links:
   - {section: 'appearance.settings', route: 'system.theme_settings'}
   # Extend Tab
   - {section: 'extend.default', route: 'system.modules_list'}
+  - {section: 'extend.default', route: 'update.module_install'}
   - {section: 'extend.default', route: 'update.module_update'}
   - {section: 'extend.default', route: 'system.modules_uninstall'}
   # Configuration Tab
   - {section: 'configuration.system', route: 'system.site_information_settings'}
   - {section: 'configuration.system', route: 'system.cron_settings'}
-  - {section: 'configuration.content_authoring', route: 'entity.entity_browser.collection'}
-  - {section: 'configuration.content_authoring', route: 'filter.admin_overview'}
-  - {section: 'configuration.content_authoring', route: 'entity.embed_button.collection'}
+  - {section: 'structure.content_authoring', route: 'entity.entity_browser.collection'}
+  - {section: 'structure.content_authoring', route: 'filter.admin_overview'}
+  - {section: 'structure.content_authoring', route: 'entity.embed_button.collection'}
   - {section: 'configuration.user_interface', route: 'entity.shortcut_set.collection'}
   - {section: 'configuration.development', route: 'system.performance_settings'}
   - {section: 'configuration.development', route: 'system.logging_settings'}
@@ -92,20 +113,21 @@ links:
   - {section: 'configuration.development', route: 'config.sync'}
   - {section: 'configuration.development', route: 'devel.admin_settings'}
   - {section: 'configuration.development', route: 'migrate_drupal_ui.upgrade'}
-  - {section: 'configuration.media', route: 'blazy.settings'}
-  - {section: 'configuration.media', route: 'image_widget_crop.crop_widget_settings'}
-  - {section: 'configuration.media', route: 'system.file_system_settings'}
-  - {section: 'configuration.media', route: 'entity.image_style.collection'}
-  - {section: 'configuration.media', route: 'crop.overview_types'}
-  - {section: 'configuration.media', route: 'entity.slick.collection'}
-  - {section: 'configuration.media', route: 'entity.responsive_image_style.collection'}
-  - {section: 'configuration.media', route: 'system.image_toolkit_settings'}
   - {section: 'configuration.search_and_metadata', route: 'entity.search_page.collection'}
-  - {section: 'configuration.search_and_metadata', route: 'path.admin_overview'}
-  - {section: 'configuration.regional_and_language', route: 'system.regional_settings'}
-  - {section: 'configuration.regional_and_language', route: 'entity.date_format.collection'}
+
   - {section: 'configuration.web_services', route: 'system.rss_feeds_settings'}
   - {section: 'configuration.workflow', route: 'entity.workflow.collection'}
+  # Language Tab
+  - {section: 'language.default', route: 'system.regional_settings'}
+  - {section: 'language.default', route: 'entity.date_format.collection'}
+  - {section: 'language.default', route: 'config_translation.mapper_list'}
+  - {section: 'language.default', route: 'language.content_settings_page'}
+  - {section: 'language.languages', route: 'entity.configurable_language.collection'}
+  - {section: 'language.languages', route: 'language.negotiation'}
+  - {section: 'language.translation', route: 'locale.translate_page'}
+  - {section: 'language.translation', route: 'locale.translate_import'}
+  - {section: 'language.translation', route: 'locale.translate_export'}
+  - {section: 'language.translation', route: 'locale.settings'}
   # Status Report Tab
   - {section: 'reports.default', route: 'system.admin_reports'}
   - {section: 'reports.default', route: 'update.status'}

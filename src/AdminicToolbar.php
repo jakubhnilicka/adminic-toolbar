@@ -310,16 +310,20 @@ class AdminicToolbar {
    */
   public function getSecondaryToolbar() {
     $secondaryWrappers = $this->getSecondaryWrappers();
-    $activeTab = reset($this->activeTabs);
+    $activeTab = $this->getActiveTab();
     $wrappers = [];
     foreach ($secondaryWrappers as $key => $wrapper) {
+      $active = FALSE;
+      if (!empty($activeTab)) {
+        $active = ($key == $activeTab->getId());
+      }
       if ($wrapper['sections']) {
         $wrappers[] = [
           '#theme' => 'adminic_toolbar_secondary_wrapper',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
           '#sections' => $wrapper['sections'],
-          '#active' => $key == $activeTab->getId(),
+          '#active' => $active,
           '#id' => $key,
         ];
       }
@@ -360,10 +364,10 @@ class AdminicToolbar {
       ],
     ];
 
-    /*$adminic_toolbar_top[] = [
+    $adminic_toolbar_top[] = [
       '#type' => 'markup',
       '#markup' => 'Route: ' . $current_route_name,
-    ];*/
+    ];
 
     if ($adminic_toolbar_top) {
       return [
