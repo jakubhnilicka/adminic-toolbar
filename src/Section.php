@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\adminic_toolbar\Components;
+namespace Drupal\adminic_toolbar;
 
 class Section {
 
