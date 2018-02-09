@@ -53,6 +53,8 @@ class TabManager {
           $section = isset($tab['section']) ? $tab['section'] : NULL;
           $route = $tab['route'];
           $isValid = $this->routeManager->isRouteValid($route);
+          // TODO: Fix disabled override.
+          // TODO: Implement weight sorting.
           if ($isValid) {
             $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
             $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;

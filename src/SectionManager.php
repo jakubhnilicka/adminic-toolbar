@@ -76,6 +76,8 @@ class SectionManager {
           $tab = isset($section['tab']) ? $section['tab'] : NULL;
           $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
           $callback = isset($section['callback']) ? $section['callback'] : NULL;
+          // TODO: Fix disabled override.
+          // TODO: Implement weight sorting.
           if ($disabled == FALSE) {
             $newSection = new Section($id, $title, $tab, $callback);
             $this->addSection($newSection);

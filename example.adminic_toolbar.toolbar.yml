@@ -1,4 +1,7 @@
-links:
+set:
+  id: 'default'
+  links:
+
   # Content Tab
   - {section: 'content.default', route: 'content.settings'}
   # Structure Tab

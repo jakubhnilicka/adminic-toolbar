@@ -49,6 +49,8 @@ class LinkManager {
           $section = $link['section'];
           $route = $link['route'];
           $isValid = $this->routeManager->isRouteValid($route);
+          // TODO: Fix disabled override.
+          // TODO: Implement weight sorting.
           if ($isValid) {
             $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
             $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
