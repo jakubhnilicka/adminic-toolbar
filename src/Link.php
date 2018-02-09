@@ -19,17 +19,20 @@ class Link {
    */
   private $title;
 
+  /*
+   * @var bool
+   */
   private $active;
 
   /**
-   * Tab constructor.
+   * Link constructor.
    *
    * @param string $section
    * @param string $route
    * @param string $title
-   * @param $active
+   * @param bool $active
    */
-  public function __construct($section, $route, $title, $active) {
+  public function __construct(string $section, string $route, string $title, bool $active) {
     $this->section = $section;
     $this->route = $route;
     $this->title = $title;
@@ -37,17 +40,13 @@ class Link {
   }
 
   /**
-   * Get link id.
+   * Get link section.
    *
    * @return string
-   *   Return link id.
+   *   Return link section.
    */
   public function getSection() {
     return $this->section;
-  }
-
-  public function setSection($section) {
-    $this->section = $section;
   }
 
   /**
@@ -59,9 +58,6 @@ class Link {
   public function getRoute() {
     return $this->route;
   }
-  public function setRoute($route) {
-    $this->route = $route;
-  }
 
   /**
    * Get link title.
@@ -71,9 +67,6 @@ class Link {
    */
   public function getTitle() {
     return $this->title;
-  }
-  public function setTitle($title) {
-    $this->title = $title;
   }
 
   /**
@@ -93,6 +86,9 @@ class Link {
     $this->active = TRUE;
   }
 
+  /**
+   * Set link as inactive.
+   */
   public function setInactive() {
     $this->active = FALSE;
   }
@@ -111,4 +107,5 @@ class Link {
       '#active' => $this->isActive(),
     ];
   }
+
 }

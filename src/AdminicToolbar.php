@@ -2,10 +2,21 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Config\Config;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxy;
 
 class AdminicToolbar {
+
+  /**
+   * @var \Drupal\Core\Config\Config
+   */
+  private $systemSite;
+
+  /**
+   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   */
+  private $currentRouteMatch;
 
   /**
    * @var \Drupal\user\Plugin\views\argument_default\CurrentUser
@@ -28,13 +39,9 @@ class AdminicToolbar {
   private $sectionManager;
 
   /**
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  private $currentRouteMatch;
-
-  /**
    * AdminicToolbar constructor.
    *
+   * @param \Drupal\Core\Config\Config $systemSite
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    * @param \Drupal\Core\Session\AccountProxy $currentUser
    * @param \Drupal\adminic_toolbar\TabManager $tabManager
@@ -42,6 +49,7 @@ class AdminicToolbar {
    * @param \Drupal\adminic_toolbar\SectionManager $sectionManager
    */
   public function __construct(
+    Config $systemSite,
     CurrentRouteMatch $currentRouteMatch,
     AccountProxy $currentUser,
     TabManager $tabManager,
@@ -52,6 +60,7 @@ class AdminicToolbar {
     $this->linkManager = $linkManager;
     $this->sectionManager = $sectionManager;
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->systemSite = $systemSite;
   }
 
   /**
@@ -64,9 +73,11 @@ class AdminicToolbar {
     if (!$this->userCanAccessToolbar()) {
       return NULL;
     }
-    $primarySections = $this->sectionManager->getPrimarySections();
 
+    $primarySections = $this->sectionManager->getPrimarySections();
     $sections = [];
+
+    /** @var \Drupal\adminic_toolbar\Section $section */
     foreach ($primarySections as $section) {
       if ($section->hasCallback()) {
         $callback = $section->getCallback();
@@ -74,7 +85,7 @@ class AdminicToolbar {
         $sections[] = $return;
       }
       else {
-        $sections[] = $this->getPrimarySection($section);
+        $sections[] = $this->sectionManager->getPrimarySection($section);
       }
     }
 
@@ -85,6 +96,7 @@ class AdminicToolbar {
         '#sections' => $sections,
       ];
     }
+
     return NULL;
   }
 
@@ -98,9 +110,12 @@ class AdminicToolbar {
     if (!$this->userCanAccessToolbar()) {
       return NULL;
     }
-    $secondaryWrappers = $this->getSecondaryWrappers();
+
+    $secondaryWrappers = $this->sectionManager->getSecondarySectionWrappers();
+    /** @var \Drupal\adminic_toolbar\Tab $activeTab */
     $activeTab = $this->tabManager->getActiveTab();
     $wrappers = [];
+
     foreach ($secondaryWrappers as $key => $wrapper) {
       $active = FALSE;
       if (!empty($activeTab)) {
@@ -138,16 +153,14 @@ class AdminicToolbar {
     if (!$this->userCanAccessToolbar()) {
       return NULL;
     }
-    $current_route_name = $this->currentRouteMatch->getRouteName();
 
+    $current_route_name = $this->currentRouteMatch->getRouteName();
     $adminic_toolbar_top = [];
-    // TODO: move config to constructor.
-    $config = \Drupal::config('system.site');
 
     $adminic_toolbar_top[] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
-      '#value' => $config->get('name'),
+      '#value' => $this->systemSite->get('name'),
       '#attributes' => [
         'class' => [
           'site-title',
@@ -168,108 +181,6 @@ class AdminicToolbar {
     }
 
     return NULL;
-  }
-
-  protected function getSecondaryWrappers() {
-    $tabs = $this->tabManager->getTabs();
-    $secondaryWrappers = [];
-    foreach ($tabs as $tab) {
-      $sections = $this->getTabSections($tab);
-
-      $secondaryWrappers[$tab->getId()] = [
-        'title' => $tab->getTitle(),
-        'route' => $tab->getRoute(),
-        'sections' => $sections
-      ];
-    }
-
-    return $secondaryWrappers;
-  }
-
-  protected function getTabSections($tab): array {
-    $sections = $this->sectionManager->getSections();
-
-    $secondarySections = array_filter(
-      $sections, function ($section) use ($tab) {
-      $sectionTab = $section->getTab();
-        return !empty($sectionTab) && $sectionTab == $tab->getId();
-      }
-    );
-
-    $renderedSections = [];
-    foreach ($secondarySections as $key => $secondarySection) {
-      $ss = $this->getSecondarySection($secondarySection);
-      if ($ss != NULL) {
-        $renderedSections[$key] = $ss;
-      }
-    }
-
-    return $renderedSections;
-  }
-
-  /**
-   * Get renderable array for primary section.
-   *
-   * @param \Drupal\adminic_toolbar\Section $section
-   *   Section.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  protected function getPrimarySection(Section $section) {
-    $tabs = $this->tabManager->getTabs();
-    $sectionId = $section->getId();
-
-    $sectionValidTabs = array_filter(
-      $tabs, function ($tab) use ($sectionId) {
-      return $tab->getSection() == $sectionId;
-    }
-    );
-
-    $sectionTabs = [];
-    /** @var \Drupal\adminic_toolbar\Tab $tab */
-    foreach ($sectionValidTabs as $tab) {
-      $sectionTabs[] = $tab->getRenderArray();
-    }
-
-    if ($sectionTabs) {
-      $section->setLinks($sectionTabs);
-      return $section->getRenderArray();
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Get renderable array for secondary section.
-   *
-   * @param \Drupal\adminic_toolbar\Section $section
-   *   Section.
-   *
-   * @return array|null
-   *   Retrun renderable array or null.
-   */
-  protected function getSecondarySection(Section $section) {
-    $links = $this->linkManager->getLinks();
-    $sectionId = $section->getId();
-
-    $sectionValidLinks = array_filter(
-      $links, function ($link) use ($sectionId) {
-        return $link->getSection() == $sectionId;
-      }
-    );
-
-    if(empty($sectionValidLinks)) {
-      return NULL;
-    }
-
-    /** @var \Drupal\adminic_toolbar\Link $link */
-    $sectionLinks = [];
-    foreach ($sectionValidLinks as $link) {
-      $sectionLinks[] = $link->getRenderArray();
-    }
-    $section->setLinks($sectionLinks);
-    return $section->getRenderArray();
   }
 
   /**

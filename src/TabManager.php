@@ -1,30 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jakubhnilicka
- * Date: 07.02.18
- * Time: 20:19
- */
 
 namespace Drupal\adminic_toolbar;
 
-use Drupal\Core\Access\AccessManager;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Routing\RouteProvider;
-use Drupal\Core\Session\AccountProxy;
-
 class TabManager {
-
-  /**
-   * @var array
-   */
-  private $tabs = [];
-
-  /**
-   * @var array
-   */
-  private $activeTabs = [];
 
   /**
    * @var \Drupal\adminic_toolbar\DiscoveryManager
@@ -37,25 +15,26 @@ class TabManager {
   private $routeManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\SectionManager
+   * @var array
    */
-  private $sectionManager;
+  private $tabs = [];
+
+  /**
+   * @var array
+   */
+  private $activeTabs = [];
 
   /**
    * TabManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
-   * @param \Drupal\adminic_toolbar\SectionManager $sectionManager
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
-    RouteManager $routeManager,
-    SectionManager $sectionManager) {
+    RouteManager $routeManager) {
     $this->discoveryManager = $discoveryManager;
     $this->routeManager = $routeManager;
-    $this->sectionManager = $sectionManager;
-    $this->parseTabs();
   }
 
   /**
@@ -66,8 +45,6 @@ class TabManager {
    */
   protected function parseTabs() {
     $config = $this->discoveryManager->getConfig();
-    $activeSections =$this->sectionManager->getActiveSection();
-    $currentRouteName = $this->routeManager->getCurrentRoute();
 
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['tabs'])) {
@@ -81,39 +58,75 @@ class TabManager {
             $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
             $active = FALSE;
             if ($disabled == FALSE && $isValid) {
-              $newTab = new Tab($id, $section, $route, $title, $active);
-              if ($activeSections && $id == $activeSections->getTab()) {
-                $newTab->setActive();
-                $this->addActiveTab($newTab);
-              }
-              elseif ($route == $currentRouteName) {
-                $newTab->setActive();
-                $this->addActiveTab($newTab);
-              }
-              $this->addTab($newTab);
+              $this->addTab(new Tab($id, $section, $route, $title, $active));
             }
           }
         }
       }
     }
+
     return TRUE;
   }
 
-  public function addTab($tab) {
-    $this->tabs[] = $tab;
-  }
-
-  public function addActiveTab($tab) {
-    $this->activeTabs[] = $tab;
-  }
-
-  public function getTabs() {
-    return $this->tabs;
-  }
   /**
-   * Get active tab defined by active session.
+   * Get tab unique key from id.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
+   *
+   * @return string
+   *   Return formated key.
+   */
+  public function getTabKey(Tab $tab) {
+    return $tab->getId();
+  }
+
+  /**
+   * Add tab.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
+   */
+  public function addTab(Tab $tab) {
+    $key = $this->getTabKey($tab);
+    $this->tabs[$key] = $tab;
+  }
+
+  /**
+   * Add tab to active tabs.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
+   */
+  public function addActiveTab(Tab $tab) {
+    $key = $this->getTabKey($tab);
+    $this->activeTabs[$key] = $tab;
+  }
+
+  /**
+   * Set tab as active.
+   *
+   * @param string $key
+   */
+  public function setActive(string $key) {
+    $this->tabs[$key]->setActive();
+  }
+
+  /**
+   * Get tabs.
    *
    * @return array
+   */
+  public function getTabs() {
+    if (empty($this->tabs)) {
+      $this->parseTabs();
+    }
+
+    return $this->tabs;
+  }
+
+  /**
+   * Get first active tab.
+   *
+   * @return \Drupal\adminic_toolbar\Tab
    *   Return first active tab.
    */
   public function getActiveTab() {
@@ -121,6 +134,8 @@ class TabManager {
     if ($activeTabs) {
       return reset($activeTabs);
     }
+
     return NULL;
   }
+
 }

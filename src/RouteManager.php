@@ -51,7 +51,6 @@ class RouteManager {
     $this->currentRouteMatch = $currentRouteMatch;
     $this->accessManager = $accessManager;
     $this->currentUser = $currentUser;
-    $this->routes = $this->getAvailableRoutes();
   }
 
   /**
@@ -72,6 +71,11 @@ class RouteManager {
     return $routes;
   }
 
+  /**
+   * Get current route name.
+   *
+   * @return null|string
+   */
   public function getCurrentRoute() {
     return $this->currentRouteMatch->getRouteName();
   }
@@ -87,11 +91,19 @@ class RouteManager {
    */
   public function isRouteValid(string $routeName) {
     $isValidRoute = array_key_exists($routeName, $this->getRoutes());
-    return $isValidRoute;
+    if (!$isValidRoute) {
+      return FALSE;
+    }
+    $isRouteAccessible = $this->isRouteAccessible($routeName);
+    if (!$isRouteAccessible) {
+      return FALSE;
+    }
+
+    return TRUE;
   }
 
   /**
-   * Check if user has access to route.
+   * Check if current user has access to route.
    *
    * @param string $routeName
    *   Route name.
@@ -109,6 +121,10 @@ class RouteManager {
    * @return array
    */
   public function getRoutes() {
+    if (empty($this->routes)) {
+      $this->routes = $this->getAvailableRoutes();
+    }
+
     return $this->routes;
   }
 
@@ -122,8 +138,11 @@ class RouteManager {
   public function getDefaultTitle(string $routeName) {
     if ($this->isRouteValid($routeName)) {
       $routes = $this->getRoutes();
+
       return $routes[$routeName];
     }
+
+    return NULL;
   }
 
 }

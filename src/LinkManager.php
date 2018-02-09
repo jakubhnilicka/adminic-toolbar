@@ -35,7 +35,6 @@ class LinkManager {
     RouteManager $routeManager) {
     $this->routeManager = $routeManager;
     $this->discoveryManager = $discoveryManager;
-    $this->parseLinks();
   }
 
   /**
@@ -43,7 +42,6 @@ class LinkManager {
    */
   public function parseLinks() {
     $config = $this->discoveryManager->getConfig();
-    $currentRouteName = $this->routeManager->getCurrentRoute();
 
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['links'])) {
@@ -56,12 +54,7 @@ class LinkManager {
             $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
             $active = FALSE;
             if ($disabled == FALSE && $isValid) {
-              $newLink = new Link($section, $route, $title, $active);
-              $this->addLink($newLink);
-              if ($route == $currentRouteName) {
-                $newLink->setActive();
-                $this->addActiveLink($newLink);
-              }
+              $this->addLink(new Link($section, $route, $title, $active));
             }
           }
         }
@@ -72,19 +65,36 @@ class LinkManager {
   /**
    * Add link.
    *
-   * @param $tab
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
    */
-  public function addLink($tab) {
-    $this->links[] = $tab;
+  public function addLink(Link $link) {
+    $key = $this->getLinkKey($link);
+    $this->links[$key] = $link;
   }
 
   /**
-   * Add active link.
+   * Get link unique key from section and route.
    *
-   * @param $tab
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   *
+   * @return string
+   *   Return formated key.
    */
-  public function addActiveLink($tab) {
-    $this->activeLinks[] = $tab;
+  public function getLinkKey(Link $link) {
+    return sprintf('%s.%s', $link->getSection(), $link->getRoute());
+  }
+
+  /**
+   * Add link to active links.
+   *
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   */
+  public function addActiveLink(Link $link) {
+    $key = $this->getLinkKey($link);
+    $this->activeLinks[$key] = $link;
   }
 
   /**
@@ -93,12 +103,16 @@ class LinkManager {
    * @return array
    */
   public function getLinks() {
+    if (empty($this->links)) {
+      $this->parseLinks();
+    }
     return $this->links;
   }
+
   /**
    * Get first active link.
    *
-   * @return array
+   * @return \Drupal\adminic_toolbar\Link
    *   Return first active link.
    */
   public function getActiveLink() {

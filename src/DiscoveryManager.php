@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jakubhnilicka
- * Date: 08.02.18
- * Time: 21:01
- */
 
 namespace Drupal\adminic_toolbar;
 
@@ -14,13 +8,14 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 class DiscoveryManager {
 
   /**
-   * @var array
-   */
-  private $config;
-  /**
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   private $moduleHandler;
+
+  /**
+   * @var array
+   */
+  private $config = [];
 
   /**
    * DiscoveryManager constructor.
@@ -29,7 +24,6 @@ class DiscoveryManager {
    */
   public function __construct(ModuleHandlerInterface $moduleHandler) {
     $this->moduleHandler = $moduleHandler;
-    $this->config = $this->loadConfig();
   }
 
   /**
@@ -41,6 +35,7 @@ class DiscoveryManager {
   protected function loadConfig() {
     $discovery = new YamlDiscovery('toolbar', $this->moduleHandler->getModuleDirectories());
     $config = $discovery->findAll();
+
     return $config;
   }
 
@@ -50,6 +45,10 @@ class DiscoveryManager {
    * @return array
    */
   public function getConfig() {
+    if (empty($this->config)) {
+      $this->config = $this->loadConfig();
+    }
+
     return $this->config;
   }
 
