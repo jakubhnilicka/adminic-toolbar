@@ -75,25 +75,25 @@ class AdminicToolbar {
     }
 
     $primarySections = $this->sectionManager->getPrimarySections();
-    $sections = [];
+    $widgets = [];
 
     /** @var \Drupal\adminic_toolbar\Section $section */
     foreach ($primarySections as $section) {
       if ($section->hasCallback()) {
         $callback = $section->getCallback();
-        $return = call_user_func($callback);
-        $sections[] = $return;
+        $return = call_user_func([$callback, 'getRenderArray']);
+        $widgets[] = $return;
       }
       else {
-        $sections[] = $this->sectionManager->getPrimarySection($section);
+        $widgets[] = $this->sectionManager->getPrimarySection($section);
       }
     }
 
-    if ($sections) {
+    if ($widgets) {
       return [
         '#theme' => 'adminic_toolbar_primary',
         '#title' => 'Drupal',
-        '#sections' => $sections,
+        '#widgets' => $widgets,
       ];
     }
 

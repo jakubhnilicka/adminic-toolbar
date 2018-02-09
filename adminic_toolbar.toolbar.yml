@@ -18,7 +18,7 @@ set:
   # Primary Tabs
   - {id: 'default'}
   - {id: 'general', title: 'General'}
-  - {id: 'user', title: 'User', callback: 'getUserAccount'}
+  - {id: 'user', title: 'User', callback: 'Drupal\adminic_toolbar\UserAccountWidget'}
   # Content Tab
   - {id: 'content.default', tab: 'content'}
   # Media Tab
