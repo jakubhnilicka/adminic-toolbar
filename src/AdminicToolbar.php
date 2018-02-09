@@ -88,7 +88,7 @@ class AdminicToolbar {
     /** @var \Drupal\adminic_toolbar\Section $section */
     foreach ($primarySections as $section) {
       if ($section->hasCallback()) {
-        $widgetManager = $this->toolbarWidgetPluginManager;
+        //$widgetManager = $this->toolbarWidgetPluginManager;
         $callback = $section->getCallback();
         $widget = $this->toolbarWidgetPluginManager->createInstance($callback);
         $widgets[] = $widget->getRenderArray();
@@ -103,6 +103,11 @@ class AdminicToolbar {
         '#theme' => 'adminic_toolbar_primary',
         '#title' => 'Drupal',
         '#widgets' => $widgets,
+        '#access' => $this->userCanAccessToolbar(),
+        '#cache' => [
+          'keys' => ['toolbar_primary'],
+          'contexts' => ['user.permissions', 'url.path'],
+        ],
       ];
     }
 
@@ -138,6 +143,7 @@ class AdminicToolbar {
           '#sections' => $wrapper['sections'],
           '#active' => $active,
           '#id' => $key,
+          '#access' => $this->userCanAccessToolbar(),
         ];
       }
     }
@@ -146,6 +152,10 @@ class AdminicToolbar {
       return [
         '#theme' => 'adminic_toolbar_secondary',
         '#wrappers' => $wrappers,
+        '#cache' => [
+          'keys' => ['toolbar_secondary'],
+          'contexts' => ['user.permissions', 'url.path'],
+        ],
       ];
     }
 
@@ -186,6 +196,11 @@ class AdminicToolbar {
       return [
         '#theme' => 'adminic_toolbar_top',
         '#info' => $adminic_toolbar_top,
+        '#access' => $this->userCanAccessToolbar(),
+        '#cache' => [
+          'keys' => ['toolbar_top'],
+          'contexts' => ['user.permissions', 'url.path'],
+        ],
       ];
     }
 
