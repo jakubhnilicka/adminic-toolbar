@@ -14,11 +14,11 @@ set:
   - {id: 'reports', section: 'general', route: 'system.admin_reports'}
   - {id: 'help', section: 'general', route: 'help.main'}
 
-  sections:
+  widgets:
   # Primary Tabs
   - {id: 'default'}
   - {id: 'general', title: 'General'}
-  - {id: 'user', title: 'User', callback: 'Drupal\adminic_toolbar\UserAccountWidget'}
+  - {id: 'user', title: 'User', callback: 'user_account'}
   # Content Tab
   - {id: 'content.default', tab: 'content'}
   # Media Tab

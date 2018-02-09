@@ -6,7 +6,7 @@ services:
       - system.site
   adminic_toolbar:
     class: Drupal\adminic_toolbar\AdminicToolbar
-    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.tab_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.section_manager', '@adminic_toolbar.section_manager']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tab_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.section_manager', '@adminic_toolbar.section_manager']
   adminic_toolbar.discovery_manager:
     class: Drupal\adminic_toolbar\DiscoveryManager
     arguments: ['@module_handler']
@@ -22,3 +22,6 @@ services:
   adminic_toolbar.link_manager:
     class: Drupal\adminic_toolbar\LinkManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager']
+  adminic_toolbar.widget.manager:
+    class: Drupal\adminic_toolbar\ToolbarWidgetPluginManager
+    parent: default_plugin_manager
