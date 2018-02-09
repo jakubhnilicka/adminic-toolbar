@@ -2,12 +2,12 @@
 
 namespace Drupal\adminic_toolbar;
 
-interface WidgetInterface {
+interface ToolbarWidgetPluginInterface {
 
   /**
    * Get render array for widget.
    *
    * @return array
    */
-  public static function getRenderArray();
+  public function getRenderArray();
 }

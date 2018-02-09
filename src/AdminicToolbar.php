@@ -39,11 +39,17 @@ class AdminicToolbar {
   private $sectionManager;
 
   /**
+   * @var \Drupal\adminic_toolbar\ToolbarWidgetPluginManager
+   */
+  private $toolbarWidgetPluginManager;
+
+  /**
    * AdminicToolbar constructor.
    *
    * @param \Drupal\Core\Config\Config $systemSite
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    * @param \Drupal\Core\Session\AccountProxy $currentUser
+   * @param \Drupal\adminic_toolbar\ToolbarWidgetPluginManager $toolbarWidgetPluginManager
    * @param \Drupal\adminic_toolbar\TabManager $tabManager
    * @param \Drupal\adminic_toolbar\LinkManager $linkManager
    * @param \Drupal\adminic_toolbar\SectionManager $sectionManager
@@ -52,6 +58,7 @@ class AdminicToolbar {
     Config $systemSite,
     CurrentRouteMatch $currentRouteMatch,
     AccountProxy $currentUser,
+    ToolbarWidgetPluginManager $toolbarWidgetPluginManager,
     TabManager $tabManager,
     LinkManager $linkManager,
     SectionManager $sectionManager) {
@@ -61,6 +68,7 @@ class AdminicToolbar {
     $this->sectionManager = $sectionManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->systemSite = $systemSite;
+    $this->toolbarWidgetPluginManager = $toolbarWidgetPluginManager;
   }
 
   /**
@@ -80,9 +88,10 @@ class AdminicToolbar {
     /** @var \Drupal\adminic_toolbar\Section $section */
     foreach ($primarySections as $section) {
       if ($section->hasCallback()) {
+        $widgetManager = $this->toolbarWidgetPluginManager;
         $callback = $section->getCallback();
-        $return = call_user_func([$callback, 'getRenderArray']);
-        $widgets[] = $return;
+        $widget = $this->toolbarWidgetPluginManager->createInstance($callback);
+        $widgets[] = $widget->getRenderArray();
       }
       else {
         $widgets[] = $this->sectionManager->getPrimarySection($section);

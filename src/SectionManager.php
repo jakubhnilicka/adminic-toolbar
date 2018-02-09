@@ -69,8 +69,8 @@ class SectionManager {
     $activeLink = $this->linkManager->getActiveLink();
 
     foreach ($config as $configFile) {
-      if ($configFile['set']['id'] == 'default' && isset($configFile['set']['sections'])) {
-        foreach ($configFile['set']['sections'] as $section) {
+      if ($configFile['set']['id'] == 'default' && isset($configFile['set']['widgets'])) {
+        foreach ($configFile['set']['widgets'] as $section) {
           $id = $section['id'];
           $title = isset($section['title']) ? $section['title'] : NULL;
           $tab = isset($section['tab']) ? $section['tab'] : NULL;
