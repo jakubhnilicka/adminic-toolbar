@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\adminic_toolbar\Components;
+namespace Drupal\adminic_toolbar;
 
 class Tab {
 
@@ -38,7 +38,7 @@ class Tab {
    * @param string $title
    * @param bool $active
    */
-  public function __construct($id, $section, $route, $title, $active) {
+  public function __construct(string $id, string $section, string $route, string $title, bool $active) {
     $this->id = $id;
     $this->section = $section;
     $this->route = $route;
@@ -57,10 +57,10 @@ class Tab {
   }
 
   /**
-   * Get tab id.
+   * Get tab section.
    *
    * @return string
-   *   Return tab id.
+   *   Return tab section.
    */
   public function getSection() {
     return $this->section;
@@ -87,7 +87,7 @@ class Tab {
   }
 
   /**
-   * Is tab active.
+   * Get tab state.
    *
    * @return string
    *   Return tab active state.
@@ -101,6 +101,13 @@ class Tab {
    */
   public function setActive() {
     $this->active = TRUE;
+  }
+
+  /**
+   * Set tab as inactive.
+   */
+  public function setInactive() {
+    $this->active = FALSE;
   }
 
   /**

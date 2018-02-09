@@ -1,4 +1,24 @@
 services:
+  adminic_toolbar.system_site:
+    class: Drupal\Core\Config\ImmutableConfig
+    factory: config.factory:get
+    arguments:
+      - system.site
   adminic_toolbar:
     class: Drupal\adminic_toolbar\AdminicToolbar
-    arguments: ['@router.route_provider', '@current_route_match', '@module_handler', '@access_manager', '@current_user']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.tab_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.section_manager', '@adminic_toolbar.section_manager']
+  adminic_toolbar.discovery_manager:
+    class: Drupal\adminic_toolbar\DiscoveryManager
+    arguments: ['@module_handler']
+  adminic_toolbar.route_manager:
+    class: Drupal\adminic_toolbar\RouteManager
+    arguments: ['@router.route_provider', '@current_route_match', '@access_manager', '@current_user']
+  adminic_toolbar.tab_manager:
+    class: Drupal\adminic_toolbar\TabManager
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager']
+  adminic_toolbar.section_manager:
+    class: Drupal\adminic_toolbar\SectionManager
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.tab_manager', '@adminic_toolbar.tab_manager']
+  adminic_toolbar.link_manager:
+    class: Drupal\adminic_toolbar\LinkManager
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager']

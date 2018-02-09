@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\adminic_toolbar\Components;
+namespace Drupal\adminic_toolbar;
 
 class Section {
 
@@ -17,10 +17,10 @@ class Section {
   /**
    * Section constructor.
    *
-   * @param $id
-   * @param $title
-   * @param $tab
-   * @param $callback
+   * @param string $id
+   * @param string|null $title
+   * @param string $tab
+   * @param string $callback
    */
   public function __construct($id, $title, $tab, $callback) {
     $this->id = $id;
@@ -89,9 +89,15 @@ class Section {
     return $this->links;
   }
 
+  /**
+   * Has section callback?
+   *
+   * @return bool
+   */
   public function hasCallback() {
     return !is_null($this->callback);
   }
+
   /**
    * Return section render array.
    *
