@@ -23,6 +23,10 @@ class Link {
    * @var bool
    */
   private $active;
+  /**
+   * @var bool
+   */
+  private $disabled;
 
   /**
    * Link constructor.
@@ -31,12 +35,14 @@ class Link {
    * @param string $route
    * @param string $title
    * @param bool $active
+   * @param bool $disabled
    */
-  public function __construct(string $section, string $route, string $title, bool $active) {
+  public function __construct(string $section, string $route, string $title, bool $active, bool $disabled) {
     $this->section = $section;
     $this->route = $route;
     $this->title = $title;
     $this->active = $active;
+    $this->disabled = $disabled;
   }
 
   /**
@@ -93,6 +99,9 @@ class Link {
     $this->active = FALSE;
   }
 
+  public function isDisabled() {
+    return $this->disabled;
+  }
   /**
    * Return link render array.
    *

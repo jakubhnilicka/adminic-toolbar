@@ -41,7 +41,7 @@ set:
   - {id: 'configuration.people', tab: 'configuration', title: 'People'}
   - {id: 'configuration.system', tab: 'configuration', title: 'System'}
   - {id: 'configuration.user_interface', tab: 'configuration', title: 'User interface'}
-  - {id: 'configuration.development', tab: 'configuration', title: 'Development'}
+  - {id: 'configuration.development', tab: 'configuration', title: 'Development', weight: -99}
   - {id: 'configuration.media', tab: 'configuration', title: 'Media'}
   - {id: 'configuration.search_and_metadata', tab: 'configuration', title: 'Search and metadat'}
   - {id: 'configuration.web_services', tab: 'configuration', title: 'Web services'}

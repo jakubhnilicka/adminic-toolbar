@@ -30,6 +30,11 @@ class Tab {
   private $active;
 
   /**
+   * @var bool
+   */
+  private $disabled;
+
+  /**
    * Tab constructor.
    *
    * @param string $id
@@ -37,13 +42,15 @@ class Tab {
    * @param string $route
    * @param string $title
    * @param bool $active
+   * @param bool $disabled
    */
-  public function __construct(string $id, string $section, string $route, string $title, bool $active) {
+  public function __construct(string $id, string $section, string $route, string $title, bool $active, bool $disabled) {
     $this->id = $id;
     $this->section = $section;
     $this->route = $route;
     $this->title = $title;
     $this->active = $active;
+    $this->disabled = $disabled;
   }
 
   /**
@@ -93,6 +100,16 @@ class Tab {
    *   Return tab active state.
    */
   public function isActive() {
+    return $this->active;
+  }
+
+  /**
+   * Get tab state.
+   *
+   * @return string
+   *   Return tab active state.
+   */
+  public function isDisabled() {
     return $this->active;
   }
 

@@ -34,9 +34,22 @@ class DiscoveryManager {
    */
   protected function loadConfig() {
     $discovery = new YamlDiscovery('toolbar', $this->moduleHandler->getModuleDirectories());
-    $config = $discovery->findAll();
+    $configs = $discovery->findAll();
 
-    return $config;
+    foreach ($configs as $key => $config) {
+      // Allways load adminic toolbar before others.
+      if ($key == 'adminic_toolbar') {
+        $configs[$key]['weight'] = -99;
+      }
+      // If weight is not specified set it as 0.
+      if (!isset($configs[$key]['weight'])) {
+        $configs[$key]['weight'] = 0;
+      }
+    }
+    // Sort by weight.
+    uasort($configs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    return $configs;
   }
 
   /**

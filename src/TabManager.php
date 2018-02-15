@@ -39,35 +39,33 @@ class TabManager {
 
   /**
    * Get all defined tabs from all config files.
-   *
-   * @return bool
-   *   Array of tabs.
    */
   protected function parseTabs() {
     $config = $this->discoveryManager->getConfig();
 
+    $configTabs = [];
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['tabs'])) {
         foreach ($configFile['set']['tabs'] as $tab) {
-          $id = $tab['id'];
-          $section = isset($tab['section']) ? $tab['section'] : NULL;
-          $route = $tab['route'];
-          $isValid = $this->routeManager->isRouteValid($route);
-          // TODO: Fix disabled override.
-          // TODO: Implement weight sorting.
-          if ($isValid) {
-            $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
-            $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
-            $active = FALSE;
-            if ($disabled == FALSE && $isValid) {
-              $this->addTab(new Tab($id, $section, $route, $title, $active));
-            }
-          }
+          $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
+          $configTabs[] = $tab;
         }
       }
     }
+    uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
-    return TRUE;
+    foreach ($configTabs as $tab) {
+      $id = $tab['id'];
+      $section = isset($tab['section']) ? $tab['section'] : '';
+      $route = $tab['route'];
+      $isValid = $this->routeManager->isRouteValid($route);
+      if ($isValid) {
+        $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
+        $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
+        $active = FALSE;
+        $this->addTab(new Tab($id, $section, $route, $title, $active, $disabled));
+      }
+    }
   }
 
   /**
@@ -91,6 +89,11 @@ class TabManager {
   public function addTab(Tab $tab) {
     $key = $this->getTabKey($tab);
     $this->tabs[$key] = $tab;
+    // Remove tab if exists and is disabled
+    if (isset($this->tabs[$key]) && $tab->isDisabled()) {
+      unset($this->tabs[$key]);
+    }
+
   }
 
   /**

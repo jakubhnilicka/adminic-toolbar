@@ -14,19 +14,23 @@ class Section {
 
   private $callback;
 
+  private $disabled;
+
   /**
    * Section constructor.
    *
    * @param string $id
    * @param string|null $title
    * @param string $tab
+   * @param $disabled
    * @param string $callback
    */
-  public function __construct($id, $title, $tab, $callback) {
+  public function __construct($id, $title, $tab, $disabled, $callback) {
     $this->id = $id;
     $this->title = $title;
     $this->tab = $tab;
     $this->callback = $callback;
+    $this->disabled = $disabled;
   }
 
   /**
@@ -98,6 +102,9 @@ class Section {
     return !is_null($this->callback);
   }
 
+  public function isDisabled() {
+    return $this->disabled;
+  }
   /**
    * Return section render array.
    *

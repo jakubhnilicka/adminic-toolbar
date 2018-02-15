@@ -68,24 +68,27 @@ class SectionManager {
     $config = $this->discoveryManager->getConfig();
     $activeLink = $this->linkManager->getActiveLink();
 
+    $configSections = [];
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['widgets'])) {
         foreach ($configFile['set']['widgets'] as $section) {
-          $id = $section['id'];
-          $title = isset($section['title']) ? $section['title'] : NULL;
-          $tab = isset($section['tab']) ? $section['tab'] : NULL;
-          $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
-          $callback = isset($section['callback']) ? $section['callback'] : NULL;
-          // TODO: Fix disabled override.
-          // TODO: Implement weight sorting.
-          if ($disabled == FALSE) {
-            $newSection = new Section($id, $title, $tab, $callback);
-            $this->addSection($newSection);
-            if ($activeLink && $id == $activeLink->getSection()) {
-              $this->addActiveSection($newSection);
-            }
-          }
+          $section['weight'] = isset($section['weight']) ? $section['weight'] : 0;
+          $configSections[] = $section;
         }
+      }
+    }
+    uasort($configSections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    foreach ($configSections as $section) {
+      $id = $section['id'];
+      $title = isset($section['title']) ? $section['title'] : NULL;
+      $tab = isset($section['tab']) ? $section['tab'] : NULL;
+      $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
+      $callback = isset($section['callback']) ? $section['callback'] : NULL;
+      $newSection = new Section($id, $title, $tab, $disabled, $callback);
+      $this->addSection($newSection);
+      if ($activeLink && $id == $activeLink->getSection()) {
+        $this->addActiveSection($newSection);
       }
     }
 
@@ -98,7 +101,16 @@ class SectionManager {
    * @param \Drupal\adminic_toolbar\Section $section
    */
   public function addSection(Section $section) {
-    $this->sections[] = $section;
+    $key = $this->getSectionKey($section);
+    $this->sections[$key] = $section;
+    // Remove section if exists and is disabled
+    if (isset($this->sections[$key]) && $section->isDisabled()) {
+      unset($this->sections[$key]);
+    }
+  }
+
+  protected function getSectionKey(Section $section) {
+    return $section->getId();
   }
 
   /**
