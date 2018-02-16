@@ -60,10 +60,12 @@ body.adminic-toolbar-top {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
 }
+
 .toolbar__primary::-webkit-scrollbar,
 .toolbar__secondary::-webkit-scrollbar {
   display: none;
 }
+
 .toolbar__secondary {
   background-color: #f2f3f4;
   left: 48px;
@@ -160,26 +162,39 @@ body.adminic-toolbar-secondary .toolbar__top {
   visibility: visible;
   background-size: 100% auto;
 }
+
 .toolbar__primary .toolbar__header a:before {
   background: url('../images/drupal-logo.svg') no-repeat center;
 }
+
 .toolbar__primary .toolbar__header a:hover:before {
-  background-color: #1F51BF;
+  background-color: #1f51bf;
 }
 
 .toolbar__secondary .toolbar__header a:before {
   background: url('../images/back.svg') no-repeat center;
 }
+
 .toolbar__secondary .toolbar__header a:hover:before {
-  background-color: #D9DADB;
+  background-color: #d9dadb;
 }
 
 .toolbar__section {
-  margin-bottom: 16px;
+  margin-bottom: 7px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid transparent;
 }
 
-.toolbar__section.bottom {
+.toolbar__primary .toolbar__section {
+  border-bottom: 1px solid #333;
+}
 
+.toolbar__secondary .toolbar__section {
+  border-bottom: 1px solid #ebeced;
+}
+
+.toolbar__section:last-child {
+  border-bottom: none;
 }
 
 .toolbar__section__header {
@@ -200,6 +215,7 @@ body.adminic-toolbar-secondary .toolbar__top {
   margin-top: 0;
   text-indent: 0;
 }
+
 .toolbar__section__content {
   position: relative;
   padding: 8px 16px;
@@ -259,9 +275,14 @@ body.adminic-toolbar-secondary .toolbar__top {
 }
 
 .toolbar__primary .toolbar__section__navigation li a.active {
-  color: #FFF;
+  color: #fff;
 }
-
+.toolbar__primary .toolbar__section__navigation li a:hover,
+.toolbar__primary .toolbar__section__navigation li a:focus,
+.toolbar__primary .toolbar__section__navigation li a:active {
+  color: #1D99F1;
+  background-color: #303743;
+}
 .toolbar__primary .toolbar__section__navigation li a:hover:before,
 .toolbar__primary .toolbar__section__navigation li a:focus:before,
 .toolbar__primary .toolbar__section__navigation li a:active:before {
@@ -271,10 +292,17 @@ body.adminic-toolbar-secondary .toolbar__top {
 .toolbar__secondary .toolbar__section__navigation li a.active {
   color: #333;
 }
+
+.toolbar__secondary .toolbar__section__navigation li a:hover,
+.toolbar__secondary .toolbar__section__navigation li a:focus,
+.toolbar__secondary .toolbar__section__navigation li a:active {
+  color: #1D99F1;
+  background-color: #ebeced;
+}
 .toolbar__secondary .toolbar__section__navigation li a:hover:before,
 .toolbar__secondary .toolbar__section__navigation li a:focus:before,
 .toolbar__secondary .toolbar__section__navigation li a:active:before {
-  background-color: #E3E4E6;
+  background-color: #e3e4e6;
 }
 
 .toolbar_secondary_wrapper {
@@ -288,15 +316,18 @@ body.adminic-toolbar-secondary .toolbar__top {
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
 }
+
 .toolbar_secondary_wrapper::-webkit-scrollbar {
   display: none;
 }
+
 .toolbar_secondary_wrapper.active {
   transform: none;
 }
+
 /* Icons */
 .icon:before {
-  background: transparent no-repeat scroll center ;
+  background: transparent no-repeat scroll center;
   background-size: 100% auto;
 }
 
@@ -399,53 +430,59 @@ body.adminic-toolbar-secondary .toolbar__top {
   background-image: url('../images/help.svg');
 }
 
-
 .dropdown-toggle {
   padding: .5em 1em;
   background: #777;
   border-radius: .2em .2em 0 0;
 }
+
 ul.dropdown {
-  display:none;
+  display: none;
   position: absolute;
   top: 100%;
   margin-top: .5em;
   background: #777;
   min-width: 12em;
   padding: 0;
-  border-radius: 0 0 .2em .2em;}
+  border-radius: 0 0 .2em .2em;
+}
+
 ul.dropdown li {
-  list-style-type: none;}
+  list-style-type: none;
+}
+
 ul.dropdown li a {
   text-decoration: none;
   padding: .5em 1em;
   display: block;
 }
 
-
 .user_account--left {
   float: left;
   width: 24px;
 }
+
 .user_account--right {
   float: right;
   width: 80px;
 }
+
 .user_account--image {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 1px solid #919BA9;
+  border: 1px solid #919ba9;
 }
+
 .user_account--right h3 {
   font-size: 14px;
   margin: 0 0 4px 0;
   padding: 0;
-  color: #FFF;
+  color: #fff;
 }
 
 .user_account--right a {
   font-size: 12px;
-  color: #919BA9;
+  color: #919ba9;
   display: block;
 }
