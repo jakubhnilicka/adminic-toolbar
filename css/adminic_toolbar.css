@@ -285,6 +285,11 @@ body.adminic-toolbar-secondary .toolbar__top {
   transform: translateX(-100%);
   transition: all 0.2s;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+}
+.toolbar_secondary_wrapper::-webkit-scrollbar {
+  display: none;
 }
 .toolbar_secondary_wrapper.active {
   transform: none;
