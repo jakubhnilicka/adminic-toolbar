@@ -57,8 +57,13 @@ body.adminic-toolbar-top {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
   z-index: 999999;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
-
+.toolbar__primary::-webkit-scrollbar,
+.toolbar__secondary::-webkit-scrollbar {
+  display: none;
+}
 .toolbar__secondary {
   background-color: #f2f3f4;
   left: 48px;
