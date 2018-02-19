@@ -110,7 +110,7 @@ class Link {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'adminic_toolbar_section_link',
+      '#theme' => 'toolbar_section_link',
       '#title' => $this->getTitle(),
       '#route' => $this->getRoute(),
       '#active' => $this->isActive(),

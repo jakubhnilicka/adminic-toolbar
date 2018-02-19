@@ -180,8 +180,8 @@ body.adminic-toolbar-secondary .toolbar__top {
 }
 
 .toolbar__section {
-  margin-bottom: 7px;
-  padding-bottom: 8px;
+  margin-bottom: 15px;
+  padding-bottom: 16px;
   border-bottom: 1px solid transparent;
 }
 
@@ -205,15 +205,10 @@ body.adminic-toolbar-secondary .toolbar__top {
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  border-top: 1px solid #333;
-  margin-top: -1px;
-  text-indent: -99999px;
 }
 
-.toolbar__secondary .toolbar__section__header {
-  border-top: none;
-  margin-top: 0;
-  text-indent: 0;
+.toolbar__primary .toolbar__section__header {
+  display: none;
 }
 
 .toolbar__section__content {
@@ -351,10 +346,8 @@ body.adminic-toolbar-secondary .toolbar__top {
     visibility: visible;
   }
 
-  .toolbar__primary .toolbar__section__header {
-    border-top: none;
-    margin-top: 0;
-    text-indent: 0;
+  .toolbar__secondary .toolbar__section__header {
+    display: block;
   }
 
   .toolbar__primary .toolbar__section__navigation li a {
@@ -428,61 +421,4 @@ body.adminic-toolbar-secondary .toolbar__top {
 
 #tab-help:before {
   background-image: url('../images/help.svg');
-}
-
-.dropdown-toggle {
-  padding: .5em 1em;
-  background: #777;
-  border-radius: .2em .2em 0 0;
-}
-
-ul.dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  margin-top: .5em;
-  background: #777;
-  min-width: 12em;
-  padding: 0;
-  border-radius: 0 0 .2em .2em;
-}
-
-ul.dropdown li {
-  list-style-type: none;
-}
-
-ul.dropdown li a {
-  text-decoration: none;
-  padding: .5em 1em;
-  display: block;
-}
-
-.user_account--left {
-  float: left;
-  width: 24px;
-}
-
-.user_account--right {
-  float: right;
-  width: 80px;
-}
-
-.user_account--image {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 1px solid #919ba9;
-}
-
-.user_account--right h3 {
-  font-size: 14px;
-  margin: 0 0 4px 0;
-  padding: 0;
-  color: #fff;
-}
-
-.user_account--right a {
-  font-size: 12px;
-  color: #919ba9;
-  display: block;
 }
