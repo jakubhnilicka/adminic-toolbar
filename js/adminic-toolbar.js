@@ -56,18 +56,6 @@
                 $toolbarSecondary.hide();
                 $body.removeClass('adminic-toolbar-secondary');
             }
-
-            $(document).keydown(function (e) {
-                if (e.which == "17") {
-                    cntrlIsPressed = true;
-                }
-            });
-
-            $(document).keyup(function () {
-                cntrlIsPressed = false;
-            });
-
-            var cntrlIsPressed = false;
         }
     };
 
