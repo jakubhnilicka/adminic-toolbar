@@ -6,7 +6,7 @@ use Drupal\Core\Config\Config;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxy;
 
-class AdminicToolbar {
+class Toolbar {
 
   /**
    * @var \Drupal\Core\Config\Config
@@ -44,7 +44,7 @@ class AdminicToolbar {
   private $toolbarWidgetPluginManager;
 
   /**
-   * AdminicToolbar constructor.
+   * Toolbar constructor.
    *
    * @param \Drupal\Core\Config\Config $systemSite
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
@@ -100,7 +100,7 @@ class AdminicToolbar {
 
     if ($widgets) {
       return [
-        '#theme' => 'adminic_toolbar_primary',
+        '#theme' => 'toolbar_primary',
         '#title' => 'Drupal',
         '#widgets' => $widgets,
         '#access' => $this->userCanAccessToolbar(),
@@ -137,7 +137,7 @@ class AdminicToolbar {
       }
       if ($wrapper['sections']) {
         $wrappers[] = [
-          '#theme' => 'adminic_toolbar_secondary_wrapper',
+          '#theme' => 'toolbar_secondary_wrapper',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
           '#sections' => $wrapper['sections'],
@@ -150,7 +150,7 @@ class AdminicToolbar {
 
     if (!empty($wrappers)) {
       return [
-        '#theme' => 'adminic_toolbar_secondary',
+        '#theme' => 'toolbar_secondary',
         '#wrappers' => $wrappers,
         '#cache' => [
           'keys' => ['toolbar_secondary'],
@@ -189,12 +189,12 @@ class AdminicToolbar {
 
     $adminic_toolbar_top[] = [
       '#type' => 'markup',
-      '#markup' => 'Route: ' . $current_route_name,
+      '#markup' => "- {section: 'default', route: '" . $current_route_name . "'}",
     ];
 
     if ($adminic_toolbar_top) {
       return [
-        '#theme' => 'adminic_toolbar_top',
+        '#theme' => 'toolbar_top',
         '#info' => $adminic_toolbar_top,
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [

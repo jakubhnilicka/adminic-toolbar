@@ -8,26 +8,26 @@ use Drupal\user\Entity\User;
 function adminic_toolbar_theme($existing, $type, $theme, $path) {
   $items = [];
 
-  $items['adminic_toolbar_top'] = [
+  $items['toolbar_top'] = [
     'variables' => [
       'info' => NULL,
     ],
   ];
 
-  $items['adminic_toolbar_primary'] = [
+  $items['toolbar_primary'] = [
     'variables' => [
       'title' => NULL,
       'widgets' => NULL,
     ],
   ];
 
-  $items['adminic_toolbar_secondary'] = [
+  $items['toolbar_secondary'] = [
     'variables' => [
       'wrappers' => NULL,
     ],
   ];
 
-  $items['adminic_toolbar_secondary_wrapper'] = [
+  $items['toolbar_secondary_wrapper'] = [
     'variables' => [
       'title' => NULL,
       'title_link' => NULL,
@@ -37,14 +37,14 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['adminic_toolbar_section'] = [
+  $items['toolbar_section'] = [
     'variables' => [
       'title' => NULL,
       'links' => NULL,
     ],
   ];
 
-  $items['adminic_toolbar_section_tab'] = [
+  $items['toolbar_section_tab'] = [
     'variables' => [
       'title' => NULL,
       'route' => NULL,
@@ -53,7 +53,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['adminic_toolbar_section_link'] = [
+  $items['toolbar_section_link'] = [
     'variables' => [
       'title' => NULL,
       'route' => NULL,
@@ -81,7 +81,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
  * {@inheritdoc}
  */
 function adminic_toolbar_page_top(array &$page_top) {
-  /** @var \Drupal\adminic_toolbar\AdminicToolbar $adminic_toolbar */
+  /** @var \Drupal\adminic_toolbar\Toolbar $adminic_toolbar */
   $adminic_toolbar = \Drupal::service('adminic_toolbar');
 
   $toolbarPrimary = $adminic_toolbar->getPrimaryToolbar();

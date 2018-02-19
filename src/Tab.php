@@ -135,7 +135,7 @@ class Tab {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'adminic_toolbar_section_tab',
+      '#theme' => 'toolbar_section_tab',
       '#title' => $this->getTitle(),
       '#route' => $this->getRoute(),
       '#active' => $this->isActive(),

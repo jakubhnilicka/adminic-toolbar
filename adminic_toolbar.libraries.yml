@@ -8,3 +8,9 @@ adminic_toolbar:
   dependencies:
     - core/jquery
     - core/jquery.once
+
+user_account:
+  version: VERSION
+  css:
+    component:
+      css/user_account.css: {}

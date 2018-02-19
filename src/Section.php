@@ -113,7 +113,7 @@ class Section {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'adminic_toolbar_section',
+      '#theme' => 'toolbar_section',
       '#title' => $this->getTitle(),
       '#links' => $this->getLinks(),
     ];

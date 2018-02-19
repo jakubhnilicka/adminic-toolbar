@@ -1,0 +1,54 @@
+.toolbar__user_account {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.user_account--left {
+  width: 24px;
+  left: 8px;
+}
+.user_account--right {
+  display: none;
+}
+.user_account--image {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #919ba9;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+.user_account--image a {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.user_account--right .user_name {
+  font-size: 14px;
+  margin: 0 0 4px 0;
+  padding: 0;
+  color: #fff;
+}
+
+.user_account--right a {
+  font-size: 12px;
+  color: #919ba9;
+  display: block;
+}
+
+/**
+ * Media queries.
+ */
+@media only screen and (min-width: 60em) {
+  .toolbar__user_account {
+    padding-left: 12px;
+    padding-right: 16px;
+    display: flex;
+  }
+  .user_account--left {
+    margin-right: 20px;
+  }
+  .user_account--right {
+    display: block;
+    padding-top: 2px;
+  }
+}
