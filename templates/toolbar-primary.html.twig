@@ -1,8 +1,6 @@
 {{ attach_library('adminic_toolbar/adminic_toolbar') }}
 <div class="toolbar__primary">
-  <div class="toolbar__header">
-    <a href="{{ url('<front>') }}">{{ title }}</a>
-  </div>
+  {{ header }}
   <div class="toolbar__content">
     {% for widget in widgets %}
       {{ widget }}

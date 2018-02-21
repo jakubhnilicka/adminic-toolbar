@@ -16,7 +16,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
 
   $items['toolbar_primary'] = [
     'variables' => [
-      'title' => NULL,
+      'header' => NULL,
       'widgets' => NULL,
     ],
   ];
@@ -27,10 +27,16 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['toolbar_secondary_wrapper'] = [
+  $items['toolbar_header'] = [
     'variables' => [
       'title' => NULL,
       'title_link' => NULL,
+    ],
+  ];
+
+  $items['toolbar_secondary_wrapper'] = [
+    'variables' => [
+      'header' => NULL,
       'sections' => NULL,
       'active' => FALSE,
       'id' => FALSE,

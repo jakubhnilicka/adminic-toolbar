@@ -98,9 +98,16 @@ class Toolbar {
       }
     }
 
+    $header = [
+      '#theme' => 'toolbar_header',
+      '#title' => t('Drupal'),
+      '#title_link' => '<front>'
+    ];
+
     if ($widgets) {
       return [
         '#theme' => 'toolbar_primary',
+        '#header' => $header,
         '#title' => 'Drupal',
         '#widgets' => $widgets,
         '#access' => $this->userCanAccessToolbar(),
@@ -136,10 +143,15 @@ class Toolbar {
         $active = ($key == $activeTab->getId());
       }
       if ($wrapper['sections']) {
-        $wrappers[] = [
-          '#theme' => 'toolbar_secondary_wrapper',
+        $header = [
+          '#theme' => 'toolbar_header',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
+        ];
+
+        $wrappers[] = [
+          '#theme' => 'toolbar_secondary_wrapper',
+          '#header' => $header,
           '#sections' => $wrapper['sections'],
           '#active' => $active,
           '#id' => $key,
