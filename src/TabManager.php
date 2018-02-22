@@ -2,6 +2,9 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\adminic_toolbar\DiscoveryManager;
+use Drupal\adminic_toolbar\RouteManager;
+
 class TabManager {
 
   /**
@@ -43,12 +46,14 @@ class TabManager {
   protected function parseTabs() {
     $config = $this->discoveryManager->getConfig();
 
+    $weight = 0;
     $configTabs = [];
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['tabs'])) {
         foreach ($configFile['set']['tabs'] as $tab) {
-          $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
+          $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : $weight;
           $configTabs[] = $tab;
+          $weight++;
         }
       }
     }

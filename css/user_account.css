@@ -6,9 +6,6 @@
   width: 24px;
   left: 8px;
 }
-.user_account--right {
-  display: none;
-}
 .user_account--image {
   width: 24px;
   height: 24px;
@@ -22,19 +19,24 @@
   display: block;
 }
 
-.user_account--right .user_name {
-  font-size: 14px;
-  margin: 0 0 4px 0;
-  padding: 0;
-  color: #fff;
+/* Dropdown */
+.user_account--right .drdc {
+  padding-top: 2px;
 }
-
-.user_account--right a {
-  font-size: 12px;
-  color: #919ba9;
+.user_account--right .drdc a {
   display: block;
+  color: #19212e;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 16px;
+  margin: 4px 0;
+  text-align: left;
 }
-
+.user_account--right .drdc a:hover,
+.user_account--right .drdc a:focus,
+.user_account--right .drdc a:active {
+  color: #1d99f1
+}
 /**
  * Media queries.
  */
@@ -49,6 +51,6 @@
   }
   .user_account--right {
     display: block;
-    padding-top: 2px;
+    width: 100px;
   }
 }

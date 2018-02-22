@@ -2,6 +2,19 @@
  * @file
  * Adminic toolbar css styles.
  */
+:root {
+  --toolbar-bg-color: #19212e;
+
+  --toolbar-primary-bg-color: #19212e;
+  --toolbar-primary-header-bg-color: #19212e;
+  --toolbar-primary-header-color: #19212e;
+  --toolbar-primary-divider-color: #333;
+
+  --toolbar-secondary-bg-color: #f2f3f4;
+  --toolbar-secondary-header-bg-color: #19212e;
+  --toolbar-secondary-header-color: #19212e;
+  --toolbar-secondary-divider-color: #ebeced;
+}
 
 /**
  * Body resizing.
@@ -47,7 +60,7 @@ body.adminic-toolbar-top {
 .toolbar__primary,
 .toolbar__secondary {
   position: fixed;
-  background-color: #19212e;
+  background-color: var(--toolbar-bg-color);
   top: 0;
   left: 0;
   width: 48px;
@@ -56,7 +69,7 @@ body.adminic-toolbar-top {
   flex-direction: column;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
   z-index: 999999;
-  overflow-y: scroll;
+  overflow: auto;
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
 }
@@ -67,7 +80,7 @@ body.adminic-toolbar-top {
 }
 
 .toolbar__secondary {
-  background-color: #f2f3f4;
+  background-color: var(--toolbar-secondary-bg-color);
   left: 48px;
   width: 200px;
   z-index: 999998;
@@ -111,13 +124,13 @@ body.adminic-toolbar-secondary .toolbar__top {
 }
 
 .toolbar__primary .toolbar__header {
-  background-color: #2461e3;
-  color: #fff;
+  background-color: var(--toolbar-primary-header-bg-color);
+  color: var(--toolbar-primary-header-color);
 }
 
 .toolbar__secondary .toolbar__header {
-  background-color: #ebeced;
-  color: #919bad;
+  background-color: var(--toolbar-secondary-header-bg-color);
+  color: var(--toolbar-secondary-header-color);
 }
 
 .toolbar__header a {
@@ -186,11 +199,11 @@ body.adminic-toolbar-secondary .toolbar__top {
 }
 
 .toolbar__primary .toolbar__section {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--toolbar-primary-divider-color);
 }
 
 .toolbar__secondary .toolbar__section {
-  border-bottom: 1px solid #ebeced;
+  border-bottom: 1px solid var(--toolbar-secondary-divider-color);
 }
 
 .toolbar__section:last-child {
@@ -272,12 +285,14 @@ body.adminic-toolbar-secondary .toolbar__top {
 .toolbar__primary .toolbar__section__navigation li a.active {
   color: #fff;
 }
+
 .toolbar__primary .toolbar__section__navigation li a:hover,
 .toolbar__primary .toolbar__section__navigation li a:focus,
 .toolbar__primary .toolbar__section__navigation li a:active {
-  color: #1D99F1;
+  color: #1d99f1;
   background-color: #303743;
 }
+
 .toolbar__primary .toolbar__section__navigation li a:hover:before,
 .toolbar__primary .toolbar__section__navigation li a:focus:before,
 .toolbar__primary .toolbar__section__navigation li a:active:before {
@@ -291,9 +306,10 @@ body.adminic-toolbar-secondary .toolbar__top {
 .toolbar__secondary .toolbar__section__navigation li a:hover,
 .toolbar__secondary .toolbar__section__navigation li a:focus,
 .toolbar__secondary .toolbar__section__navigation li a:active {
-  color: #1D99F1;
+  color: #1d99f1;
   background-color: #ebeced;
 }
+
 .toolbar__secondary .toolbar__section__navigation li a:hover:before,
 .toolbar__secondary .toolbar__section__navigation li a:focus:before,
 .toolbar__secondary .toolbar__section__navigation li a:active:before {
@@ -307,7 +323,7 @@ body.adminic-toolbar-secondary .toolbar__top {
   height: 100vh;
   transform: translateX(-100%);
   transition: all 0.2s;
-  overflow-y: scroll;
+  overflow: auto;
   -ms-overflow-style: none;
   overflow: -moz-scrollbars-none;
 }

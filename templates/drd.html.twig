@@ -1,0 +1,9 @@
+{{ attach_library('adminic_toolbar/drd') }}
+<div class="drd">
+  <div class="drdt">{{ trigger_content }}</div>
+  <div class="drdc">
+    {% for part in content %}
+      {{ part }}
+    {% endfor %}
+  </div>
+</div>

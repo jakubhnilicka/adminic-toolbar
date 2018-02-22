@@ -1,0 +1,44 @@
+.drd {
+  position: relative;
+  display: inline-block;
+}
+.drdt {
+  border: 1px solid #919bad;
+  border-radius: 4px;
+  box-sizing: border-box;
+  line-height: 8px;
+  padding: 8px;
+  min-width: 24px;
+  height: 24px;
+  cursor: pointer;
+  color: #919bad;
+}
+.drdc {
+  display: none;
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  background-color: #FFF;
+  padding: 8px 16px;
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  font-size: 12px;
+  line-height: 16px;
+  box-shadow: 0 4px 10px 4px rgba(0,0,0,0.06);
+}
+.drdc a {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 16px;
+  margin: 4px 0;
+}
+/* Opened */
+.drd.open .drdt {
+  border: 1px solid #1d99f1;
+  color: #1d99f1;
+}
+
+.drd.open .drdc {
+  display: block;
+}

@@ -14,3 +14,14 @@ user_account:
   css:
     component:
       css/user_account.css: {}
+
+drd:
+  version: VERSION
+  css:
+    component:
+      css/drd.css: {}
+  js:
+    js/drd.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

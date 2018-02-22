@@ -68,12 +68,14 @@ class SectionManager {
     $config = $this->discoveryManager->getConfig();
     $activeLink = $this->linkManager->getActiveLink();
 
+    $weight = 0;
     $configSections = [];
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['widgets'])) {
         foreach ($configFile['set']['widgets'] as $section) {
-          $section['weight'] = isset($section['weight']) ? $section['weight'] : 0;
+          $section['weight'] = isset($section['weight']) ? $section['weight'] : $weight;
           $configSections[] = $section;
+          $weight++;
         }
       }
     }

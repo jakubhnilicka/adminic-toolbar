@@ -2,6 +2,10 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\adminic_toolbar\DiscoveryManager;
+use Drupal\adminic_toolbar\RouteManager;
+use Drupal\Core\Extension\ModuleHandler;
+
 class LinkManager {
 
   /**
@@ -23,18 +27,25 @@ class LinkManager {
    * @var array
    */
   private $activeLinks = [];
+  /**
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  private $moduleHandler;
 
   /**
    * LinkManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
-    RouteManager $routeManager) {
+    RouteManager $routeManager,
+    ModuleHandler $moduleHandler) {
     $this->routeManager = $routeManager;
     $this->discoveryManager = $discoveryManager;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -44,15 +55,19 @@ class LinkManager {
     $config = $this->discoveryManager->getConfig();
 
     $configLinks = [];
+    $weight = 0;
     foreach ($config as $configFile) {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['links'])) {
         foreach ($configFile['set']['links'] as $link) {
-          $link['weight'] = isset($link['weight']) ? $link['weight'] : 0;
+          $link['weight'] = isset($link['weight']) ? $link['weight'] : $weight;
           $configLinks[] = $link;
+          $weight++;
         }
       }
     }
     uasort($configLinks, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
     foreach ($configLinks as $link) {
       $section = $link['section'];

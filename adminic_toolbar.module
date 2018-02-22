@@ -69,10 +69,15 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
 
   $items['user_account'] = [
     'variables' => [
-      'name' => NULL,
-      'edit_url' => NULL,
-      'profile_url' => NULL,
-      'logout_url' => NULL,
+      'avatar' => NULL,
+      'dropdown' => NULL,
+    ],
+  ];
+
+  $items['drd'] = [
+    'variables' => [
+      'trigger_content' => NULL,
+      'content' => NULL,
     ],
   ];
 

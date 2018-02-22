@@ -21,7 +21,7 @@ services:
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.tab_manager', '@adminic_toolbar.tab_manager']
   adminic_toolbar.link_manager:
     class: Drupal\adminic_toolbar\LinkManager
-    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager']
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
   adminic_toolbar.widget.manager:
     class: Drupal\adminic_toolbar\ToolbarWidgetPluginManager
     parent: default_plugin_manager
