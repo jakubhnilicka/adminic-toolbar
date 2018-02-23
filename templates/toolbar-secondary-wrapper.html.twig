@@ -1,10 +1,12 @@
 {% if sections %}
   <div class="toolbar_secondary_wrapper {{ active ? 'active' }}" id="toolbar-{{ id|clean_class }}">
     {{ header }}
-    <div class="toolbar__content">
-      {% for section in sections %}
-        {{ section }}
-      {% endfor %}
+    <div class="toolbar__content nano">
+      <div class="nano-content">
+        {% for section in sections %}
+          {{ section }}
+        {% endfor %}
+      </div>
     </div>
   </div>
 {% endif %}

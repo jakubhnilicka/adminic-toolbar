@@ -25,3 +25,13 @@ drd:
   dependencies:
     - core/jquery
     - core/jquery.once
+
+nanoscroller:
+  version: VERSION
+  css:
+    component:
+      css/nanoscroller.css: {}
+  js:
+    js/nanoscroller.js: {}
+  dependencies:
+    - core/jquery

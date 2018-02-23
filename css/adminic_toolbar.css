@@ -68,22 +68,21 @@ body.adminic-toolbar-top {
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
-  z-index: 999999;
-  overflow: auto;
-  -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
+  z-index: 999998;
+
 }
 
-.toolbar__primary::-webkit-scrollbar,
-.toolbar__secondary::-webkit-scrollbar {
-  display: none;
+.toolbar__content {
+  padding: 0;
 }
-
+.toolbar__content .nano-content{
+  padding: 16px 0;
+}
 .toolbar__secondary {
   background-color: var(--toolbar-secondary-bg-color);
   left: 48px;
   width: 200px;
-  z-index: 999998;
+  z-index: 999997;
 }
 
 .toolbar__top {
@@ -119,7 +118,6 @@ body.adminic-toolbar-secondary .toolbar__top {
 
 .toolbar__header {
   height: 48px;
-  margin-bottom: 16px;
   position: relative;
 }
 
@@ -323,13 +321,6 @@ body.adminic-toolbar-secondary .toolbar__top {
   height: 100vh;
   transform: translateX(-100%);
   transition: all 0.2s;
-  overflow: auto;
-  -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
-}
-
-.toolbar_secondary_wrapper::-webkit-scrollbar {
-  display: none;
 }
 
 .toolbar_secondary_wrapper.active {

@@ -98,6 +98,8 @@ class Toolbar {
       }
     }
 
+    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')->getRenderArray();
+
     $header = [
       '#theme' => 'toolbar_header',
       '#title' => t('Drupal'),
@@ -110,6 +112,7 @@ class Toolbar {
         '#header' => $header,
         '#title' => 'Drupal',
         '#widgets' => $widgets,
+        '#user_account' => $userAccount,
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [
           'keys' => ['toolbar_primary'],

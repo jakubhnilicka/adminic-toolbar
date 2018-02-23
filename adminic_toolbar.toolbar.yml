@@ -18,7 +18,6 @@ set:
   # Primary Tabs
   - {id: 'default'}
   - {id: 'general', title: 'General'}
-  - {id: 'user', title: 'User', callback: 'user_account'}
   # Content Tab
   - {id: 'content.default', tab: 'content'}
   # Media Tab

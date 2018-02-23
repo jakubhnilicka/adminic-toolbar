@@ -14,6 +14,8 @@
                 hideSecondaryToolbar()
             }
 
+            $('.nano').nanoScroller();
+
             $('.toolbar__primary a').not('.dropdown a').on('click', function (e) {
                 $('.toolbar__primary a').removeClass('active');
 
