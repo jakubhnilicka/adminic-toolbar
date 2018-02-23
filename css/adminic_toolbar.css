@@ -6,12 +6,12 @@
   --toolbar-bg-color: #19212e;
 
   --toolbar-primary-bg-color: #19212e;
-  --toolbar-primary-header-bg-color: #19212e;
-  --toolbar-primary-header-color: #19212e;
+  --toolbar-primary-header-bg-color: #2056c9;
+  --toolbar-primary-header-color: #fff;
   --toolbar-primary-divider-color: #333;
 
   --toolbar-secondary-bg-color: #f2f3f4;
-  --toolbar-secondary-header-bg-color: #19212e;
+  --toolbar-secondary-header-bg-color: #ebeced;
   --toolbar-secondary-header-color: #19212e;
   --toolbar-secondary-divider-color: #ebeced;
 }
