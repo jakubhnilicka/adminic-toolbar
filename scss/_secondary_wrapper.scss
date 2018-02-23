@@ -1,0 +1,20 @@
+@import "variables";
+
+.toolbar_secondary_wrapper {
+  top: 0;
+  position: fixed;
+  width: $secondary-width-compact;
+  height: 100vh;
+  transform: translateX(-100%);
+  transition: all 0.2s;
+}
+
+.toolbar_secondary_wrapper.active {
+  transform: none;
+}
+
+@media only screen and (min-width: $compact-breakpoint) {
+  .toolbar_secondary_wrapper {
+    width: $secondary-width-normal;
+  }
+}

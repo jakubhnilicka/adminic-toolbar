@@ -1,0 +1,51 @@
+@import "variables";
+
+/* Icons */
+.icon:before {
+  background: transparent no-repeat scroll center;
+  background-size: 100% auto;
+}
+
+#tab-content:before {
+  background-image: url('../images/content.svg');
+}
+
+#tab-media:before {
+  background-image: url('../images/media.svg');
+}
+
+#tab-structure:before {
+  background-image: url('../images/structure.svg');
+}
+
+#tab-users:before {
+  background-image: url('../images/people.svg');
+}
+
+#tab-blocks:before {
+  background-image: url('../images/layout.svg');
+}
+
+#tab-appearance:before {
+  background-image: url('../images/appearance.svg');
+}
+
+#tab-extend:before {
+  background-image: url('../images/extend.svg');
+}
+
+#tab-configuration:before {
+  background-image: url('../images/configuration.svg');
+}
+
+#tab-language:before {
+  background-image: url('../images/language.svg');
+}
+
+#tab-reports:before {
+  background-image: url('../images/reports.svg');
+}
+
+#tab-help:before {
+  background-image: url('../images/help.svg');
+}

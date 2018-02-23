@@ -1,0 +1,118 @@
+@import "variables";
+
+.toolbar__section {
+  margin-bottom: ($unit * 2) - 1;
+  padding-bottom: ($unit * 2);
+  border-bottom: 1px solid transparent;
+}
+
+.toolbar__section__header {
+  line-height: ($unit * 2);
+  padding: $unit ($unit * 2);
+  color: #676e7a;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.toolbar__section__content {
+  position: relative;
+  padding: $unit ($unit * 2);
+}
+
+// Navigation.
+.toolbar__section__navigation ul {
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar__section__navigation li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.toolbar__section__navigation li a {
+  text-decoration: none;
+  line-height: ($unit * 2);
+  padding: $unit ($unit * 2) $unit ($unit * 7);
+  font-size: 12px;
+  transition: all 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  flex-flow: row nowrap;
+  justify-content: left;
+}
+
+// Primary toolbar section.
+.toolbar__primary .toolbar__section {
+  border-bottom: 1px solid $primary-divider;
+}
+
+.toolbar__primary .toolbar__section__header {
+  display: none;
+}
+
+.toolbar__primary .toolbar__section__navigation li a {
+  color: $primary-link;
+}
+
+.toolbar__primary .toolbar__section__navigation li a.active {
+  color: $primary-link-active;
+}
+
+.toolbar__primary .toolbar__section__navigation li a:hover,
+.toolbar__primary .toolbar__section__navigation li a:focus,
+.toolbar__primary .toolbar__section__navigation li a:active {
+  color: $primary-link-hover;
+  background-color: darken($primary-bg, 4%);
+}
+
+.toolbar__primary .toolbar__section__navigation li a:before {
+  content: '';
+  display: block;
+  width: ($unit * 3);
+  height: ($unit * 3);
+  border-radius: ($unit / 2);
+  background-color: transparent;
+  transition: background-color 0.2s;
+  margin-right: $unit;
+  position: absolute;
+  left: $unit * 1.5;
+  top: 3px;
+  visibility: visible;
+}
+
+// Secondary toolbar section.
+.toolbar__secondary .toolbar__section {
+  border-bottom: 1px solid $secondary-divider;
+}
+
+.toolbar__secondary .toolbar__section__navigation li a {
+  color: $secondary-link;
+}
+
+.toolbar__secondary .toolbar__section__navigation li a.active {
+  color: $secondary-link-active;
+}
+
+.toolbar__secondary .toolbar__section__navigation li a:hover,
+.toolbar__secondary .toolbar__section__navigation li a:focus,
+.toolbar__secondary .toolbar__section__navigation li a:active {
+  color: $secondary-link-hover;
+  background-color: darken($secondary-bg, 4%);
+}
+
+.toolbar__section:last-child {
+  border-bottom: none;
+}
+
+@media only screen and (min-width: $compact-breakpoint) {
+  .toolbar__section__navigation li a:before {
+    left: ($unit * 2);
+  }
+}

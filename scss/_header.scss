@@ -1,0 +1,78 @@
+@import "variables";
+
+.toolbar__header {
+  height: $unit * 6;
+  position: relative;
+}
+
+.toolbar__header a {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: ($unit * 2);
+  color: inherit;
+  padding: ($unit * 2) ($unit * 2) ($unit * 2) ($unit * 7);
+  transition: background-color 0.2s;
+  letter-spacing: 0.05em;
+  align-items: center;
+  justify-content: left;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.toolbar__header a:before {
+  content: '';
+  display: block;
+  width: ($unit * 3);
+  height: ($unit * 3);
+  border-radius: ($unit / 2);
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  visibility: visible;
+  background-size: 100% auto;
+}
+
+/* Primary*/
+.toolbar__primary .toolbar__header {
+  background-color: $primary-header-bg;
+  color: $primary-header-color;
+}
+
+.toolbar__primary .toolbar__header a {
+  visibility: hidden;
+  text-transform: uppercase;
+}
+
+.toolbar__primary .toolbar__header a:hover {
+  background-color: darken($primary-header-bg, 4%);
+}
+
+.toolbar__primary .toolbar__header a:before {
+  background: url('../images/drupal-logo.svg') no-repeat center;
+}
+
+/* Secondary */
+.toolbar__secondary .toolbar__header {
+  background-color: $secondary-header-bg;
+  color: $secondary-header-color;
+}
+
+.toolbar__secondary .toolbar__header a:hover {
+  background-color: darken($secondary-header-bg, 4%);
+}
+
+.toolbar__secondary .toolbar__header a:before {
+  background: url('../images/back.svg') no-repeat center;
+}
+
+@media only screen and (min-width: $compact-breakpoint) {
+  .toolbar__primary .toolbar__header a {
+    visibility: visible;
+  }
+
+  .toolbar__header a:before {
+    left: ($unit * 2);
+  }
+}
