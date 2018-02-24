@@ -60,7 +60,8 @@ class LinkManager {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['links'])) {
         foreach ($configFile['set']['links'] as $link) {
           $link['weight'] = isset($link['weight']) ? $link['weight'] : $weight;
-          $configLinks[] = $link;
+          $key = sprintf('%s.%s', $link['section'], $link['route']);
+          $configLinks[$key] = $link;
           $weight++;
         }
       }

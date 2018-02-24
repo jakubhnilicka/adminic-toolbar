@@ -8,6 +8,8 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Extension\ModuleHandler;
+
 class SectionManager {
 
   /**
@@ -41,23 +43,30 @@ class SectionManager {
   private $activeSections = [];
 
   /**
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  private $moduleHandler;
+
+  /**
    * SectionManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
    * @param \Drupal\adminic_toolbar\LinkManager $linkManager
    * @param \Drupal\adminic_toolbar\TabManager $tabManager
+   * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
     RouteManager $routeManager,
     LinkManager $linkManager,
-    TabManager $tabManager) {
+    TabManager $tabManager,
+    ModuleHandler $moduleHandler) {
     $this->discoveryManager = $discoveryManager;
     $this->linkManager = $linkManager;
     $this->tabManager = $tabManager;
     $this->routeManager = $routeManager;
-
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -74,12 +83,15 @@ class SectionManager {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['widgets'])) {
         foreach ($configFile['set']['widgets'] as $section) {
           $section['weight'] = isset($section['weight']) ? $section['weight'] : $weight;
-          $configSections[] = $section;
+          $key = $section['id'];
+          $configSections[$key] = $section;
           $weight++;
         }
       }
     }
     uasort($configSections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    $this->moduleHandler->alter('toolbar_config_sections', $configSections);
 
     foreach ($configSections as $section) {
       $id = $section['id'];

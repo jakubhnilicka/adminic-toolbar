@@ -4,6 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 use Drupal\adminic_toolbar\DiscoveryManager;
 use Drupal\adminic_toolbar\RouteManager;
+use Drupal\Core\Extension\ModuleHandler;
 
 class TabManager {
 
@@ -26,18 +27,25 @@ class TabManager {
    * @var array
    */
   private $activeTabs = [];
+  /**
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  private $moduleHandler;
 
   /**
    * TabManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
-    RouteManager $routeManager) {
+    RouteManager $routeManager,
+    ModuleHandler $moduleHandler) {
     $this->discoveryManager = $discoveryManager;
     $this->routeManager = $routeManager;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -52,12 +60,16 @@ class TabManager {
       if ($configFile['set']['id'] == 'default' && isset($configFile['set']['tabs'])) {
         foreach ($configFile['set']['tabs'] as $tab) {
           $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : $weight;
-          $configTabs[] = $tab;
+          $key = $tab['id'];
+          $configTabs[$key] = $tab;
           $weight++;
         }
       }
     }
+
     uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
 
     foreach ($configTabs as $tab) {
       $id = $tab['id'];
