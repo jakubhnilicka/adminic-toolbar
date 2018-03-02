@@ -57,10 +57,10 @@ class LinkManager {
     $configLinks = [];
     $weight = 0;
     foreach ($config as $configFile) {
-      if ($configFile['set']['id'] == 'default' && isset($configFile['set']['links'])) {
-        foreach ($configFile['set']['links'] as $link) {
+      if (isset($configFile['links'])) {
+        foreach ($configFile['links'] as $link) {
           $link['weight'] = isset($link['weight']) ? $link['weight'] : $weight;
-          $key = sprintf('%s.%s', $link['section'], $link['route']);
+          $key = sprintf('%s.%s', $link['widget'], $link['route']);
           $configLinks[$key] = $link;
           $weight++;
         }
@@ -71,14 +71,14 @@ class LinkManager {
     $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
     foreach ($configLinks as $link) {
-      $section = $link['section'];
+      $widget = $link['widget'];
       $route = $link['route'];
       $isValid = $this->routeManager->isRouteValid($route);
       if ($isValid) {
         $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
         $active = FALSE;
-        $this->addLink(new Link($section, $route, $title, $active, $disabled));
+        $this->addLink(new Link($widget, $route, $title, $active, $disabled));
       }
     }
   }
@@ -108,7 +108,7 @@ class LinkManager {
    *   Return formated key.
    */
   public function getLinkKey(Link $link) {
-    return sprintf('%s.%s', $link->getSection(), $link->getRoute());
+    return sprintf('%s.%s', $link->getWidget(), $link->getRoute());
   }
 
   /**

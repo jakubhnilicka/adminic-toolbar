@@ -12,7 +12,7 @@ class Section {
 
   private $tab;
 
-  private $callback;
+  private $type;
 
   private $disabled;
 
@@ -23,13 +23,13 @@ class Section {
    * @param string|null $title
    * @param string $tab
    * @param $disabled
-   * @param string $callback
+   * @param string $type
    */
-  public function __construct($id, $title, $tab, $disabled, $callback) {
+  public function __construct($id, $title, $tab, $disabled, $type) {
     $this->id = $id;
     $this->title = $title;
     $this->tab = $tab;
-    $this->callback = $callback;
+    $this->type = $type;
     $this->disabled = $disabled;
   }
 
@@ -69,8 +69,8 @@ class Section {
    * @return string
    *   Retrun section callback.
    */
-  public function getCallback() {
-    return $this->callback;
+  public function getType() {
+    return $this->type;
   }
 
   /**
@@ -98,8 +98,8 @@ class Section {
    *
    * @return bool
    */
-  public function hasCallback() {
-    return !is_null($this->callback);
+  public function hasType() {
+    return !is_null($this->type);
   }
 
   public function isDisabled() {

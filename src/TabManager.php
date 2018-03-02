@@ -57,9 +57,10 @@ class TabManager {
     $weight = 0;
     $configTabs = [];
     foreach ($config as $configFile) {
-      if ($configFile['set']['id'] == 'default' && isset($configFile['set']['tabs'])) {
-        foreach ($configFile['set']['tabs'] as $tab) {
+      if (isset($configFile['tabs'])) {
+        foreach ($configFile['tabs'] as $tab) {
           $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : $weight;
+          $tab['set'] = isset($tab['set']) ? $tab['set'] : 'default';
           $key = $tab['id'];
           $configTabs[$key] = $tab;
           $weight++;
@@ -76,7 +77,7 @@ class TabManager {
       $section = isset($tab['section']) ? $tab['section'] : '';
       $route = $tab['route'];
       $isValid = $this->routeManager->isRouteValid($route);
-      if ($isValid) {
+      if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
         $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
         $active = FALSE;
@@ -152,7 +153,16 @@ class TabManager {
    *   Return first active tab.
    */
   public function getActiveTab() {
-    $activeTabs = $this->activeTabs;
+    $activeTabs = [];
+    $activeRoutes = $this->routeManager->getActiveRoutes();
+    $tabs = $this->getTabs();
+    foreach ($tabs as $tab) {
+      $tabRoute = $tab->getRoute();
+      if (array_key_exists($tabRoute, $activeRoutes)) {
+        $activeTabs[$tabRoute] = $tab;
+      }
+    }
+
     if ($activeTabs) {
       return reset($activeTabs);
     }

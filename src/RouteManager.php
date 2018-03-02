@@ -35,6 +35,11 @@ class RouteManager {
   private $routes = [];
 
   /**
+   * @var array
+   */
+  private $activeRoutes = [];
+
+  /**
    * RouteManager constructor.
    *
    * @param \Drupal\Core\Routing\RouteProvider $routeProvider
@@ -143,6 +148,30 @@ class RouteManager {
     }
 
     return NULL;
+  }
+
+  public function getActiveRoutes() {
+    if (empty($this->activeRoutes)) {
+      $this->setActiveRoutes();
+    }
+    return $this->activeRoutes;
+  }
+
+  public function setActiveRoutes() {
+    $activeRoutes = [];
+    $currentRouteObject = $this->currentRouteMatch->getRouteObject();
+    $allRoutes = $this->routeProvider->getAllRoutes();
+
+    $currentPath = $currentRouteObject->getPath();
+
+    foreach ($allRoutes as $route_name => $route) {
+      $path = $route->getPath();
+      if (strpos($currentPath, $path) === 0) {
+        $activeRoutes[$route_name] = $route;
+      };
+    }
+
+    $this->activeRoutes = $activeRoutes;
   }
 
 }

@@ -1,12 +1,12 @@
 @import "variables";
 
-.links {
+.toolbar_links {
   margin-bottom: ($unit * 2) - 1;
   padding-bottom: ($unit * 2);
   border-bottom: 1px solid transparent;
 }
 
-.links__header {
+.toolbar_links__header {
   line-height: ($unit * 2);
   padding: $unit ($unit * 2);
   color: #676e7a;
@@ -16,13 +16,13 @@
   letter-spacing: 0.1em;
 }
 
-.links__content {
+.toolbar_links__content {
   position: relative;
   padding: $unit ($unit * 2);
 }
 
 // Navigation.
-nav a {
+.toolbar_links nav a {
   text-decoration: none;
   line-height: ($unit * 2);
   padding: $unit ($unit * 2) $unit ($unit * 7);
@@ -37,30 +37,30 @@ nav a {
 }
 
 // Primary toolbar section.
-.toolbar__primary .links {
+.toolbar__primary .toolbar_links {
   border-bottom: 1px solid $primary-divider;
 }
 
-.toolbar__primary .links__header {
+.toolbar__primary .toolbar_links__header {
   display: none;
 }
 
-.toolbar__primary nav a {
+.toolbar__primary .toolbar_links nav a {
   color: $primary-link;
 }
 
-.toolbar__primary nav a.active {
+.toolbar__primary .toolbar_links nav a.active {
   color: $primary-link-active;
 }
 
-.toolbar__primary nav a:hover,
-.toolbar__primary nav a:focus,
-.toolbar__primary nav a:active {
+.toolbar__primary .toolbar_links nav a:hover,
+.toolbar__primary .toolbar_links nav a:focus,
+.toolbar__primary .toolbar_links nav a:active {
   color: $primary-link-hover;
   background-color: darken($primary-bg, 4%);
 }
 
-.toolbar__primary nav a:before {
+.toolbar__primary .toolbar_links nav a:before {
   content: '';
   display: block;
   width: ($unit * 3);
@@ -76,31 +76,31 @@ nav a {
 }
 
 // Secondary toolbar section.
-.toolbar__secondary .links {
+.toolbar__secondary .toolbar_links {
   border-bottom: 1px solid $secondary-divider;
 }
 
-.toolbar__secondary nav a {
+.toolbar__secondary .toolbar_links nav a {
   color: $secondary-link;
 }
 
-.toolbar__secondary nav a.active {
+.toolbar__secondary .toolbar_links nav a.active {
   color: $secondary-link-active;
 }
 
-.toolbar__secondary nav a:hover,
-.toolbar__secondary nav a:focus,
-.toolbar__secondary nav a:active {
+.toolbar__secondary .toolbar_links nav a:hover,
+.toolbar__secondary .toolbar_links nav a:focus,
+.toolbar__secondary .toolbar_links nav a:active {
   color: $secondary-link-hover;
   background-color: darken($secondary-bg, 4%);
 }
 
-.links:last-child {
+.toolbar_links:last-child {
   border-bottom: none;
 }
 
 @media only screen and (min-width: $compact-breakpoint) {
-  nav a:before {
+  .toolbar_links nav a:before {
     left: ($unit * 2);
   }
 }

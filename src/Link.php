@@ -7,7 +7,7 @@ class Link {
   /**
    * @var string
    */
-  private $section;
+  private $widget;
 
   /**
    * @var string
@@ -31,14 +31,14 @@ class Link {
   /**
    * Link constructor.
    *
-   * @param string $section
+   * @param string $widget
    * @param string $route
    * @param string $title
    * @param bool $active
    * @param bool $disabled
    */
-  public function __construct(string $section, string $route, string $title, bool $active, bool $disabled) {
-    $this->section = $section;
+  public function __construct(string $widget, string $route, string $title, bool $active, bool $disabled) {
+    $this->widget = $widget;
     $this->route = $route;
     $this->title = $title;
     $this->active = $active;
@@ -51,8 +51,8 @@ class Link {
    * @return string
    *   Return link section.
    */
-  public function getSection() {
-    return $this->section;
+  public function getWidget() {
+    return $this->widget;
   }
 
   /**
