@@ -1,6 +1,6 @@
 @import "variables";
 
-.toolbar_secondary_wrapper {
+.wrapper {
   top: 0;
   position: fixed;
   width: $secondary-width-compact;
@@ -9,12 +9,12 @@
   transition: all 0.2s;
 }
 
-.toolbar_secondary_wrapper.active {
+.wrapper.active {
   transform: none;
 }
 
 @media only screen and (min-width: $compact-breakpoint) {
-  .toolbar_secondary_wrapper {
+  .wrapper {
     width: $secondary-width-normal;
   }
 }

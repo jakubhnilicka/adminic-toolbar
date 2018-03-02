@@ -1,6 +1,6 @@
 @import "variables";
 
-.toolbar__user_account {
+.user_account {
   border-top: 1px solid $primary-divider;
   padding: ($unit * 2) ($unit * 1.5);
   position: absolute;
@@ -9,12 +9,12 @@
   bottom: 0;
 }
 
-.user_account--left {
+.user_account__avatar{
   width: $unit * 3;
   margin-bottom: $unit;
 }
 
-.user_account--image {
+.user_account__avatar__image {
   width: $unit * 3;
   height: $unit * 3;
   border-radius: 50%;
@@ -22,13 +22,13 @@
   background-color: lighten($primary-bg, 4%);
 }
 
-.user_account--image a {
+.user_account__avatar__image a {
   width: $unit * 3;
   height: $unit * 3;
   display: block;
 }
 
-.user_account--right .drdt {
+.user_account__links .drdt {
   border: 1px solid $primary-divider;
   border-radius: $unit / 2;
   line-height: $unit;
@@ -38,11 +38,11 @@
   color: $primary-color;
 }
 
-.user_account--right .drdc {
+.user_account__links .drdc {
   padding-top: $unit / 4;
 }
 
-.user_account--right .drdc a {
+.user_account__links .drdc a {
   display: block;
   color: $primary-link;
   text-overflow: ellipsis;
@@ -52,18 +52,18 @@
   text-align: left;
 }
 
-.user_account--right .drdc a:active,
-.user_account--right .drdc a:focus,
-.user_account--right .drdc a:hover {
+.user_account__links .drdc a:active,
+.user_account__links .drdc a:focus,
+.user_account__links .drdc a:hover {
   color: $primary-link-hover;
 }
 
 @media only screen and (min-width: $compact-breakpoint) {
-  .user_account--left {
+  .user_account__avatar {
     float: left;
     margin-bottom: 0;
   }
-  .user_account--right {
+  .user_account__links {
     float: right;
     width: $unit * 11;
     text-align: right;
