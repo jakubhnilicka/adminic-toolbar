@@ -153,16 +153,7 @@ class TabManager {
    *   Return first active tab.
    */
   public function getActiveTab() {
-    $activeTabs = [];
-    $activeRoutes = $this->routeManager->getActiveRoutes();
-    $tabs = $this->getTabs();
-    foreach ($tabs as $tab) {
-      $tabRoute = $tab->getRoute();
-      if (array_key_exists($tabRoute, $activeRoutes)) {
-        $activeTabs[$tabRoute] = $tab;
-      }
-    }
-
+    $activeTabs = $this->activeTabs;
     if ($activeTabs) {
       return reset($activeTabs);
     }

@@ -179,14 +179,33 @@ class SectionManager {
    * Set active tabs.
    */
   protected function setActiveTabs() {
-    $activeRoutes = $this->routeManager->getActiveRoutes();
+    // Try to get active tabs from tybs hiearchy.
+    $activeSections = $this->getActiveSection();
+    $currentRouteName = $this->routeManager->getCurrentRoute();
     $tabs = $this->tabManager->getTabs();
     /** @var \Drupal\adminic_toolbar\Tab $tab */
-    foreach ($tabs as $tab) {
-      $tabRoute = $tab->getRoute();
-      if (array_key_exists($tabRoute, $activeRoutes)) {
+    foreach ($tabs as $key => &$tab) {
+      if ($activeSections && $tab->getId() == $activeSections->getTab()) {
         $tab->setActive();
         $this->tabManager->addActiveTab($tab);
+      }
+      elseif ($tab->getRoute() == $currentRouteName) {
+        $tab->setActive();
+        $this->tabManager->addActiveTab($tab);
+      }
+    }
+
+    // Set active tabs from routes.
+    $activeTabs = $this->tabManager->getActiveTab();
+    if (empty($activeTabs)) {
+      $activeRoutes = $this->routeManager->getActiveRoutes();
+      $tabs = $this->tabManager->getTabs();
+      foreach ($tabs as $tab) {
+        $tabRoute = $tab->getRoute();
+        if (array_key_exists($tabRoute, $activeRoutes)) {
+          $tab->setActive();
+          $this->tabManager->addActiveTab($tab);
+        }
       }
     }
   }
@@ -195,24 +214,29 @@ class SectionManager {
    * Set active links.
    */
   protected function setActiveLinks() {
-    $activeRoutes = $this->routeManager->getActiveRoutes();
-    $links = $this->linkManager->getLinks();
-    /** @var \Drupal\adminic_toolbar\Link $link */
-    foreach ($links as &$link) {
-      $linkRoute = $link->getRoute();
-      if (array_key_exists($linkRoute, $activeRoutes)) {
-        $link->setActive();
-        $this->linkManager->addActiveLink($link);
-      }
-    }
-    /*$currentRouteName = $this->routeManager->getCurrentRoute();
+    // Try to select active links from config links hiearchy.
+    $currentRouteName = $this->routeManager->getCurrentRoute();
     $links = $this->linkManager->getLinks();
     foreach ($links as $key => &$link) {
       if ($link->getRoute() == $currentRouteName) {
         $link->setActive();
         $this->linkManager->addActiveLink($link);
       }
-    }*/
+    }
+
+    // If active links are empty, select active links from routes.
+    $activeLinks = $this->linkManager->getActiveLink();
+    if (empty($activeLinks)) {
+      $activeRoutes = $this->routeManager->getActiveRoutes();
+      $links = $this->linkManager->getLinks();
+      foreach ($links as &$link) {
+        $linkRoute = $link->getRoute();
+        if (array_key_exists($linkRoute, $activeRoutes)) {
+          $link->setActive();
+          $this->linkManager->addActiveLink($link);
+        }
+      }
+    }
   }
 
   /**
