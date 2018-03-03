@@ -59,7 +59,7 @@
 }
 .toolbar__secondary .toolbar_links nav a {
   color: $secondary-link;
-  padding: $unit ($unit * 1.5) $unit ($unit * 7);
+  padding: $unit ($unit * 1.5) $unit ($unit * 6);
 }
 .toolbar__secondary .toolbar_links nav a.active {
   color: $secondary-link-active;
@@ -82,7 +82,7 @@
   }
   .toolbar__secondary .toolbar_links nav a {
     color: $secondary-link;
-    padding: $unit ($unit * 2) $unit ($unit * 7);
+    padding: $unit ($unit * 2) $unit ($unit * 6);
   }
   .toolbar_links nav a .ico {
     left: ($unit * 2);

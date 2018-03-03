@@ -56,7 +56,7 @@ widgets:
 
 links:
 # Content Tab
-- {widget: 'content.default', route: 'system.admin_content'}
+- {widget: 'content.default', route: 'system.admin_content', title: 'Nodes'}
 - {widget: 'content.default', route: 'comment.admin'}
 - {widget: 'content.default', route: 'view.media.media_page_list'}
 - {widget: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}

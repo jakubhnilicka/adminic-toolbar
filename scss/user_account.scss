@@ -2,10 +2,10 @@
 .user_account {
   border-top: 1px solid $primary-divider;
   padding: ($unit * 2) ($unit * 1.5);
-  position: absolute;
-  left: 0;
+  position: relative;
+  /*left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0;*/
 }
 .user_account__avatar {
   width: $unit * 3;

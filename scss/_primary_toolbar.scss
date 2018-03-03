@@ -13,6 +13,8 @@ body.adminic-toolbar-primary {
   height: 100vh;
   //box-shadow: 0 0 ($unit / 2) 0 rgba(0, 0, 0, 0.25);
   z-index: 999998;
+  display: flex;
+  flex-direction: column;
 }
 .toolbar__primary a {
   border-bottom: none;
