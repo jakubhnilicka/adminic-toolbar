@@ -59,30 +59,29 @@ class RouteManager {
   }
 
   /**
-   * Get available routes from drupal.
-   *
-   * @return array
-   *   Array of available routes.
-   */
-  protected function getAvailableRoutes() {
-    $allRoutes = $this->routeProvider->getAllRoutes();
-
-    $routes = [];
-    foreach ($allRoutes as $route_name => $route) {
-      $title = $route->getDefault('_title');
-      $routes[$route_name] = $title;
-    }
-
-    return $routes;
-  }
-
-  /**
    * Get current route name.
    *
    * @return null|string
    */
   public function getCurrentRoute() {
     return $this->currentRouteMatch->getRouteName();
+  }
+
+  /**
+   * Get route default title.
+   *
+   * @param string $routeName
+   *
+   * @return mixed
+   */
+  public function getDefaultTitle(string $routeName) {
+    if ($this->isRouteValid($routeName)) {
+      $routes = $this->getRoutes();
+
+      return $routes[$routeName];
+    }
+
+    return NULL;
   }
 
   /**
@@ -108,19 +107,6 @@ class RouteManager {
   }
 
   /**
-   * Check if current user has access to route.
-   *
-   * @param string $routeName
-   *   Route name.
-   *
-   * @return bool
-   *   True if user has access to route or flase.
-   */
-  public function isRouteAccessible(string $routeName) {
-    return $this->accessManager->checkNamedRoute($routeName, [], $this->currentUser);
-  }
-
-  /**
    * Get routes.
    *
    * @return array
@@ -134,20 +120,34 @@ class RouteManager {
   }
 
   /**
-   * Get route default title.
+   * Get available routes from drupal.
    *
-   * @param string $routeName
-   *
-   * @return mixed
+   * @return array
+   *   Array of available routes.
    */
-  public function getDefaultTitle(string $routeName) {
-    if ($this->isRouteValid($routeName)) {
-      $routes = $this->getRoutes();
+  protected function getAvailableRoutes() {
+    $allRoutes = $this->routeProvider->getAllRoutes();
 
-      return $routes[$routeName];
+    $routes = [];
+    foreach ($allRoutes as $route_name => $route) {
+      $title = $route->getDefault('_title');
+      $routes[$route_name] = $title;
     }
 
-    return NULL;
+    return $routes;
+  }
+
+  /**
+   * Check if current user has access to route.
+   *
+   * @param string $routeName
+   *   Route name.
+   *
+   * @return bool
+   *   True if user has access to route or flase.
+   */
+  public function isRouteAccessible(string $routeName) {
+    return $this->accessManager->checkNamedRoute($routeName, [], $this->currentUser);
   }
 
   public function getActiveRoutes() {

@@ -2,8 +2,6 @@
 
 namespace Drupal\adminic_toolbar;
 
-use Drupal\adminic_toolbar\DiscoveryManager;
-use Drupal\adminic_toolbar\RouteManager;
 use Drupal\Core\Extension\ModuleHandler;
 
 class TabManager {
@@ -27,6 +25,7 @@ class TabManager {
    * @var array
    */
   private $activeTabs = [];
+
   /**
    * @var \Drupal\Core\Extension\ModuleHandler
    */
@@ -46,6 +45,51 @@ class TabManager {
     $this->discoveryManager = $discoveryManager;
     $this->routeManager = $routeManager;
     $this->moduleHandler = $moduleHandler;
+  }
+
+  /**
+   * Add tab to active tabs.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
+   */
+  public function addActiveTab(Tab $tab) {
+    $key = $this->getTabKey($tab);
+    $this->activeTabs[$key] = $tab;
+  }
+
+  /**
+   * Get tab unique key from id.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
+   *
+   * @return string
+   *   Return formated key.
+   */
+  public function getTabKey(Tab $tab) {
+    return $tab->getId();
+  }
+
+  /**
+   * Set tab as active.
+   *
+   * @param string $key
+   */
+  public function setActive(string $key) {
+    $this->tabs[$key]->setActive();
+  }
+
+  /**
+   * Get tabs.
+   *
+   * @return array
+   */
+  public function getTabs() {
+    if (empty($this->tabs)) {
+      $this->parseTabs();
+    }
+
+    return $this->tabs;
   }
 
   /**
@@ -87,19 +131,6 @@ class TabManager {
   }
 
   /**
-   * Get tab unique key from id.
-   *
-   * @param \Drupal\adminic_toolbar\Tab $tab
-   *   Tab.
-   *
-   * @return string
-   *   Return formated key.
-   */
-  public function getTabKey(Tab $tab) {
-    return $tab->getId();
-  }
-
-  /**
    * Add tab.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
@@ -112,38 +143,6 @@ class TabManager {
       unset($this->tabs[$key]);
     }
 
-  }
-
-  /**
-   * Add tab to active tabs.
-   *
-   * @param \Drupal\adminic_toolbar\Tab $tab
-   */
-  public function addActiveTab(Tab $tab) {
-    $key = $this->getTabKey($tab);
-    $this->activeTabs[$key] = $tab;
-  }
-
-  /**
-   * Set tab as active.
-   *
-   * @param string $key
-   */
-  public function setActive(string $key) {
-    $this->tabs[$key]->setActive();
-  }
-
-  /**
-   * Get tabs.
-   *
-   * @return array
-   */
-  public function getTabs() {
-    if (empty($this->tabs)) {
-      $this->parseTabs();
-    }
-
-    return $this->tabs;
   }
 
   /**

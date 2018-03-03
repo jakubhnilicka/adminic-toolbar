@@ -38,6 +38,7 @@
 .toolbar__primary .toolbar__header {
   background-color: $primary-header-bg;
   color: $primary-header-color;
+  border-bottom: 1px solid $primary-divider;
 }
 
 .toolbar__primary .toolbar__header a {
@@ -57,6 +58,7 @@
 .toolbar__secondary .toolbar__header {
   background-color: $secondary-header-bg;
   color: $secondary-header-color;
+  border-bottom: 1px solid $secondary-divider;
 }
 
 .toolbar__secondary .toolbar__header a:hover {

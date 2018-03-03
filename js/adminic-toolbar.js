@@ -21,7 +21,7 @@
 
         var $tab = $(this);
         var tabId = $tab.attr('id');
-        var tabKey = tabId.substring(4);
+        var tabKey = tabId.substring(5);
         var $sectionWrapper = $('#toolbar-' + tabKey);
         $tab.addClass('active');
         $('.wrapper.active').removeClass('active');

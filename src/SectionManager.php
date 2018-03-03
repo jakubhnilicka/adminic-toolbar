@@ -68,13 +68,45 @@ class SectionManager {
     LinkManager $linkManager,
     TabManager $tabManager,
     ModuleHandler $moduleHandler,
-    ToolbarWidgetPluginManager $toolbarWidgetPluginManager ) {
+    ToolbarWidgetPluginManager $toolbarWidgetPluginManager) {
     $this->discoveryManager = $discoveryManager;
     $this->linkManager = $linkManager;
     $this->tabManager = $tabManager;
     $this->routeManager = $routeManager;
     $this->moduleHandler = $moduleHandler;
     $this->toolbarWidgetPluginManager = $toolbarWidgetPluginManager;
+  }
+
+  /**
+   * Get sections defined for primary toolbar.
+   *
+   * @return array
+   *   Array of sections.
+   */
+  public function getPrimarySections(): array {
+    $sections = $this->getSections();
+
+    $primarySections = array_filter(
+      $sections, function ($section) {
+      /** @var \Drupal\adminic_toolbar\Section $section */
+      return $section->getTab() == NULL;
+    }
+    );
+
+    return $primarySections;
+  }
+
+  /**
+   * Get sections.
+   *
+   * @return array
+   */
+  public function getSections() {
+    if (empty($this->sections)) {
+      $this->parseSections();
+    }
+
+    return $this->sections;
   }
 
   /**
@@ -121,6 +153,36 @@ class SectionManager {
   }
 
   /**
+   * Set active links.
+   */
+  protected function setActiveLinks() {
+    /** @var \Drupal\adminic_toolbar\Link $link */
+    // Try to select active links from config links hiearchy.
+    $currentRouteName = $this->routeManager->getCurrentRoute();
+    $links = $this->linkManager->getLinks();
+    foreach ($links as $key => &$link) {
+      if ($link->getRoute() == $currentRouteName) {
+        $link->setActive();
+        $this->linkManager->addActiveLink($link);
+      }
+    }
+
+    // If active links are empty, select active links from routes.
+    $activeLinks = $this->linkManager->getActiveLink();
+    if (empty($activeLinks)) {
+      $activeRoutes = $this->routeManager->getActiveRoutes();
+      $links = $this->linkManager->getLinks();
+      foreach ($links as &$link) {
+        $linkRoute = $link->getRoute();
+        if (array_key_exists($linkRoute, $activeRoutes)) {
+          $link->setActive();
+          $this->linkManager->addActiveLink($link);
+        }
+      }
+    }
+  }
+
+  /**
    * Add section.
    *
    * @param \Drupal\adminic_toolbar\Section $section
@@ -145,34 +207,6 @@ class SectionManager {
    */
   public function addActiveSection(Section $section) {
     $this->activeSections[] = $section;
-  }
-
-  /**
-   * Get sections.
-   *
-   * @return array
-   */
-  public function getSections() {
-    if (empty($this->sections)) {
-      $this->parseSections();
-    }
-
-    return $this->sections;
-  }
-
-  /**
-   * Get first active section.
-   *
-   * @return \Drupal\adminic_toolbar\Section|NULL
-   *   Return first active section or NULL.
-   */
-  public function getActiveSection() {
-    $activeSections = $this->activeSections;
-    if ($activeSections) {
-      return reset($activeSections);
-    }
-
-    return NULL;
   }
 
   /**
@@ -211,51 +245,18 @@ class SectionManager {
   }
 
   /**
-   * Set active links.
-   */
-  protected function setActiveLinks() {
-    // Try to select active links from config links hiearchy.
-    $currentRouteName = $this->routeManager->getCurrentRoute();
-    $links = $this->linkManager->getLinks();
-    foreach ($links as $key => &$link) {
-      if ($link->getRoute() == $currentRouteName) {
-        $link->setActive();
-        $this->linkManager->addActiveLink($link);
-      }
-    }
-
-    // If active links are empty, select active links from routes.
-    $activeLinks = $this->linkManager->getActiveLink();
-    if (empty($activeLinks)) {
-      $activeRoutes = $this->routeManager->getActiveRoutes();
-      $links = $this->linkManager->getLinks();
-      foreach ($links as &$link) {
-        $linkRoute = $link->getRoute();
-        if (array_key_exists($linkRoute, $activeRoutes)) {
-          $link->setActive();
-          $this->linkManager->addActiveLink($link);
-        }
-      }
-    }
-  }
-
-  /**
-   * Get sections defined for primary toolbar.
+   * Get first active section.
    *
-   * @return array
-   *   Array of sections.
+   * @return \Drupal\adminic_toolbar\Section|NULL
+   *   Return first active section or NULL.
    */
-  public function getPrimarySections(): array {
-    $sections = $this->getSections();
+  public function getActiveSection() {
+    $activeSections = $this->activeSections;
+    if ($activeSections) {
+      return reset($activeSections);
+    }
 
-    $primarySections = array_filter(
-      $sections, function ($section) {
-        /** @var \Drupal\adminic_toolbar\Section $section */
-        return $section->getTab() == NULL;
-      }
-    );
-
-    return $primarySections;
+    return NULL;
   }
 
   /**
@@ -273,9 +274,9 @@ class SectionManager {
 
     $sectionValidTabs = array_filter(
       $tabs, function ($tab) use ($sectionId) {
-        /** @var \Drupal\adminic_toolbar\Tab $tab */
-        return $tab->getSection() == $sectionId;
-      }
+      /** @var \Drupal\adminic_toolbar\Tab $tab */
+      return $tab->getSection() == $sectionId;
+    }
     );
 
     $sectionTabs = [];
@@ -294,9 +295,32 @@ class SectionManager {
   }
 
   /**
+   * Get secondary sections wrappers.
+   *
+   * @return array
+   */
+  public function getSecondarySectionWrappers() {
+    $tabs = $this->tabManager->getTabs();
+    $secondaryWrappers = [];
+    /** @var \Drupal\adminic_toolbar\Tab $tab */
+    foreach ($tabs as $tab) {
+      $sections = $this->getSecondarySectionsByTab($tab);
+
+      $secondaryWrappers[$tab->getId()] = [
+        'title' => $tab->getTitle(),
+        'route' => $tab->getRoute(),
+        'sections' => $sections,
+      ];
+    }
+
+    return $secondaryWrappers;
+  }
+
+  /**
    * Get secondary sections by tab.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
+   *
    * @return array
    */
   protected function getSecondarySectionsByTab(Tab $tab) {
@@ -306,9 +330,9 @@ class SectionManager {
     $secondarySections = array_filter(
       $sections, function ($section) use ($tab) {
       /** @var \Drupal\adminic_toolbar\Section $section */
-        $sectionTab = $section->getTab();
-        return !empty($sectionTab) && $sectionTab == $tab->getId();
-      }
+      $sectionTab = $section->getTab();
+      return !empty($sectionTab) && $sectionTab == $tab->getId();
+    }
     );
 
     if (empty($secondarySections)) {
@@ -351,9 +375,9 @@ class SectionManager {
 
     $sectionValidLinks = array_filter(
       $links, function ($link) use ($sectionId) {
-        /** @var \Drupal\adminic_toolbar\Link $link */
-        return $link->getWidget() == $sectionId;
-      }
+      /** @var \Drupal\adminic_toolbar\Link $link */
+      return $link->getWidget() == $sectionId;
+    }
     );
 
     if (empty($sectionValidLinks)) {
@@ -372,28 +396,6 @@ class SectionManager {
     }
 
     return NULL;
-  }
-
-  /**
-   * Get secondary sections wrappers.
-   *
-   * @return array
-   */
-  public function getSecondarySectionWrappers() {
-    $tabs = $this->tabManager->getTabs();
-    $secondaryWrappers = [];
-    /** @var \Drupal\adminic_toolbar\Tab $tab */
-    foreach ($tabs as $tab) {
-      $sections = $this->getSecondarySectionsByTab($tab);
-
-      $secondaryWrappers[$tab->getId()] = [
-        'title' => $tab->getTitle(),
-        'route' => $tab->getRoute(),
-        'sections' => $sections
-      ];
-    }
-
-    return $secondaryWrappers;
   }
 
 }

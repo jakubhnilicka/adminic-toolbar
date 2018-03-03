@@ -23,6 +23,7 @@ class Link {
    * @var bool
    */
   private $active;
+
   /**
    * @var bool
    */
@@ -56,13 +57,29 @@ class Link {
   }
 
   /**
-   * Get link route.
-   *
-   * @return string
-   *   Return link route.
+   * Set link as inactive.
    */
-  public function getRoute() {
-    return $this->route;
+  public function setInactive() {
+    $this->active = FALSE;
+  }
+
+  public function isDisabled() {
+    return $this->disabled;
+  }
+
+  /**
+   * Return link render array.
+   *
+   * @return array
+   *   Return links render array.
+   */
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section_link',
+      '#title' => $this->getTitle(),
+      '#route' => $this->getRoute(),
+      '#active' => $this->isActive(),
+    ];
   }
 
   /**
@@ -73,6 +90,16 @@ class Link {
    */
   public function getTitle() {
     return $this->title;
+  }
+
+  /**
+   * Get link route.
+   *
+   * @return string
+   *   Return link route.
+   */
+  public function getRoute() {
+    return $this->route;
   }
 
   /**
@@ -90,31 +117,6 @@ class Link {
    */
   public function setActive() {
     $this->active = TRUE;
-  }
-
-  /**
-   * Set link as inactive.
-   */
-  public function setInactive() {
-    $this->active = FALSE;
-  }
-
-  public function isDisabled() {
-    return $this->disabled;
-  }
-  /**
-   * Return link render array.
-   *
-   * @return array
-   *   Return links render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section_link',
-      '#title' => $this->getTitle(),
-      '#route' => $this->getRoute(),
-      '#active' => $this->isActive(),
-    ];
   }
 
 }

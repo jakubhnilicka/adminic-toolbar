@@ -44,16 +44,6 @@ class Section {
   }
 
   /**
-   * Get section title.
-   *
-   * @return string
-   *   Retrun section title.
-   */
-  public function getTitle() {
-    return $this->title;
-  }
-
-  /**
    * Get section tab.
    *
    * @return string
@@ -74,13 +64,40 @@ class Section {
   }
 
   /**
-   * Set section links.
+   * Has section callback?
    *
-   * @param array $links
-   *   Array of links.
+   * @return bool
    */
-  public function setLinks($links) {
-    $this->links = $links;
+  public function hasType() {
+    return !is_null($this->type);
+  }
+
+  public function isDisabled() {
+    return $this->disabled;
+  }
+
+  /**
+   * Return section render array.
+   *
+   * @return array
+   *   Return section render array.
+   */
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section',
+      '#title' => $this->getTitle(),
+      '#links' => $this->getLinks(),
+    ];
+  }
+
+  /**
+   * Get section title.
+   *
+   * @return string
+   *   Retrun section title.
+   */
+  public function getTitle() {
+    return $this->title;
   }
 
   /**
@@ -94,29 +111,13 @@ class Section {
   }
 
   /**
-   * Has section callback?
+   * Set section links.
    *
-   * @return bool
+   * @param array $links
+   *   Array of links.
    */
-  public function hasType() {
-    return !is_null($this->type);
-  }
-
-  public function isDisabled() {
-    return $this->disabled;
-  }
-  /**
-   * Return section render array.
-   *
-   * @return array
-   *   Return section render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section',
-      '#title' => $this->getTitle(),
-      '#links' => $this->getLinks(),
-    ];
+  public function setLinks($links) {
+    $this->links = $links;
   }
 
 }

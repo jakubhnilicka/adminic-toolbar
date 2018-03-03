@@ -97,12 +97,13 @@ class Toolbar {
       }
     }
 
-    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')->getRenderArray();
+    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')
+      ->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_header',
       '#title' => t('Drupal'),
-      '#title_link' => '<front>'
+      '#title_link' => '<front>',
     ];
 
     if ($widgets) {
@@ -121,6 +122,16 @@ class Toolbar {
     }
 
     return NULL;
+  }
+
+  /**
+   * Check if current user can access toolbar.
+   *
+   * @return bool
+   *   Retrun true if user can access toolbar or false.
+   */
+  protected function userCanAccessToolbar() {
+    return $this->currentUser->hasPermission('can use adminic toolbar');
   }
 
   /**
@@ -219,16 +230,6 @@ class Toolbar {
     }
 
     return NULL;
-  }
-
-  /**
-   * Check if current user can access toolbar.
-   *
-   * @return bool
-   *   Retrun true if user can access toolbar or false.
-   */
-  protected function userCanAccessToolbar() {
-    return $this->currentUser->hasPermission('can use adminic toolbar');
   }
 
 }

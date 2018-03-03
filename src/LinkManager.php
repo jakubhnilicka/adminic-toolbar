@@ -2,8 +2,6 @@
 
 namespace Drupal\adminic_toolbar;
 
-use Drupal\adminic_toolbar\DiscoveryManager;
-use Drupal\adminic_toolbar\RouteManager;
 use Drupal\Core\Extension\ModuleHandler;
 
 class LinkManager {
@@ -27,6 +25,7 @@ class LinkManager {
    * @var array
    */
   private $activeLinks = [];
+
   /**
    * @var \Drupal\Core\Extension\ModuleHandler
    */
@@ -46,6 +45,42 @@ class LinkManager {
     $this->routeManager = $routeManager;
     $this->discoveryManager = $discoveryManager;
     $this->moduleHandler = $moduleHandler;
+  }
+
+  /**
+   * Add link to active links.
+   *
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   */
+  public function addActiveLink(Link $link) {
+    $key = $this->getLinkKey($link);
+    $this->activeLinks[$key] = $link;
+  }
+
+  /**
+   * Get link unique key from section and route.
+   *
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   *
+   * @return string
+   *   Return formated key.
+   */
+  public function getLinkKey(Link $link) {
+    return sprintf('%s.%s', $link->getWidget(), $link->getRoute());
+  }
+
+  /**
+   * Get links.
+   *
+   * @return array
+   */
+  public function getLinks() {
+    if (empty($this->links)) {
+      $this->parseLinks();
+    }
+    return $this->links;
   }
 
   /**
@@ -93,45 +128,9 @@ class LinkManager {
     $key = $this->getLinkKey($link);
     $this->links[$key] = $link;
     // Remove link if exists and is disabled
-    if (isset($this->links[$key]) && $link->isDisabled() ) {
+    if (isset($this->links[$key]) && $link->isDisabled()) {
       unset($this->links[$key]);
     }
-  }
-
-  /**
-   * Get link unique key from section and route.
-   *
-   * @param \Drupal\adminic_toolbar\Link $link
-   *   Link.
-   *
-   * @return string
-   *   Return formated key.
-   */
-  public function getLinkKey(Link $link) {
-    return sprintf('%s.%s', $link->getWidget(), $link->getRoute());
-  }
-
-  /**
-   * Add link to active links.
-   *
-   * @param \Drupal\adminic_toolbar\Link $link
-   *   Link.
-   */
-  public function addActiveLink(Link $link) {
-    $key = $this->getLinkKey($link);
-    $this->activeLinks[$key] = $link;
-  }
-
-  /**
-   * Get links.
-   *
-   * @return array
-   */
-  public function getLinks() {
-    if (empty($this->links)) {
-      $this->parseLinks();
-    }
-    return $this->links;
   }
 
   /**

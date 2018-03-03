@@ -54,16 +54,6 @@ class Tab {
   }
 
   /**
-   * Get tab id.
-   *
-   * @return string
-   *   Return tab id.
-   */
-  public function getId() {
-    return $this->id;
-  }
-
-  /**
    * Get tab section.
    *
    * @return string
@@ -74,36 +64,6 @@ class Tab {
   }
 
   /**
-   * Get tab route.
-   *
-   * @return string
-   *   Return tab route.
-   */
-  public function getRoute() {
-    return $this->route;
-  }
-
-  /**
-   * Get tab title.
-   *
-   * @return string
-   *   Return tab title.
-   */
-  public function getTitle() {
-    return $this->title;
-  }
-
-  /**
-   * Get tab state.
-   *
-   * @return string
-   *   Return tab active state.
-   */
-  public function isActive() {
-    return $this->active;
-  }
-
-  /**
    * Get tab state.
    *
    * @return string
@@ -111,13 +71,6 @@ class Tab {
    */
   public function isDisabled() {
     return $this->active;
-  }
-
-  /**
-   * Set tab as active.
-   */
-  public function setActive() {
-    $this->active = TRUE;
   }
 
   /**
@@ -141,6 +94,53 @@ class Tab {
       '#active' => $this->isActive(),
       '#id' => $this->getId(),
     ];
+  }
+
+  /**
+   * Get tab title.
+   *
+   * @return string
+   *   Return tab title.
+   */
+  public function getTitle() {
+    return $this->title;
+  }
+
+  /**
+   * Get tab route.
+   *
+   * @return string
+   *   Return tab route.
+   */
+  public function getRoute() {
+    return $this->route;
+  }
+
+  /**
+   * Get tab state.
+   *
+   * @return string
+   *   Return tab active state.
+   */
+  public function isActive() {
+    return $this->active;
+  }
+
+  /**
+   * Set tab as active.
+   */
+  public function setActive() {
+    $this->active = TRUE;
+  }
+
+  /**
+   * Get tab id.
+   *
+   * @return string
+   *   Return tab id.
+   */
+  public function getId() {
+    return $this->id;
   }
 
 }

@@ -1,4 +1,10 @@
 {% set attributes = create_attribute() %}
-{% set tab_classes = ['tab', 'icon', active ? 'active'] %}
-{% set tab_id = 'tab-' ~ id|clean_class %}
-<a {{ attributes.addClass(tab_classes).setAttribute('id', tab_id) }}href="{{ url(route) }}">{{ title }}</a>
+{% set tab_classes = [
+  'tab',
+  active ? 'active'
+] %}
+{% set tab_id = 'tab--' ~ id|clean_class %}
+<a {{ attributes.addClass(tab_classes).setAttribute('id', tab_id) }}href="{{ url(route) }}">
+  <i class="ico"></i>
+  <span>{{ title }}</span>
+</a>

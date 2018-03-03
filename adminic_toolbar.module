@@ -1,7 +1,5 @@
 <?php
 
-use Drupal\user\Entity\User;
-
 /**
  * Implements hook_theme().
  */
@@ -97,11 +95,12 @@ function adminic_toolbar_page_top(array &$page_top) {
   $adminic_toolbar = \Drupal::service('adminic_toolbar');
 
   $toolbarPrimary = $adminic_toolbar->getPrimaryToolbar();
-  $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
-  $toolbarTop = $adminic_toolbar->getTopToolbar();
-
   $page_top['adminic_toolbar_primary'] = $toolbarPrimary;
+
+  $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
   $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
+
+  $toolbarTop = $adminic_toolbar->getTopToolbar();
   $page_top['adminic_toolbar_top'] = $toolbarTop;
 }
 
