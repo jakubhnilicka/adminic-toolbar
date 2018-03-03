@@ -4,7 +4,6 @@
 body.adminic-toolbar-primary {
   margin-left: $primary-width-compact;
 }
-
 .toolbar__primary {
   position: fixed;
   background-color: $primary-bg;
@@ -15,12 +14,10 @@ body.adminic-toolbar-primary {
   //box-shadow: 0 0 ($unit / 2) 0 rgba(0, 0, 0, 0.25);
   z-index: 999998;
 }
-
 .toolbar__primary a {
   border-bottom: none;
   text-decoration: none;
 }
-
 .toolbar__primary a:hover,
 .toolbar__primary a:active,
 .toolbar__primary a:focus {
@@ -28,7 +25,6 @@ body.adminic-toolbar-primary {
   text-decoration: none;
   color: inherit;
 }
-
 @media only screen and (min-width: $compact-breakpoint) {
   body.adminic-toolbar-primary {
     margin-left: $primary-width-normal;

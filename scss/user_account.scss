@@ -1,5 +1,4 @@
 @import "variables";
-
 .user_account {
   border-top: 1px solid $primary-divider;
   padding: ($unit * 2) ($unit * 1.5);
@@ -8,12 +7,10 @@
   right: 0;
   bottom: 0;
 }
-
-.user_account__avatar{
+.user_account__avatar {
   width: $unit * 3;
   margin-bottom: $unit;
 }
-
 .user_account__avatar__image {
   width: $unit * 3;
   height: $unit * 3;
@@ -21,13 +18,11 @@
   border: 1px solid $primary-divider;
   background-color: lighten($primary-bg, 4%);
 }
-
 .user_account__avatar__image a {
   width: $unit * 3;
   height: $unit * 3;
   display: block;
 }
-
 .user_account__links .drdt {
   border: 1px solid $primary-divider;
   border-radius: $unit / 2;
@@ -37,11 +32,9 @@
   height: $unit * 3;
   color: $primary-color;
 }
-
 .user_account__links .drdc {
   padding-top: $unit / 4;
 }
-
 .user_account__links .drdc a {
   display: block;
   color: $primary-link;
@@ -51,13 +44,11 @@
   margin: ($unit / 2) 0;
   text-align: left;
 }
-
 .user_account__links .drdc a:active,
 .user_account__links .drdc a:focus,
 .user_account__links .drdc a:hover {
   color: $primary-link-hover;
 }
-
 @media only screen and (min-width: $compact-breakpoint) {
   .user_account__avatar {
     float: left;

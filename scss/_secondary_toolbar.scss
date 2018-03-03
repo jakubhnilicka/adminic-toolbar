@@ -1,9 +1,7 @@
 @import "variables";
-
 body.adminic-toolbar-secondary {
   margin-left: $primary-width-compact + $secondary-width-compact;
 }
-
 .toolbar__secondary {
   position: fixed;
   background-color: $secondary-bg;
@@ -13,12 +11,10 @@ body.adminic-toolbar-secondary {
   //box-shadow: 0 0 ($unit / 2) 0 rgba(0, 0, 0, 0.25);
   z-index: 999997;
 }
-
 .toolbar__secondary a {
   border-bottom: none;
   text-decoration: none;
 }
-
 .toolbar__secondary a:hover,
 .toolbar__secondary a:active,
 .toolbar__secondary a:focus {
@@ -26,7 +22,6 @@ body.adminic-toolbar-secondary {
   text-decoration: none;
   color: inherit;
 }
-
 @media only screen and (min-width: $compact-breakpoint) {
   body.adminic-toolbar-secondary {
     margin-left: $primary-width-normal + $secondary-width-normal;

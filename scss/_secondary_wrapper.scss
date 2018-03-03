@@ -1,5 +1,4 @@
 @import "variables";
-
 .wrapper {
   top: 0;
   position: fixed;
@@ -8,11 +7,9 @@
   transform: translateX(-100%);
   transition: all 0.2s;
 }
-
 .wrapper.active {
   transform: none;
 }
-
 @media only screen and (min-width: $compact-breakpoint) {
   .wrapper {
     width: $secondary-width-normal;
