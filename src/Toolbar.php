@@ -160,6 +160,7 @@ class Toolbar {
           '#theme' => 'toolbar_header',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
+          '#close' => TRUE,
         ];
 
         $wrappers[] = [

@@ -33,6 +33,11 @@
         }
       });
 
+      $('.toolbar__header .close').on('click', function (e) {
+        $('.wrapper.active').removeClass('active');
+        hideSecondaryToolbar();
+      });
+
       function showSecondaryToolbar() {
         $toolbarSecondary.show();
         $body.addClass('adminic-toolbar-secondary');

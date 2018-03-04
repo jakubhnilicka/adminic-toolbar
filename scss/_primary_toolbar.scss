@@ -10,7 +10,7 @@ body.adminic-toolbar-primary {
   top: 0;
   left: 0;
   width: $primary-width-compact;
-  height: 100vh;
+  height: 100%;
   //box-shadow: 0 0 ($unit / 2) 0 rgba(0, 0, 0, 0.25);
   z-index: 999998;
   display: flex;
@@ -34,10 +34,6 @@ body.adminic-toolbar-primary {
 
   .toolbar__primary {
     width: $primary-width-normal;
-  }
-
-  .toolbar__primary .toolbar__header a {
-    visibility: visible;
   }
 
   .toolbar__primary .toolbar__section__navigation li a {

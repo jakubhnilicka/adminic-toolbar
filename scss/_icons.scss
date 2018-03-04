@@ -12,6 +12,9 @@
   margin-right: 0;
   visibility: visible;
 }
+.active .ico {
+  filter: brightness(200%);
+}
 @media only screen and (min-width: $compact-breakpoint) {
   .ico {
     margin-right: $unit;

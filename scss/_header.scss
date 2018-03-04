@@ -12,19 +12,29 @@
   padding: ($unit * 1.5);
   transition: background-color 0.2s;
   letter-spacing: 0.05em;
-  align-items: center;
-  justify-content: left;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
+  flex-flow: row nowrap;
+  justify-content: left;
+}
+.toolbar__header .close {
+  height: $unit * 6;
+  width: $unit * 6;
+  display: block;
+  cursor: pointer;
+  background: url('../images/close.svg') no-repeat center;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 /* Primary*/
 .toolbar__primary .toolbar__header {
-  background-color: $primary-header-bg;
-  color: $primary-header-color;
   border-bottom: 1px solid $primary-divider;
 }
 .toolbar__primary .toolbar__header a {
+  background-color: $primary-header-bg;
+  color: $primary-header-color;
   visibility: hidden;
   text-transform: uppercase;
 }
@@ -39,14 +49,18 @@
 .toolbar__secondary .toolbar__header {
   background-color: $secondary-header-bg;
   color: $secondary-header-color;
-  border-bottom: 1px solid $secondary-divider;
+  border-bottom: 1px solid $secondary-divider
 }
 .toolbar__secondary .toolbar__header a:hover {
+  background-color: darken($secondary-header-bg, 4%);
+}
+.toolbar__secondary .toolbar__header .close:hover {
   background-color: darken($secondary-header-bg, 4%);
 }
 .toolbar__secondary .toolbar__header a .ico {
   background: url('../images/back.svg') no-repeat center;
   margin-right: $unit;
+  filter: none;
 }
 @media only screen and (min-width: $compact-breakpoint) {
   .toolbar__header a {
