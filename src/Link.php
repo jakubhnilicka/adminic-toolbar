@@ -28,6 +28,7 @@ class Link {
    * @var bool
    */
   private $disabled;
+  private $badge;
 
   /**
    * Link constructor.
@@ -37,13 +38,15 @@ class Link {
    * @param string $title
    * @param bool $active
    * @param bool $disabled
+   * @param $badge
    */
-  public function __construct(string $widget, string $route, string $title, bool $active, bool $disabled) {
+  public function __construct(string $widget, string $route, string $title, bool $active, bool $disabled, $badge) {
     $this->widget = $widget;
     $this->route = $route;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
+    $this->badge = $badge;
   }
 
   /**
@@ -56,6 +59,9 @@ class Link {
     return $this->widget;
   }
 
+  public function getBadge() {
+    return $this->badge;
+  }
   /**
    * Set link as inactive.
    */
@@ -79,6 +85,7 @@ class Link {
       '#title' => $this->getTitle(),
       '#route' => $this->getRoute(),
       '#active' => $this->isActive(),
+      '#badge' => $this->getBadge(),
     ];
   }
 

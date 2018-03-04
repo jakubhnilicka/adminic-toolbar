@@ -1,11 +1,11 @@
 tabs:
-- {id: 'commerce', section: 'commerce', route: 'commerce.admin_commerce'}
+- {id: 'commerce', section: 'commerce', route: 'commerce.admin_commerce' }
 
 widgets:
 - {id: 'default', weight: -99}
 - {id: 'general', title: 'General', weight: 10}
 # Primary Toolbar Widgets
-- {id: 'commerce', title: 'General', weight: 0}
+- {id: 'commerce', title: 'Commerce', weight: 0}
 # Secondary Toolbar Widgets
 - {id: 'commerce.content', tab: 'commerce', title: 'Shop'}
 - {id: 'commerce.settings', tab: 'commerce', title: 'Settings'}

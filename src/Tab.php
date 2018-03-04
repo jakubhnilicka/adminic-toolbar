@@ -33,6 +33,7 @@ class Tab {
    * @var bool
    */
   private $disabled;
+  private $badge;
 
   /**
    * Tab constructor.
@@ -43,14 +44,16 @@ class Tab {
    * @param string $title
    * @param bool $active
    * @param bool $disabled
+   * @param $badge
    */
-  public function __construct(string $id, string $section, string $route, string $title, bool $active, bool $disabled) {
+  public function __construct(string $id, string $section, string $route, string $title, bool $active, bool $disabled, $badge) {
     $this->id = $id;
     $this->section = $section;
     $this->route = $route;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
+    $this->badge = $badge;
   }
 
   /**
@@ -93,6 +96,7 @@ class Tab {
       '#route' => $this->getRoute(),
       '#active' => $this->isActive(),
       '#id' => $this->getId(),
+      '#badge' => $this->getBadge(),
     ];
   }
 
@@ -114,6 +118,16 @@ class Tab {
    */
   public function getRoute() {
     return $this->route;
+  }
+
+  /**
+   * Get badge route.
+   *
+   * @return string
+   *   Return tab route.
+   */
+  public function getBadge() {
+    return $this->badge;
   }
 
   /**

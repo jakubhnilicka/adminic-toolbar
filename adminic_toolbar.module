@@ -55,6 +55,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'route' => NULL,
       'active' => FALSE,
+      'badge' => NULL,
       'id' => NULL,
     ],
   ];
@@ -64,6 +65,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'route' => NULL,
       'active' => FALSE,
+      'badge' => NULL,
     ],
   ];
 

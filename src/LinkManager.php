@@ -112,8 +112,9 @@ class LinkManager {
       if ($isValid) {
         $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
+        $badge = isset($link['badge']) ? $link['badge'] : NULL;
         $active = FALSE;
-        $this->addLink(new Link($widget, $route, $title, $active, $disabled));
+        $this->addLink(new Link($widget, $route, $title, $active, $disabled, $badge));
       }
     }
   }

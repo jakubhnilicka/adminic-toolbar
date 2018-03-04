@@ -13,3 +13,12 @@ function adminic_toolbar_commerce_library_info_alter(&$libraries, $extension) {
     $libraries['adminic_toolbar']['css']['component'][$commerce] = [];
   }
 }
+
+function adminic_toolbar_commerce_toolbar_config_tabs_alter(&$configTabs) {
+  // Check new orders number
+  $configTabs['commerce']['badge'] = 10;
+}
+
+function adminic_toolbar_commerce_toolbar_config_links_alter(&$configLinks) {
+  $configLinks['commerce.content.entity.commerce_order.collection']['badge'] = 10;
+}

@@ -2,4 +2,7 @@
 {% set classes = [
   active ? 'active',
 ] %}
-<a {{ attributes.addClass(classes) }} href="{{ url(route) }}">{{ title }}</a>
+<a {{ attributes.addClass(classes) }} href="{{ url(route) }}">
+  {{ title }}
+  {% if badge %}<span class="badge">{{ badge }}</span>{% endif %}
+</a>

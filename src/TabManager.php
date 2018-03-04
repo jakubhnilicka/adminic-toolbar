@@ -124,8 +124,9 @@ class TabManager {
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
         $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
+        $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
         $active = FALSE;
-        $this->addTab(new Tab($id, $section, $route, $title, $active, $disabled));
+        $this->addTab(new Tab($id, $section, $route, $title, $active, $disabled, $badge));
       }
     }
   }

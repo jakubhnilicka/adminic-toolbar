@@ -7,4 +7,5 @@
 <a {{ attributes.addClass(tab_classes).setAttribute('id', tab_id) }}href="{{ url(route) }}">
   <i class="ico"></i>
   <span>{{ title }}</span>
+  {% if badge %}<span class="badge">{{ badge }}</span>{% endif %}
 </a>
