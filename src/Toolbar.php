@@ -153,7 +153,7 @@ class Toolbar {
     foreach ($secondaryWrappers as $key => $wrapper) {
       $active = FALSE;
       if (!empty($activeTab)) {
-        $active = ($key == $activeTab->getId());
+        //$active = ($key == $activeTab->getId());
       }
       if ($wrapper['sections']) {
         $header = [
