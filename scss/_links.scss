@@ -2,7 +2,7 @@
 .toolbar_links {
   margin-bottom: ($unit * 2) - 1;
   padding-bottom: ($unit * 2);
-  border-bottom: 1px solid transparent;
+  //border-bottom: 1px solid transparent;
 }
 .toolbar_links__header {
   line-height: ($unit * 2);
@@ -33,7 +33,7 @@
 }
 // Primary toolbar section.
 .toolbar__primary .toolbar_links {
-  border-bottom: 1px solid $primary-divider;
+  //border-bottom: 1px solid $primary-divider;
 }
 .toolbar__primary .toolbar_links__header {
   display: none;
@@ -48,14 +48,13 @@
   color: $primary-link-active;
 }
 .toolbar__primary .toolbar_links nav a:hover,
-.toolbar__primary .toolbar_links nav a:focus,
-.toolbar__primary .toolbar_links nav a:active {
+.toolbar__primary .toolbar_links nav a:focus {
   color: $primary-link-hover;
   background-color: darken($primary-bg, 4%);
 }
 // Secondary toolbar section.
 .toolbar__secondary .toolbar_links {
-  border-bottom: 1px solid $secondary-divider;
+  //border-bottom: 1px solid $secondary-divider;
 }
 .toolbar__secondary .toolbar_links nav a {
   color: $secondary-link;
@@ -65,8 +64,7 @@
   color: $secondary-link-active;
 }
 .toolbar__secondary .toolbar_links nav a:hover,
-.toolbar__secondary .toolbar_links nav a:focus,
-.toolbar__secondary .toolbar_links nav a:active {
+.toolbar__secondary .toolbar_links nav a:focus {
   color: $secondary-link-hover;
   background-color: darken($secondary-bg, 4%);
 }

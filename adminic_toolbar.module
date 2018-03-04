@@ -101,8 +101,8 @@ function adminic_toolbar_page_top(array &$page_top) {
   $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
   $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
 
-  //$toolbarTop = $adminic_toolbar->getTopToolbar();
-  //$page_top['adminic_toolbar_top'] = $toolbarTop;
+  $toolbarTop = $adminic_toolbar->getTopToolbar();
+  $page_top['adminic_toolbar_top'] = $toolbarTop;
 }
 
 function adminic_toolbar_preprocess_html(&$variables) {
