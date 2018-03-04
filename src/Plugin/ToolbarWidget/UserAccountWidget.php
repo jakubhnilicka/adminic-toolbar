@@ -74,16 +74,18 @@ class UserAccountWidget extends PluginBase implements ToolbarWidgetPluginInterfa
     $logoutUrl = Url::fromRoute('user.logout');
     $dropdownContent[] = Link::fromTextAndUrl(t('Log out'), $logoutUrl);
 
+    $name = $this->currentUser->getDisplayName();
+
     $dropdown = [
       '#theme' => 'drd',
       '#trigger_content' => '',
-      '#name' => $this->currentUser->getDisplayName(),
       '#content' => $dropdownContent,
     ];
 
     return [
       '#theme' => 'user_account',
       '#avatar' => NULL,
+      '#name' => $name,
       '#dropdown' => $dropdown,
     ];
   }
