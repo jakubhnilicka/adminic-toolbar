@@ -14,16 +14,16 @@ links:
 # Content Links
 - {widget: 'commerce.content', route: 'entity.commerce_order.collection'}
 - {widget: 'commerce.content', route: 'entity.commerce_product.collection'}
-- {widget: 'commerce.content', route: 'entity.commerce_product_attribute.collection'}
 - {widget: 'commerce.content', route: 'entity.commerce_promotion.collection'}
 - {widget: 'commerce.content', route: 'entity.commerce_store.collection'}
 # Setting Lings
-- {widget: 'commerce.settings', route: 'entity.commerce_currency.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_store_type.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_tax_type.collection'}
 - {widget: 'commerce.settings', route: 'entity.commerce_product_type.collection'}
+- {widget: 'commerce.content', route: 'entity.commerce_product_attribute.collection'}
 - {widget: 'commerce.settings', route: 'entity.commerce_product_variation_type.collection'}
 - {widget: 'commerce.settings', route: 'entity.commerce_order_type.collection'}
 - {widget: 'commerce.settings', route: 'entity.commerce_order_item_type.collection'}
 - {widget: 'commerce.settings', route: 'entity.commerce_checkout_flow.collection'}
 - {widget: 'commerce.settings', route: 'entity.commerce_payment_gateway.collection'}
+- {widget: 'commerce.settings', route: 'entity.commerce_store_type.collection'}
+- {widget: 'commerce.settings', route: 'entity.commerce_tax_type.collection'}
+- {widget: 'commerce.settings', route: 'entity.commerce_currency.collection'}
