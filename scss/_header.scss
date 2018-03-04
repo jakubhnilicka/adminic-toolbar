@@ -35,7 +35,6 @@
 .toolbar__primary .toolbar__header a {
   background-color: $primary-header-bg;
   color: $primary-header-color;
-  visibility: hidden;
   text-transform: uppercase;
 }
 
@@ -44,6 +43,9 @@
 }
 .toolbar__primary .toolbar__header a .ico {
   background: url('../images/drupal-logo.svg') no-repeat center;
+}
+.toolbar__primary .toolbar__header a span {
+  display: none;
 }
 /* Secondary */
 .toolbar__secondary .toolbar__header {
@@ -66,7 +68,7 @@
   .toolbar__header a {
     padding: ($unit * 1.5) ($unit * 2);
   }
-  .toolbar__primary .toolbar__header a {
-    visibility: visible;
+  .toolbar__primary .toolbar__header a span {
+    display: block;
   }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>user</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Artboard" transform="translate(-733.000000, -520.000000)" stroke="#919BAD">
+            <g id="user" transform="translate(739.000000, 525.000000)">
+                <path d="M12,13.5 L12,12 C12,10.3431458 10.6568542,9 9,9 L3,9 C1.34314575,9 0,10.3431458 0,12 L0,13.5" id="Shape"></path>
+                <circle id="Oval" cx="6" cy="3" r="3"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

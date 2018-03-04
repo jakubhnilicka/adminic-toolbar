@@ -76,7 +76,8 @@ class UserAccountWidget extends PluginBase implements ToolbarWidgetPluginInterfa
 
     $dropdown = [
       '#theme' => 'drd',
-      '#trigger_content' => '...',
+      '#trigger_content' => '',
+      '#name' => $this->currentUser->getDisplayName(),
       '#content' => $dropdownContent,
     ];
 

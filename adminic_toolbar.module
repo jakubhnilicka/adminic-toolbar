@@ -70,6 +70,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
   $items['user_account'] = [
     'variables' => [
       'avatar' => NULL,
+      'name' => NULL,
       'dropdown' => NULL,
     ],
   ];
