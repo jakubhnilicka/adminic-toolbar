@@ -6,9 +6,10 @@
     attach: function (context) {
       var $toolbarSecondary = $('.toolbar__secondary');
       var $body = $('body');
-      var compactBreakpoint = window.matchMedia("only screen and (min-width: 60em)")
-      showToolbarSpace(compactBreakpoint);
-      compactBreakpoint.addListener(showToolbarSpace);
+      var compactBreakpoint = window.matchMedia("only screen and (min-width: 60em)");
+
+      showSecondaryToolbar(compactBreakpoint);
+      compactBreakpoint.addListener(showSecondaryToolbar);
 
       $('.nano').nanoScroller();
 
@@ -25,11 +26,10 @@
         if ($sectionWrapper[0] !== undefined) {
           e.preventDefault();
           $sectionWrapper.addClass('active');
-          $toolbarSecondary.show();
-          //showSecondaryToolbar();
+          showSecondaryToolbar(compactBreakpoint);
         }
         else {
-          //hideSecondaryToolbar()
+          hideSecondaryToolbar()
         }
       });
 
@@ -38,9 +38,22 @@
         hideSecondaryToolbar();
       });
 
-      function showSecondaryToolbar() {
-        $toolbarSecondary.show();
-        $body.addClass('adminic-toolbar-secondary');
+      function showSecondaryToolbar(compactBreakpoint) {
+        var $tabActive = $('.tab.active');
+
+        if (compactBreakpoint.matches && $tabActive.length > 0) {
+          var tabId = $tabActive.attr('id');
+          var tabKey = tabId.substring(5);
+          var $sectionWrapper = $('#toolbar-' + tabKey);
+          if ($sectionWrapper[0] !== undefined) {
+            $sectionWrapper.addClass('active');
+            $body.addClass('adminic-toolbar-secondary');
+            $toolbarSecondary.show();
+          }
+          else {
+            hideSecondaryToolbar();
+          }
+        }
       }
 
       function hideSecondaryToolbar() {
@@ -48,19 +61,6 @@
         $body.removeClass('adminic-toolbar-secondary');
       }
 
-      function showToolbarSpace(compactBreakpoint) {
-        var $tabActive = $('.tab.active');
-        if (compactBreakpoint.matches && $tabActive.length > 0 ) {
-          showSecondaryToolbar();
-          var tabId = $tabActive.attr('id');
-          var tabKey = tabId.substring(5);
-          var $sectionWrapper = $('#toolbar-' + tabKey);
-          $sectionWrapper.addClass('active');
-        }
-        else {
-          hideSecondaryToolbar()
-        }
-      }
     }
   };
 

@@ -8,8 +8,12 @@ body.adminic-toolbar-secondary {
   left: $primary-width-compact;
   width: $secondary-width-compact;
   height: 100vh;
-  //box-shadow: 0 0 ($unit / 2) 0 rgba(0, 0, 0, 0.25);
+  flex-direction: column;
   z-index: 999997;
+  display:  none;
+}
+body.adminic-toolbar-secondary .toolbar__secondary {
+  display: flex;
 }
 .toolbar__secondary a {
   border-bottom: none;
