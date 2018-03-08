@@ -1,4 +1,7 @@
 @import "variables";
+body {
+  transition: margin 0.15s $transition_ease;
+}
 body.adminic-toolbar-secondary {
   margin-left: $primary-width-compact + $secondary-width-compact;
 }

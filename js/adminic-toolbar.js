@@ -13,12 +13,12 @@
       $('.nano').nanoScroller();
 
       $('.tab').on('click', function (e) {
-        $('.tab').removeClass('active');
-
         var $tab = $(this);
         var tabId = $tab.attr('id');
         var tabKey = tabId.substring(5);
         var $sectionWrapper = $('#toolbar-' + tabKey);
+
+        $('.tab').removeClass('active');
         $tab.addClass('active');
         $('.wrapper.active').css('z-index', 999).removeClass('active');
 
@@ -28,12 +28,12 @@
           showSecondaryToolbar();
         }
         else {
+
           hideSecondaryToolbar()
         }
       });
 
       $('.toolbar__header .close').on('click', function (e) {
-        $('.wrapper.active').removeClass('active');
         hideSecondaryToolbar();
       });
 
@@ -57,7 +57,8 @@
 
       function hideSecondaryToolbar() {
         $toolbarSecondary.hide();
-        setBodyPadding(compactBreakpoint);
+        $('.wrapper').removeClass('active');
+        $body.removeClass('adminic-toolbar-secondary');
       }
 
       function setBodyPadding(compactBreakpoint) {
@@ -67,7 +68,7 @@
             var tabId = $tabActive.attr('id');
             var tabKey = tabId.substring(5);
             var $sectionWrapper = $('#toolbar-' + tabKey);
-            if ($sectionWrapper[0] !== undefined) {
+            if ($sectionWrapper[0] !== undefined && $sectionWrapper.hasClass) {
               $sectionWrapper.addClass('active');
               $body.addClass('adminic-toolbar-secondary');
             }
