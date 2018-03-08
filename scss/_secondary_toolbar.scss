@@ -4,7 +4,7 @@ body.adminic-toolbar-secondary {
 }
 .toolbar__secondary {
   position: fixed;
-  background-color: $secondary-bg;
+  background-color: transparent;
   left: $primary-width-compact;
   width: $secondary-width-compact;
   height: 100vh;

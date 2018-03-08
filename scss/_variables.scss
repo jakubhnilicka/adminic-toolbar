@@ -1,5 +1,6 @@
 $unit: 8px;
 $compact-breakpoint: 60em;
+$transition_ease: cubic-bezier(.43,.22,.46,.9);
 
 $primary-width-compact: $unit * 6;
 $primary-width-normal: $unit * 20;

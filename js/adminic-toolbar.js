@@ -7,10 +7,8 @@
       var $toolbarSecondary = $('.toolbar__secondary');
       var $body = $('body');
       var compactBreakpoint = window.matchMedia("only screen and (min-width: 60em)");
-
+      compactBreakpoint.addListener(setBodyPadding);
       showSecondaryToolbar(compactBreakpoint);
-      compactBreakpoint.addListener(showSecondaryToolbar);
-
       $('.nano').nanoScroller();
 
       $('.tab').on('click', function (e) {
@@ -21,11 +19,11 @@
         var tabKey = tabId.substring(5);
         var $sectionWrapper = $('#toolbar-' + tabKey);
         $tab.addClass('active');
-        $('.wrapper.active').removeClass('active');
+        $('.wrapper.active').css('z-index', 999).removeClass('active');
 
         if ($sectionWrapper[0] !== undefined) {
           e.preventDefault();
-          $sectionWrapper.addClass('active');
+          $sectionWrapper.css('z-index', 999).addClass('active');
           showSecondaryToolbar(compactBreakpoint);
         }
         else {
@@ -41,26 +39,35 @@
       function showSecondaryToolbar(compactBreakpoint) {
         var $tabActive = $('.tab.active');
 
-        if (compactBreakpoint.matches && $tabActive.length > 0) {
+        if ($tabActive.length > 0) {
           var tabId = $tabActive.attr('id');
           var tabKey = tabId.substring(5);
           var $sectionWrapper = $('#toolbar-' + tabKey);
           if ($sectionWrapper[0] !== undefined) {
             $sectionWrapper.addClass('active');
-            $body.addClass('adminic-toolbar-secondary');
             $toolbarSecondary.show();
           }
           else {
             hideSecondaryToolbar();
           }
+          setBodyPadding(compactBreakpoint);
         }
       }
 
       function hideSecondaryToolbar() {
         $toolbarSecondary.hide();
-        $body.removeClass('adminic-toolbar-secondary');
+        //$body.removeClass('adminic-toolbar-secondary');
+        setBodyPadding(compactBreakpoint);
       }
 
+      function setBodyPadding(compactBreakpoint) {
+        if (compactBreakpoint.matches && $('.wrapper.active').length > 0) {
+          $body.addClass('adminic-toolbar-secondary');
+        }
+        else {
+          $body.removeClass('adminic-toolbar-secondary');
+        }
+      }
     }
   };
 

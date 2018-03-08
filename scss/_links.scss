@@ -115,10 +115,10 @@
   .toolbar_links nav a {
     padding: ($unit / 2) ($unit * 2);
   }
-  .toolbar__primary .toolbar_links nav a span:not(.badge) {
+  .toolbar__primary .toolbar_links nav a span {
     display: block;
   }
-  .toolbar__primary .toolbar_links nav a span {
+  .toolbar__primary .toolbar_links nav a span:not(.badge) {
     display: block;
   }
   .toolbar__secondary .toolbar_links nav a {
