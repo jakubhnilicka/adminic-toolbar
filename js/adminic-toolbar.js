@@ -51,13 +51,12 @@
           else {
             hideSecondaryToolbar();
           }
-          setBodyPadding(compactBreakpoint);
         }
+        setBodyPadding(compactBreakpoint);
       }
 
       function hideSecondaryToolbar() {
         $toolbarSecondary.hide();
-        //$body.removeClass('adminic-toolbar-secondary');
         setBodyPadding(compactBreakpoint);
       }
 
