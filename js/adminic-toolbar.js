@@ -8,7 +8,8 @@
       var $body = $('body');
       var compactBreakpoint = window.matchMedia("only screen and (min-width: 60em)");
       compactBreakpoint.addListener(setBodyPadding);
-      showSecondaryToolbar(compactBreakpoint);
+      setBodyPadding(compactBreakpoint);
+
       $('.nano').nanoScroller();
 
       $('.tab').on('click', function (e) {
@@ -24,7 +25,7 @@
         if ($sectionWrapper[0] !== undefined) {
           e.preventDefault();
           $sectionWrapper.css('z-index', 999).addClass('active');
-          showSecondaryToolbar(compactBreakpoint);
+          showSecondaryToolbar();
         }
         else {
           hideSecondaryToolbar()
@@ -36,7 +37,7 @@
         hideSecondaryToolbar();
       });
 
-      function showSecondaryToolbar(compactBreakpoint) {
+      function showSecondaryToolbar() {
         var $tabActive = $('.tab.active');
 
         if ($tabActive.length > 0) {
@@ -61,8 +62,17 @@
       }
 
       function setBodyPadding(compactBreakpoint) {
-        if (compactBreakpoint.matches && $('.wrapper.active').length > 0) {
-          $body.addClass('adminic-toolbar-secondary');
+        if (compactBreakpoint.matches) {
+          var $tabActive = $('.tab.active');
+          if ($tabActive.length > 0) {
+            var tabId = $tabActive.attr('id');
+            var tabKey = tabId.substring(5);
+            var $sectionWrapper = $('#toolbar-' + tabKey);
+            if ($sectionWrapper[0] !== undefined) {
+              $sectionWrapper.addClass('active');
+              $body.addClass('adminic-toolbar-secondary');
+            }
+          }
         }
         else {
           $body.removeClass('adminic-toolbar-secondary');
