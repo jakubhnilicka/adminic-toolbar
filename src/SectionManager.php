@@ -222,11 +222,13 @@ class SectionManager {
     $tabs = $this->tabManager->getTabs();
     /** @var \Drupal\adminic_toolbar\Tab $tab */
     foreach ($tabs as $key => &$tab) {
+      $tabUrl = $tab->getRawUrl();
+      $tabRouteName = $tabUrl->getRouteName();
       if ($activeSections && $tab->getId() == $activeSections->getTab()) {
         $tab->setActive();
         $this->tabManager->addActiveTab($tab);
       }
-      elseif ($tab->getUrl() == $currentRouteName) {
+      elseif ($tabRouteName == $currentRouteName) {
         $tab->setActive();
         $this->tabManager->addActiveTab($tab);
       }
@@ -238,8 +240,9 @@ class SectionManager {
       $activeRoutes = $this->routeManager->getActiveRoutes();
       $tabs = $this->tabManager->getTabs();
       foreach ($tabs as $tab) {
-        $tabRoute = $tab->getUrl();
-        if (array_key_exists($tabRoute, $activeRoutes)) {
+        $tabUrl = $tab->getRawUrl();
+        $tabRouteName = $tabUrl->getRouteName();
+        if (array_key_exists($tabRouteName, $activeRoutes)) {
           $tab->setActive();
           $this->tabManager->addActiveTab($tab);
         }
