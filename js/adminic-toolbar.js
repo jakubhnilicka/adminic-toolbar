@@ -13,6 +13,13 @@
       $('.nano').nanoScroller();
 
       $('.tab').on('click', function (e) {
+        // If cmd + click go directly to the href.
+        if (e.metaKey) {
+          e.preventDefault();
+          window.location.replace($(this).attr('href'));
+          return true;
+        }
+
         var $tab = $(this);
         var tabId = $tab.attr('id');
         var tabKey = tabId.substring(5);
@@ -28,9 +35,9 @@
           showSecondaryToolbar();
         }
         else {
-
           hideSecondaryToolbar()
         }
+
       });
 
       $('.toolbar__header .close').on('click', function (e) {
