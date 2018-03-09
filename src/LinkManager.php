@@ -117,9 +117,9 @@ class LinkManager {
       $widget = $link['widget'];
       $route = $link['route'];
       $route_params = isset($link['route_params']) ? $link['route_params'] : [];
-      $isValid = $this->routeManager->isRouteValid($route);
+      $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid) {
-        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
+        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;

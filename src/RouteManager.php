@@ -72,13 +72,14 @@ class RouteManager {
    *
    * @param string $routeName
    *
+   * @param array $routeParameters
    * @return mixed
    */
-  public function getDefaultTitle(string $routeName) {
-    if ($this->isRouteValid($routeName)) {
+  public function getDefaultTitle(string $routeName, array $routeParameters) {
+    if ($this->isRouteValid($routeName, $routeParameters)) {
       $routes = $this->getRoutes();
 
-      return $routes[$routeName];
+      return $routes[$routeName]['title'];
     }
 
     return NULL;
@@ -89,15 +90,25 @@ class RouteManager {
    *
    * @param string $routeName
    *   Route name.
+   * @param array $routeParams
+   *   Route Parameters.
    *
    * @return bool
    *   True if route is valid or flase.
    */
-  public function isRouteValid(string $routeName) {
+  public function isRouteValid(string $routeName, array $routeParams) {
     $isValidRoute = array_key_exists($routeName, $this->getRoutes());
     if (!$isValidRoute) {
       return FALSE;
     }
+
+    $requiredParameters = $this->getRoutes()[$routeName]['parameters'];
+    foreach ($requiredParameters as $parameter) {
+      if (!array_key_exists($parameter, $routeParams)) {
+        return FALSE;
+      }
+    }
+
     $isRouteAccessible = $this->isRouteAccessible($routeName);
     if (!$isRouteAccessible) {
       return FALSE;
@@ -130,8 +141,13 @@ class RouteManager {
 
     $routes = [];
     foreach ($allRoutes as $routeName => $route) {
+      $parameters = $route->getOption('parameters');
+      $requiredParameters = empty($parameters) ? [] : array_keys($parameters);
       $title = $route->getDefault('_title');
-      $routes[$routeName] = $title;
+      $routes[$routeName] = [
+        'title' => $title,
+        'parameters' => $requiredParameters,
+      ];
     }
 
     return $routes;

@@ -57,8 +57,8 @@ widgets:
 links:
 # Content Tab
 - {widget: 'content.default', route: 'system.admin_content', title: 'Nodes'}
-- {widget: 'content.default', route: 'node.add_page', title: 'Node add page'}
-- {widget: 'content.default', route: 'node.add', route_params: {node_type: 'page'}, title: 'Node add'}
+- {widget: 'content.default', route: 'node.add_page', title: 'Add node'}
+- {widget: 'content.default', route: 'node.add', route_params: {node_type: 'page'}, title: 'Add page'}
 - {widget: 'content.default', route: 'comment.admin'}
 - {widget: 'content.default', route: 'view.media.media_page_list'}
 - {widget: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}

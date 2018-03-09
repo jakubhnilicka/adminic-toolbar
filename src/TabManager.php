@@ -122,9 +122,9 @@ class TabManager {
       $section = isset($tab['section']) ? $tab['section'] : '';
       $route = $tab['route'];
       $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
-      $isValid = $this->routeManager->isRouteValid($route);
+      $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
-        $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
+        $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
