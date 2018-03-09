@@ -10,7 +10,7 @@ tabs:
 - {id: 'appearance', section: 'general', route: 'system.themes_page'}
 - {id: 'extend', section: 'general', route: 'system.modules_list'}
 - {id: 'configuration', section: 'general', route: 'system.admin_config'}
-- {id: 'language', section: 'general', route: 'system.regional_settings', title: 'Language'}
+- {id: 'language', section: 'general', route: 'system.admin_config_regional', title: 'Language'}
 - {id: 'reports', section: 'general', route: 'system.admin_reports'}
 - {id: 'help', section: 'general', route: 'help.main'}
 
