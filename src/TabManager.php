@@ -123,6 +123,7 @@ class TabManager {
       $isValid = $this->routeManager->isRouteValid($route);
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
         $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
+        $title = empty($title) ? '' : $title;
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
         $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
         $active = FALSE;
