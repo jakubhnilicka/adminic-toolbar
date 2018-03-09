@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_theme().
  */
@@ -95,23 +97,29 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
  * {@inheritdoc}
  */
 function adminic_toolbar_page_top(array &$page_top) {
-  /** @var \Drupal\adminic_toolbar\Toolbar $adminic_toolbar */
-  $adminic_toolbar = \Drupal::service('adminic_toolbar');
+  /** @var \Drupal\user\PrivateTempStore $tempstore */
+  $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
+  $use_adminic_toolbar = $tempstore->get('use_adminic_toolbar');
 
-  $toolbarPrimary = $adminic_toolbar->getPrimaryToolbar();
-  $page_top['adminic_toolbar_primary'] = $toolbarPrimary;
+  if ($use_adminic_toolbar) {
+    /** @var \Drupal\adminic_toolbar\Toolbar $adminic_toolbar */
+    $adminic_toolbar = \Drupal::service('adminic_toolbar');
 
-  $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
-  $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
+    $toolbarPrimary = $adminic_toolbar->getPrimaryToolbar();
+    $page_top['adminic_toolbar_primary'] = $toolbarPrimary;
 
-  // $toolbarTop = $adminic_toolbar->getTopToolbar();
-  // $page_top['adminic_toolbar_top'] = $toolbarTop;
+    $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
+    $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
+
+    // $toolbarTop = $adminic_toolbar->getTopToolbar();
+    // $page_top['adminic_toolbar_top'] = $toolbarTop;
+  }
 }
 
 function adminic_toolbar_preprocess_html(&$variables) {
   // Remove default toolbar.
   // TODO: Remove libraries for toolbar.
-  if (isset($variables['page_top']['toolbar'])) {
+  if (isset($variables['page_top']['toolbar']) && isset($variables['page_top']['adminic_toolbar_primary'])) {
     unset($variables['page_top']['toolbar']);
   }
   if (isset($variables['page_top']['adminic_toolbar_primary'])) {
@@ -120,4 +128,42 @@ function adminic_toolbar_preprocess_html(&$variables) {
   if (isset($variables['page_top']['adminic_toolbar_top'])) {
     $variables['attributes']['class'][] = 'adminic-toolbar-top';
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * {@inheritdoc}
+ */
+function adminic_toolbar_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\user\PrivateTempStore $tempstore */
+  $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
+  $use_adminic_toolbar_value = $tempstore->get('use_adminic_toolbar');
+
+  $form['adminic_toolbar'] = [
+    '#type' => 'details',
+    '#title' => t('Adminic toolbar'),
+    '#open' => TRUE,
+    '#weight' => 99,
+  ];
+
+  $form['adminic_toolbar']['use_adminic_toolbar'] = [
+    '#type' => 'checkbox',
+    '#default_value' => $use_adminic_toolbar_value,
+    '#title' => t('Use Adminic toolbar'),
+  ];
+
+  $form['actions']['submit']['#submit'][] = '_adminic_toolbar_user_form_submit';
+
+}
+
+function _adminic_toolbar_user_form_submit(array $form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  if (isset($values['use_adminic_toolbar'])) {
+    /** @var \Drupal\user\PrivateTempStore $tempstore */
+    $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
+    $tempstore->set('use_adminic_toolbar', $values['use_adminic_toolbar']);
+  }
+
 }
