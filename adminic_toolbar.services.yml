@@ -18,7 +18,7 @@ services:
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
   adminic_toolbar.section_manager:
     class: Drupal\adminic_toolbar\SectionManager
-    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.tab_manager', '@module_handler']
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.tab_manager', '@module_handler', '@adminic_toolbar.widget.manager']
   adminic_toolbar.link_manager:
     class: Drupal\adminic_toolbar\LinkManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']

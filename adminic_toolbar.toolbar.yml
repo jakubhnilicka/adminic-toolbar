@@ -1,147 +1,146 @@
-set:
-  name: 'Default'
-  id: 'default'
-  tabs:
-  - {id: 'content', section: 'default', route: 'system.admin_content'}
-  - {id: 'media', section: 'default', route: 'system.admin_content', title: 'Media'}
-  - {id: 'structure', section: 'default', route: 'system.admin_structure'}
-  - {id: 'users', section: 'default', route: 'entity.user.collection'}
-  - {id: 'blocks', section: 'general', route: 'block.admin_display'}
-  - {id: 'appearance', section: 'general', route: 'system.themes_page'}
-  - {id: 'extend', section: 'general', route: 'system.modules_list'}
-  - {id: 'configuration', section: 'general', route: 'system.admin_config'}
-  - {id: 'language', section: 'general', route: 'system.regional_settings', title: 'Language'}
-  - {id: 'reports', section: 'general', route: 'system.admin_reports'}
-  - {id: 'help', section: 'general', route: 'help.main'}
+sets:
+- {id: 'default', title: 'Default'}
 
-  widgets:
-  # Primary Tabs
-  - {id: 'default'}
-  - {id: 'general', title: 'General'}
-  # Content Tab
-  - {id: 'content.default', tab: 'content'}
-  # Media Tab
-  - {id: 'media.default', tab: 'media'}
-  - {id: 'media.settings', tab: 'media', title: 'Settings'}
-  # Structure Tab
-  - {id: 'structure.default', tab: 'structure'}
-  - {id: 'structure.content_authoring', tab: 'structure', title: 'Content authoring'}
-  # People Tab
-  - {id: 'users.default', tab: 'users'}
-  - {id: 'users.configuration', tab: 'users', title: 'Settings'}
-  # Block Layout Tab
-  - {id: 'blocks.default', tab: 'blocks'}
-  # Apearance Tab
-  - {id: 'appearance.default', tab: 'appearance'}
-  - {id: 'appearance.settings', tab: 'appearance', title: 'Settings'}
-  # Extend Tab
-  - {id: 'extend.default', tab: 'extend', title: 'Extend'}
-  # Configuration Tab
-  - {id: 'configuration.people', tab: 'configuration', title: 'People'}
-  - {id: 'configuration.system', tab: 'configuration', title: 'System'}
-  - {id: 'configuration.user_interface', tab: 'configuration', title: 'User interface'}
-  - {id: 'configuration.development', tab: 'configuration', title: 'Development'}
-  - {id: 'configuration.media', tab: 'configuration', title: 'Media'}
-  - {id: 'configuration.search_and_metadata', tab: 'configuration', title: 'Search and metadat'}
-  - {id: 'configuration.web_services', tab: 'configuration', title: 'Web services'}
-  - {id: 'configuration.workflow', tab: 'configuration', title: 'Workflow'}
-  # Language
-  - {id: 'language.default', tab: 'language'}
-  - {id: 'language.languages', tab: 'language', title: 'Languages'}
-  - {id: 'language.translation', tab: 'language', title: 'User interface translation'}
-  # Status Report Tab
-  - {id: 'reports.default', tab: 'reports'}
-  # Help Tab
-  - {id: 'help.default', tab: 'help'}
+tabs:
+- {id: 'content', section: 'default', route: 'system.admin_content'}
+#- {id: 'media', section: 'default', route: 'system.admin_content', disabled: true, title: 'Media'}
+- {id: 'structure', section: 'default', route: 'system.admin_structure'}
+- {id: 'users', section: 'default', route: 'entity.user.collection'}
+- {id: 'blocks', section: 'general', route: 'block.admin_display'}
+- {id: 'appearance', section: 'general', route: 'system.themes_page'}
+- {id: 'extend', section: 'general', route: 'system.modules_list'}
+- {id: 'configuration', section: 'general', route: 'system.admin_config'}
+- {id: 'language', section: 'general', route: 'system.regional_settings', title: 'Language'}
+- {id: 'reports', section: 'general', route: 'system.admin_reports'}
+- {id: 'help', section: 'general', route: 'help.main'}
 
-  links:
-  # Content Tab
-  - {section: 'content.default', route: 'system.admin_content'}
-  - {section: 'content.default', route: 'comment.admin'}
-  - {section: 'content.default', route: 'view.media.media_page_list'}
-  - {section: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}
-  - {section: 'content.default', route: 'view.files.page_1'}
-  - {section: 'content.default', route: 'path.admin_overview'}
-  - {section: 'content.default', route: 'book.admin'}
-  - {section: 'content.default', route: 'forum.overview'}
-  # Media Tab
-  - {section: 'media.settings', route: 'blazy.settings'}
-  - {section: 'media.settings', route: 'image_widget_crop.crop_widget_settings'}
-  - {section: 'media.settings', route: 'entity.image_style.collection'}
-  - {section: 'media.settings', route: 'crop.overview_types'}
-  - {section: 'media.settings', route: 'entity.slick.collection'}
-  - {section: 'media.settings', route: 'entity.responsive_image_style.collection'}
-  - {section: 'media.settings', route: 'system.image_toolkit_settings'}
-  # Structure Tab
-  - {section: 'structure.default', route: 'book.settings'}
-  - {section: 'structure.default', route: 'entity.comment_type.collection'}
-  - {section: 'structure.default', route: 'entity.contact_form.collection'}
-  - {section: 'structure.default', route: 'entity.node_type.collection'}
-  - {section: 'structure.default', route: 'entity.entity_view_mode.collection'}
-  - {section: 'structure.default', route: 'entity.entity_form_mode.collection'}
-  - {section: 'structure.default', route: 'forum.settings'}
-  - {section: 'structure.default', route: 'entity.media_bundle.collection'}
-  - {section: 'structure.default', route: 'entity.menu.collection'}
-  - {section: 'structure.default', route: 'entity.paragraphs_type.collection'}
-  - {section: 'structure.default', route: 'field_permissions.reports'}
-  - {section: 'structure.default', route: 'entity.taxonomy_vocabulary.collection'}
-  - {section: 'structure.default', route: 'entity.view.collection'}
-  - {section: 'structure.default', route: 'entity.block_content_type.collection', title: 'Block types'}
-  # People Tab
-  - {section: 'users.default', route: 'entity.user.collection'}
-  - {section: 'users.default', route: 'user.admin_permissions'}
-  - {section: 'users.default', route: 'entity.user_role.collection'}
-  - {section: 'users.configuration', route: 'entity.user.admin_form'}
-  # Block Layout Tab
-  # Apearance Tab
-  - {section: 'appearance.default', route: 'system.themes_page'}
-  - {section: 'appearance.default', route: 'update.theme_update'}
-  - {section: 'appearance.settings', route: 'system.theme_settings'}
-  # Extend Tab
-  - {section: 'extend.default', route: 'system.modules_list'}
-  - {section: 'extend.default', route: 'update.module_install'}
-  - {section: 'extend.default', route: 'update.module_update'}
-  - {section: 'extend.default', route: 'system.modules_uninstall'}
-  # Configuration Tab
-  - {section: 'configuration.system', route: 'system.site_information_settings'}
-  - {section: 'configuration.system', route: 'system.cron_settings'}
-  - {section: 'configuration.system', route: 'entity.action.collection'}
-  - {section: 'configuration.system', route: 'system.file_system_settings'}
-  - {section: 'configuration.system', route: 'ban.admin_page'}
-  - {section: 'structure.content_authoring', route: 'entity.entity_browser.collection'}
-  - {section: 'structure.content_authoring', route: 'filter.admin_overview'}
-  - {section: 'structure.content_authoring', route: 'entity.embed_button.collection'}
-  - {section: 'configuration.user_interface', route: 'entity.shortcut_set.collection'}
-  - {section: 'configuration.development', route: 'system.performance_settings'}
-  - {section: 'configuration.development', route: 'system.logging_settings'}
-  - {section: 'configuration.development', route: 'system.site_maintenance_mode'}
-  - {section: 'configuration.development', route: 'config.sync'}
-  - {section: 'configuration.development', route: 'devel.admin_settings'}
-  - {section: 'configuration.development', route: 'migrate_drupal_ui.upgrade'}
-  - {section: 'configuration.search_and_metadata', route: 'entity.search_page.collection'}
-  - {section: 'configuration.web_services', route: 'system.rss_feeds_settings'}
-  - {section: 'configuration.web_services', route: 'aggregator.admin_overview'}
-  - {section: 'configuration.workflow', route: 'entity.workflow.collection'}
-  # Language Tab
-  - {section: 'language.default', route: 'system.regional_settings'}
-  - {section: 'language.default', route: 'entity.date_format.collection'}
-  - {section: 'language.default', route: 'config_translation.mapper_list'}
-  - {section: 'language.default', route: 'language.content_settings_page'}
-  - {section: 'language.languages', route: 'entity.configurable_language.collection'}
-  - {section: 'language.languages', route: 'language.negotiation'}
-  - {section: 'language.translation', route: 'locale.translate_page'}
-  - {section: 'language.translation', route: 'locale.translate_import'}
-  - {section: 'language.translation', route: 'locale.translate_export'}
-  - {section: 'language.translation', route: 'locale.settings'}
-  # Status Report Tab
-  - {section: 'reports.default', route: 'system.admin_reports'}
-  - {section: 'reports.default', route: 'update.status'}
-  - {section: 'reports.default', route: 'dblog.overview'}
-  - {section: 'reports.default', route: 'entity.field_storage_config.collection'}
-  - {section: 'reports.default', route: 'system.status'}
-  - {section: 'reports.default', route: 'dblog.access_denied'}
-  - {section: 'reports.default', route: 'dblog.page_not_found'}
-  - {section: 'reports.default', route: 'dblog.search'}
-  - {section: 'reports.default', route: 'views_ui.reports_plugins'}
-  - {section: 'reports.default', route: 'statistics.settings'}
-  # Help Tab
+widgets:
+# Primary Tabs
+- {id: 'default'}
+- {id: 'general', title: 'General'}
+# Content Tab
+- {id: 'content.default', tab: 'content'}
+# Media Tab
+- {id: 'media.default', tab: 'media'}
+- {id: 'media.settings', tab: 'media', title: 'Settings'}
+# Structure Tab
+- {id: 'structure.default', tab: 'structure'}
+- {id: 'structure.content_authoring', tab: 'structure', title: 'Content authoring'}
+# People Tab
+- {id: 'users.default', tab: 'users'}
+- {id: 'users.configuration', tab: 'users', title: 'Settings'}
+# Block Layout Tab
+- {id: 'blocks.default', tab: 'blocks'}
+# Apearance Tab
+- {id: 'appearance.default', tab: 'appearance'}
+- {id: 'appearance.settings', tab: 'appearance', title: 'User Account', type: 'appearance_settings'}
+# Extend Tab
+- {id: 'extend.default', tab: 'extend', title: 'Extend'}
+# Configuration Tab
+- {id: 'configuration.people', tab: 'configuration', title: 'People'}
+- {id: 'configuration.system', tab: 'configuration', title: 'System'}
+- {id: 'configuration.user_interface', tab: 'configuration', title: 'User interface'}
+- {id: 'configuration.development', tab: 'configuration', title: 'Development'}
+- {id: 'configuration.media', tab: 'configuration', title: 'Media'}
+- {id: 'configuration.search_and_metadata', tab: 'configuration', title: 'Search and metadata'}
+- {id: 'configuration.web_services', tab: 'configuration', title: 'Web services'}
+- {id: 'configuration.workflow', tab: 'configuration', title: 'Workflow'}
+# Language
+- {id: 'language.default', tab: 'language'}
+- {id: 'language.languages', tab: 'language', title: 'Languages'}
+- {id: 'language.translation', tab: 'language', title: 'User interface translation'}
+# Status Report Tab
+- {id: 'reports.default', tab: 'reports'}
+# Help Tab
+- {id: 'help.default', tab: 'help'}
+
+links:
+# Content Tab
+- {widget: 'content.default', route: 'system.admin_content', title: 'Nodes'}
+- {widget: 'content.default', route: 'comment.admin'}
+- {widget: 'content.default', route: 'view.media.media_page_list'}
+- {widget: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}
+- {widget: 'content.default', route: 'view.files.page_1'}
+- {widget: 'content.default', route: 'path.admin_overview'}
+- {widget: 'content.default', route: 'book.admin'}
+- {widget: 'content.default', route: 'forum.overview'}
+# Media Tab
+- {widget: 'media.settings', route: 'blazy.settings'}
+- {widget: 'media.settings', route: 'image_widget_crop.crop_widget_settings'}
+- {widget: 'media.settings', route: 'entity.image_style.collection'}
+- {widget: 'media.settings', route: 'crop.overview_types'}
+- {widget: 'media.settings', route: 'entity.slick.collection'}
+- {widget: 'media.settings', route: 'entity.responsive_image_style.collection'}
+- {widget: 'media.settings', route: 'system.image_toolkit_settings'}
+# Structure Tab
+- {widget: 'structure.default', route: 'book.settings'}
+- {widget: 'structure.default', route: 'entity.comment_type.collection'}
+- {widget: 'structure.default', route: 'entity.contact_form.collection'}
+- {widget: 'structure.default', route: 'entity.node_type.collection'}
+- {widget: 'structure.default', route: 'entity.entity_view_mode.collection'}
+- {widget: 'structure.default', route: 'entity.entity_form_mode.collection'}
+- {widget: 'structure.default', route: 'forum.settings'}
+- {widget: 'structure.default', route: 'entity.media_bundle.collection'}
+- {widget: 'structure.default', route: 'entity.menu.collection'}
+- {widget: 'structure.default', route: 'entity.paragraphs_type.collection'}
+- {widget: 'structure.default', route: 'field_permissions.reports'}
+- {widget: 'structure.default', route: 'entity.taxonomy_vocabulary.collection'}
+- {widget: 'structure.default', route: 'entity.view.collection'}
+- {widget: 'structure.default', route: 'entity.block_content_type.collection', title: 'Block types'}
+# People Tab
+- {widget: 'users.default', route: 'entity.user.collection'}
+- {widget: 'users.default', route: 'user.admin_permissions'}
+- {widget: 'users.default', route: 'entity.user_role.collection'}
+- {widget: 'users.configuration', route: 'entity.user.admin_form'}
+# Block Layout Tab
+# Apearance Tab
+- {widget: 'appearance.default', route: 'system.themes_page'}
+- {widget: 'appearance.default', route: 'update.theme_update'}
+# Extend Tab
+- {widget: 'extend.default', route: 'system.modules_list'}
+- {widget: 'extend.default', route: 'update.module_install'}
+- {widget: 'extend.default', route: 'update.module_update'}
+- {widget: 'extend.default', route: 'system.modules_uninstall'}
+# Configuration Tab
+- {widget: 'configuration.system', route: 'system.site_information_settings'}
+- {widget: 'configuration.system', route: 'system.cron_settings'}
+- {widget: 'configuration.system', route: 'entity.action.collection'}
+- {widget: 'configuration.system', route: 'system.file_system_settings'}
+- {widget: 'configuration.system', route: 'ban.admin_page'}
+- {widget: 'structure.content_authoring', route: 'entity.entity_browser.collection'}
+- {widget: 'structure.content_authoring', route: 'filter.admin_overview'}
+- {widget: 'structure.content_authoring', route: 'entity.embed_button.collection'}
+- {widget: 'configuration.user_interface', route: 'entity.shortcut_set.collection'}
+- {widget: 'configuration.development', route: 'system.performance_settings'}
+- {widget: 'configuration.development', route: 'system.logging_settings'}
+- {widget: 'configuration.development', route: 'system.site_maintenance_mode'}
+- {widget: 'configuration.development', route: 'config.sync'}
+- {widget: 'configuration.development', route: 'devel.admin_settings'}
+- {widget: 'configuration.development', route: 'migrate_drupal_ui.upgrade'}
+- {widget: 'configuration.search_and_metadata', route: 'entity.search_page.collection'}
+- {widget: 'configuration.web_services', route: 'system.rss_feeds_settings'}
+- {widget: 'configuration.web_services', route: 'aggregator.admin_overview'}
+- {widget: 'configuration.workflow', route: 'entity.workflow.collection'}
+# Language Tab
+- {widget: 'language.default', route: 'system.regional_settings'}
+- {widget: 'language.default', route: 'entity.date_format.collection'}
+- {widget: 'language.default', route: 'config_translation.mapper_list'}
+- {widget: 'language.default', route: 'language.content_settings_page'}
+- {widget: 'language.languages', route: 'entity.configurable_language.collection'}
+- {widget: 'language.languages', route: 'language.negotiation'}
+- {widget: 'language.translation', route: 'locale.translate_page'}
+- {widget: 'language.translation', route: 'locale.translate_import'}
+- {widget: 'language.translation', route: 'locale.translate_export'}
+- {widget: 'language.translation', route: 'locale.settings'}
+# Status Report Tab
+- {widget: 'reports.default', route: 'system.admin_reports'}
+- {widget: 'reports.default', route: 'update.status'}
+- {widget: 'reports.default', route: 'dblog.overview'}
+- {widget: 'reports.default', route: 'entity.field_storage_config.collection'}
+- {widget: 'reports.default', route: 'system.status'}
+- {widget: 'reports.default', route: 'dblog.access_denied'}
+- {widget: 'reports.default', route: 'dblog.page_not_found'}
+- {widget: 'reports.default', route: 'dblog.search'}
+- {widget: 'reports.default', route: 'views_ui.reports_plugins'}
+- {widget: 'reports.default', route: 'statistics.settings'}
+# Help Tab

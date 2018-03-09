@@ -1,5 +1,6 @@
 $unit: 8px;
 $compact-breakpoint: 60em;
+$transition_ease: cubic-bezier(.43,.22,.46,.9);
 
 $primary-width-compact: $unit * 6;
 $primary-width-normal: $unit * 20;
@@ -7,21 +8,21 @@ $primary-bg: #19212e;
 $primary-color: #919bad;
 $primary-link: $primary-color;
 $primary-link-hover: #2056c9;
-$primary-link-active: #ffffff;
+$primary-link-active: #fff;
 $primary-header-bg: #2056c9;
-$primary-header-color: #ffffff;
+$primary-header-color: #fff;
 $primary-divider: darken($primary-bg, 4%);
 $primary-scroll-bg: darken($primary-bg, 8%);
 $primary-scroll: $primary-link-hover;
 
-$secondary-width-compact: $unit * 30;
-$secondary-width-normal: $unit * 30;
+$secondary-width-compact: $unit * 24;
+$secondary-width-normal: $unit * 28;
 $secondary-bg: #f2f3f4;
 $secondary-color: #919bad;
 $secondary-link: $primary-color;
 $secondary-link-hover: #2056c9;
-$secondary-link-active: #000000;
-$secondary-header-bg: darken($secondary-bg, 4%);
+$secondary-link-active: #000;
+$secondary-header-bg: $secondary-bg;
 $secondary-header-color: #919bad;
 $secondary-divider: darken($secondary-bg, 4%);
 $secondary-scroll-bg: darken($secondary-bg, 4%);

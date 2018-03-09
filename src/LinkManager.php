@@ -2,9 +2,8 @@
 
 namespace Drupal\adminic_toolbar;
 
-use Drupal\adminic_toolbar\DiscoveryManager;
-use Drupal\adminic_toolbar\RouteManager;
 use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Url;
 
 class LinkManager {
 
@@ -27,6 +26,7 @@ class LinkManager {
    * @var array
    */
   private $activeLinks = [];
+
   /**
    * @var \Drupal\Core\Extension\ModuleHandler
    */
@@ -49,6 +49,49 @@ class LinkManager {
   }
 
   /**
+   * Add link to active links.
+   *
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   */
+  public function addActiveLink(Link $link) {
+    $key = $this->getLinkKey($link);
+    $this->activeLinks[$key] = $link;
+  }
+
+  /**
+   * Get link unique key from section and route.
+   *
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   *
+   * @return string
+   *   Return formated key.
+   */
+  public function getLinkKey(Link $link) {
+    /** @var \Drupal\Core\Url $url */
+    $url = $link->getRawUrl();
+    $routeName = $url->getRouteName();
+    $routeParams = $url->getRouteParameters();
+    $routeParams = implode('.', $routeParams);
+    $routeParams = empty($routeParams) ? '': '.' . $routeParams;
+    $key = $routeName . $routeParams;
+    return sprintf('%s.%s', $link->getWidget(), $key);
+  }
+
+  /**
+   * Get links.
+   *
+   * @return array
+   */
+  public function getLinks() {
+    if (empty($this->links)) {
+      $this->parseLinks();
+    }
+    return $this->links;
+  }
+
+  /**
    * Get all defined links from all config files.
    */
   public function parseLinks() {
@@ -57,10 +100,10 @@ class LinkManager {
     $configLinks = [];
     $weight = 0;
     foreach ($config as $configFile) {
-      if ($configFile['set']['id'] == 'default' && isset($configFile['set']['links'])) {
-        foreach ($configFile['set']['links'] as $link) {
+      if (isset($configFile['links'])) {
+        foreach ($configFile['links'] as $link) {
           $link['weight'] = isset($link['weight']) ? $link['weight'] : $weight;
-          $key = sprintf('%s.%s', $link['section'], $link['route']);
+          $key = sprintf('%s.%s', $link['widget'], $link['route']);
           $configLinks[$key] = $link;
           $weight++;
         }
@@ -71,14 +114,19 @@ class LinkManager {
     $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
     foreach ($configLinks as $link) {
-      $section = $link['section'];
+      $widget = $link['widget'];
       $route = $link['route'];
-      $isValid = $this->routeManager->isRouteValid($route);
+      $route_params = isset($link['route_params']) ? $link['route_params'] : [];
+      $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid) {
-        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
+        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
+        $title = empty($title) ? '' : $title;
+        $url = Url::fromRoute($route, $route_params);
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
+        $badge = isset($link['badge']) ? $link['badge'] : NULL;
+
         $active = FALSE;
-        $this->addLink(new Link($section, $route, $title, $active, $disabled));
+        $this->addLink(new Link($widget, $url, $title, $active, $disabled, $badge));
       }
     }
   }
@@ -93,45 +141,9 @@ class LinkManager {
     $key = $this->getLinkKey($link);
     $this->links[$key] = $link;
     // Remove link if exists and is disabled
-    if (isset($this->links[$key]) && $link->isDisabled() ) {
+    if (isset($this->links[$key]) && $link->isDisabled()) {
       unset($this->links[$key]);
     }
-  }
-
-  /**
-   * Get link unique key from section and route.
-   *
-   * @param \Drupal\adminic_toolbar\Link $link
-   *   Link.
-   *
-   * @return string
-   *   Return formated key.
-   */
-  public function getLinkKey(Link $link) {
-    return sprintf('%s.%s', $link->getSection(), $link->getRoute());
-  }
-
-  /**
-   * Add link to active links.
-   *
-   * @param \Drupal\adminic_toolbar\Link $link
-   *   Link.
-   */
-  public function addActiveLink(Link $link) {
-    $key = $this->getLinkKey($link);
-    $this->activeLinks[$key] = $link;
-  }
-
-  /**
-   * Get links.
-   *
-   * @return array
-   */
-  public function getLinks() {
-    if (empty($this->links)) {
-      $this->parseLinks();
-    }
-    return $this->links;
   }
 
   /**

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Implements hook_library_info_alter().
+ *
+ * {@inheritdoc}
+ */
+function adminic_toolbar_commerce_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'adminic_toolbar') {
+    $commerce_css_file = 'adminic_toolbar_commerce.css';
+    $module_path = drupal_get_path('module', 'adminic_toolbar_commerce');
+    $commerce = sprintf('/%s/css/%s', $module_path, $commerce_css_file);
+    $libraries['adminic_toolbar']['css']['component'][$commerce] = [];
+  }
+}
+
+function adminic_toolbar_commerce_toolbar_config_tabs_alter(&$configTabs) {
+  // Check new orders number
+  $configTabs['commerce']['badge'] = 10;
+}
+
+function adminic_toolbar_commerce_toolbar_config_links_alter(&$configLinks) {
+  $configLinks['commerce.content.entity.commerce_order.collection']['badge'] = 10;
+}

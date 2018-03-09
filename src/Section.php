@@ -12,7 +12,7 @@ class Section {
 
   private $tab;
 
-  private $callback;
+  private $type;
 
   private $disabled;
 
@@ -23,13 +23,13 @@ class Section {
    * @param string|null $title
    * @param string $tab
    * @param $disabled
-   * @param string $callback
+   * @param string $type
    */
-  public function __construct($id, $title, $tab, $disabled, $callback) {
+  public function __construct($id, $title, $tab, $disabled, $type) {
     $this->id = $id;
     $this->title = $title;
     $this->tab = $tab;
-    $this->callback = $callback;
+    $this->type = $type;
     $this->disabled = $disabled;
   }
 
@@ -41,16 +41,6 @@ class Section {
    */
   public function getId() {
     return $this->id;
-  }
-
-  /**
-   * Get section title.
-   *
-   * @return string
-   *   Retrun section title.
-   */
-  public function getTitle() {
-    return $this->title;
   }
 
   /**
@@ -69,18 +59,45 @@ class Section {
    * @return string
    *   Retrun section callback.
    */
-  public function getCallback() {
-    return $this->callback;
+  public function getType() {
+    return $this->type;
   }
 
   /**
-   * Set section links.
+   * Has section callback?
    *
-   * @param array $links
-   *   Array of links.
+   * @return bool
    */
-  public function setLinks($links) {
-    $this->links = $links;
+  public function hasType() {
+    return !is_null($this->type);
+  }
+
+  public function isDisabled() {
+    return $this->disabled;
+  }
+
+  /**
+   * Return section render array.
+   *
+   * @return array
+   *   Return section render array.
+   */
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section',
+      '#title' => $this->getTitle(),
+      '#links' => $this->getLinks(),
+    ];
+  }
+
+  /**
+   * Get section title.
+   *
+   * @return string
+   *   Retrun section title.
+   */
+  public function getTitle() {
+    return $this->title;
   }
 
   /**
@@ -94,29 +111,13 @@ class Section {
   }
 
   /**
-   * Has section callback?
+   * Set section links.
    *
-   * @return bool
+   * @param array $links
+   *   Array of links.
    */
-  public function hasCallback() {
-    return !is_null($this->callback);
-  }
-
-  public function isDisabled() {
-    return $this->disabled;
-  }
-  /**
-   * Return section render array.
-   *
-   * @return array
-   *   Return section render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section',
-      '#title' => $this->getTitle(),
-      '#links' => $this->getLinks(),
-    ];
+  public function setLinks($links) {
+    $this->links = $links;
   }
 
 }

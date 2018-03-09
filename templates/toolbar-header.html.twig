@@ -1,3 +1,9 @@
 <div class="toolbar__header">
-  <a href="{{ url(title_link) }}">{{ title }}</a>
+  <a href="{{ title_link }}">
+    <i class="ico"></i>
+    <span>{{ title }}</span>
+  </a>
+  {% if close %}
+    <span class="close"></span>
+  {% endif %}
 </div>

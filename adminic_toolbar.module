@@ -1,7 +1,5 @@
 <?php
 
-use Drupal\user\Entity\User;
-
 /**
  * Implements hook_theme().
  */
@@ -32,6 +30,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     'variables' => [
       'title' => NULL,
       'title_link' => NULL,
+      'close' => FALSE,
     ],
   ];
 
@@ -56,6 +55,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'route' => NULL,
       'active' => FALSE,
+      'badge' => NULL,
       'id' => NULL,
     ],
   ];
@@ -65,12 +65,14 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'title' => NULL,
       'route' => NULL,
       'active' => FALSE,
+      'badge' => NULL,
     ],
   ];
 
   $items['user_account'] = [
     'variables' => [
       'avatar' => NULL,
+      'name' => NULL,
       'dropdown' => NULL,
     ],
   ];
@@ -97,12 +99,13 @@ function adminic_toolbar_page_top(array &$page_top) {
   $adminic_toolbar = \Drupal::service('adminic_toolbar');
 
   $toolbarPrimary = $adminic_toolbar->getPrimaryToolbar();
-  $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
-  $toolbarTop = $adminic_toolbar->getTopToolbar();
-
   $page_top['adminic_toolbar_primary'] = $toolbarPrimary;
+
+  $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
   $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
-  $page_top['adminic_toolbar_top'] = $toolbarTop;
+
+  // $toolbarTop = $adminic_toolbar->getTopToolbar();
+  // $page_top['adminic_toolbar_top'] = $toolbarTop;
 }
 
 function adminic_toolbar_preprocess_html(&$variables) {
@@ -113,9 +116,6 @@ function adminic_toolbar_preprocess_html(&$variables) {
   }
   if (isset($variables['page_top']['adminic_toolbar_primary'])) {
     $variables['attributes']['class'][] = 'adminic-toolbar-primary';
-  }
-  if (isset($variables['page_top']['adminic_toolbar_secondary'])) {
-    $variables['attributes']['class'][] = 'adminic-toolbar-secondary';
   }
   if (isset($variables['page_top']['adminic_toolbar_top'])) {
     $variables['attributes']['class'][] = 'adminic-toolbar-top';

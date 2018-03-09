@@ -2,17 +2,19 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Url;
+
 class Link {
 
   /**
    * @var string
    */
-  private $section;
+  private $widget;
 
   /**
-   * @var string
+   * @var \Drupal\Core\Url
    */
-  private $route;
+  private $url;
 
   /**
    * @var string
@@ -23,26 +25,31 @@ class Link {
    * @var bool
    */
   private $active;
+
   /**
    * @var bool
    */
   private $disabled;
 
+  private $badge;
+
   /**
    * Link constructor.
    *
-   * @param string $section
-   * @param string $route
+   * @param string $widget
+   * @param \Drupal\Core\Url $url
    * @param string $title
    * @param bool $active
    * @param bool $disabled
+   * @param $badge
    */
-  public function __construct(string $section, string $route, string $title, bool $active, bool $disabled) {
-    $this->section = $section;
-    $this->route = $route;
+  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, $badge) {
+    $this->widget = $widget;
+    $this->url = $url;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
+    $this->badge = $badge;
   }
 
   /**
@@ -51,18 +58,38 @@ class Link {
    * @return string
    *   Return link section.
    */
-  public function getSection() {
-    return $this->section;
+  public function getWidget() {
+    return $this->widget;
+  }
+
+  public function getBadge() {
+    return $this->badge;
+  }
+  /**
+   * Set link as inactive.
+   */
+  public function setInactive() {
+    $this->active = FALSE;
+  }
+
+  public function isDisabled() {
+    return $this->disabled;
   }
 
   /**
-   * Get link route.
+   * Return link render array.
    *
-   * @return string
-   *   Return link route.
+   * @return array
+   *   Return links render array.
    */
-  public function getRoute() {
-    return $this->route;
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section_link',
+      '#title' => $this->getTitle(),
+      '#route' => $this->getUrl(),
+      '#active' => $this->isActive(),
+      '#badge' => $this->getBadge(),
+    ];
   }
 
   /**
@@ -73,6 +100,22 @@ class Link {
    */
   public function getTitle() {
     return $this->title;
+  }
+
+  /**
+   * Get link route.
+   *
+   * @return string
+   *   Return link route.
+   */
+  public function getUrl() {
+    /** @var \Drupal\Core\Url $url */
+    $url = $this->url;
+    return $url->toString();
+  }
+
+  public function getRawUrl() {
+    return $this->url;
   }
 
   /**
@@ -90,31 +133,6 @@ class Link {
    */
   public function setActive() {
     $this->active = TRUE;
-  }
-
-  /**
-   * Set link as inactive.
-   */
-  public function setInactive() {
-    $this->active = FALSE;
-  }
-
-  public function isDisabled() {
-    return $this->disabled;
-  }
-  /**
-   * Return link render array.
-   *
-   * @return array
-   *   Return links render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section_link',
-      '#title' => $this->getTitle(),
-      '#route' => $this->getRoute(),
-      '#active' => $this->isActive(),
-    ];
   }
 
 }

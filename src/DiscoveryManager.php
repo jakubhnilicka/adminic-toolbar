@@ -65,4 +65,8 @@ class DiscoveryManager {
     return $this->config;
   }
 
+  public function getActiveSet() {
+    return 'default';
+  }
+
 }

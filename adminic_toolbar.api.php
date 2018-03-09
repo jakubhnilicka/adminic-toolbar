@@ -1,10 +1,5 @@
 <?php
 
-use Drupal\node\NodeInterface;
-use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\Xss;
-use Drupal\Core\Access\AccessResult;
-
 /**
  * @addtogroup hooks
  */
@@ -24,7 +19,7 @@ function hook_toolbar_config_links_alter(&$configLinks) {
  * @param array $configSections
  */
 function hook_toolbar_config_sections_alter(&$configSections) {
-  unset($configSections['general']) ;
+  unset($configSections['general']);
 }
 
 /**
