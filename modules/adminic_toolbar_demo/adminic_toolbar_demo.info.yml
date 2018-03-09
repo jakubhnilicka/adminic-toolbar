@@ -1,0 +1,5 @@
+name: Adminic Toolbar Demo
+description: "Adminic Toolbar Demo"
+core: 8.x
+package: Administration
+type: module
