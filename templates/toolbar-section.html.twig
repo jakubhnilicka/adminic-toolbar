@@ -1,14 +1,12 @@
 {% if links %}
-<div class="toolbar__section">
+  <div class="toolbar_links">
     {% if title %}
-    <div class="toolbar__section__header">{{ title }}</div>
+      <div class="toolbar_links__header">{{ title }}</div>
     {% endif %}
-    <nav class="toolbar__section__navigation">
-      <ul>
-        {% for link in links %}
-          <li>{{ link }}</li>
-        {% endfor %}
-      </ul>
+    <nav>
+      {% for link in links %}
+        {{ link }}
+      {% endfor %}
     </nav>
   </div>
 {% endif %}

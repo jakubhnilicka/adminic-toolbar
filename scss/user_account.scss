@@ -1,0 +1,71 @@
+@import "variables";
+.user_account {
+  border-top: 1px solid $primary-divider;
+  padding: ($unit * 2) ($unit * 1.5);
+  position: relative;
+}
+.user_account__avatar {
+  width: ($unit * 3);
+  height: ($unit * 3);
+  border-radius: ($unit / 2);
+  margin-right: $unit;
+  background: url(../images/user.svg) no-repeat center;
+  display: none;
+}
+.user_account__name {
+  margin-right: $unit;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: $primary-color;
+  line-height: $unit * 3;
+  display: none;
+}
+.user_account__links .drdt {
+  border: 1px solid $primary-divider;
+  border-radius: $unit / 2;
+  line-height: $unit;
+  padding: $unit;
+  width: $unit * 3;
+  height: $unit * 3;
+  color: $primary-color;
+  background: url(../images/user.svg) no-repeat center;
+}
+.user_account__links .drdc {
+  padding-top: $unit / 4;
+}
+.user_account__links .drdc a {
+  display: block;
+  color: $primary-link;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: $unit * 2;
+  margin: ($unit / 2) 0;
+  text-align: left;
+}
+.user_account__links .drdc a:active,
+.user_account__links .drdc a:focus,
+.user_account__links .drdc a:hover {
+  color: $primary-link-hover;
+}
+@media only screen and (min-width: $compact-breakpoint) {
+  .user_account {
+    padding: ($unit * 2);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+  .user_account__avatar {
+    margin-bottom: 0;
+    display: block;
+  }
+  .user_account__name {
+    display: block;
+  }
+  .user_account__links {
+  }
+  .user_account__links .drdt {
+    background: url(../images/user-account.svg) no-repeat center;
+  }
+}

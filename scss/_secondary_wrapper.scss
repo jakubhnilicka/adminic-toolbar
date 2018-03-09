@@ -1,0 +1,19 @@
+@import "variables";
+.wrapper {
+  top: 0;
+  position: fixed;
+  width: $secondary-width-compact;
+  height: 100vh;
+  transform: translateX(-100%);
+  transition: all 0.25s $transition_ease;
+  background-color: $secondary-bg;
+}
+.wrapper.active {
+  transform: translateX(0);
+  transition: all 0.25s $transition_ease;
+}
+@media only screen and (min-width: $compact-breakpoint) {
+  .wrapper {
+    width: $secondary-width-normal;
+  }
+}

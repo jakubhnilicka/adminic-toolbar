@@ -1,0 +1,14 @@
+{
+  "name": "adminic_toolbar",
+  "version": "0.0.1",
+  "author": "Jakub Hnilička",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "cssnano": "^3.10.0",
+    "grunt": "~0.4.5",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-postcss": "^0.8.0",
+    "grunt-sass": "^1.0.0"
+  }
+}

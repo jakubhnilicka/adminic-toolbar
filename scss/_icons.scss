@@ -1,0 +1,55 @@
+@import "variables";
+
+/* Icons */
+.ico {
+  background: transparent no-repeat scroll center;
+  background-size: 100% auto;
+  display: block;
+  width: ($unit * 3);
+  height: ($unit * 3);
+  border-radius: ($unit / 2);
+  transition: background-color 0.2s;
+  margin-right: 0;
+  visibility: visible;
+}
+.active .ico {
+  filter: brightness(200%);
+}
+@media only screen and (min-width: $compact-breakpoint) {
+  .ico {
+    margin-right: $unit;
+  }
+}
+#tab--content .ico {
+  background-image: url('../images/content.svg');
+}
+#tab--media .ico {
+  background-image: url('../images/media.svg');
+}
+#tab--structure .ico {
+  background-image: url('../images/structure.svg');
+}
+#tab--users .ico {
+  background-image: url('../images/people.svg');
+}
+#tab--blocks .ico {
+  background-image: url('../images/layout.svg');
+}
+#tab--appearance .ico {
+  background-image: url('../images/appearance.svg');
+}
+#tab--extend .ico {
+  background-image: url('../images/extend.svg');
+}
+#tab--configuration .ico {
+  background-image: url('../images/configuration.svg');
+}
+#tab--language .ico {
+  background-image: url('../images/language.svg');
+}
+#tab--reports .ico {
+  background-image: url('../images/reports.svg');
+}
+#tab--help .ico {
+  background-image: url('../images/help.svg');
+}

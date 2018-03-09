@@ -1,0 +1,21 @@
+@import "variables";
+.toolbar__content {
+  padding: 0;
+}
+.toolbar__content .nano-content {
+  padding: ($unit * 2) 0;
+}
+// Primary
+.toolbar__primary .nano > .nano-pane {
+  background: $primary-scroll-bg;
+}
+.toolbar__primary .nano > .nano-pane > .nano-slider {
+  background: $primary-scroll;
+}
+// Secondary
+.toolbar__secondary .nano > .nano-pane {
+  background: $secondary-scroll-bg;
+}
+.toolbar__secondary .nano > .nano-pane > .nano-slider {
+  background: $secondary-scroll;
+}

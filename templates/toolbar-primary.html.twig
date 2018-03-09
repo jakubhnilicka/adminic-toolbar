@@ -1,11 +1,13 @@
 {{ attach_library('adminic_toolbar/adminic_toolbar') }}
+{{ attach_library('adminic_toolbar/nanoscroller') }}
 <div class="toolbar__primary">
-  <div class="toolbar__header">
-    <a href="{{ url('<front>') }}">{{ title }}</a>
+  {{ header }}
+  <div class="toolbar__content nano">
+    <div class="nano-content">
+      {% for widget in widgets %}
+        {{ widget }}
+      {% endfor %}
+    </div>
   </div>
-  <div class="toolbar__content">
-    {% for widget in widgets %}
-      {{ widget }}
-    {% endfor %}
-  </div>
+  {{ user_account }}
 </div>

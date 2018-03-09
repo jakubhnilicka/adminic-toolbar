@@ -1,74 +1,84 @@
 (function ($, Drupal) {
 
-    'use strict';
+  'use strict';
 
-    Drupal.behaviors.adminicToolbar = {
-        attach: function (context) {
-            var $toolbarSecondary = $('.toolbar__secondary');
-            var $body = $('body');
+  Drupal.behaviors.adminicToolbar = {
+    attach: function (context) {
+      var $toolbarSecondary = $('.toolbar__secondary');
+      var $body = $('body');
+      var compactBreakpoint = window.matchMedia("only screen and (min-width: 60em)");
+      compactBreakpoint.addListener(setBodyPadding);
+      setBodyPadding(compactBreakpoint);
 
-            if ($('.toolbar_secondary_wrapper.active').length > 0) {
-                showSecondaryToolbar();
-            }
-            else {
-                hideSecondaryToolbar()
-            }
+      $('.nano').nanoScroller();
 
-            $('.toolbar__primary a').not('.dropdown a').on('click', function (e) {
-                $('.toolbar__primary a').removeClass('active');
+      $('.tab').on('click', function (e) {
+        var $tab = $(this);
+        var tabId = $tab.attr('id');
+        var tabKey = tabId.substring(5);
+        var $sectionWrapper = $('#toolbar-' + tabKey);
 
-                var $tab = $(this);
-                var tabId = $tab.attr('id');
-                var tabKey = tabId.substring(4);
-                var $sectionWrapper = $('#toolbar-' + tabKey);
-                $tab.addClass('active');
+        $('.tab').removeClass('active');
+        $tab.addClass('active');
+        $('.wrapper.active').css('z-index', 999).removeClass('active');
 
-                if ($sectionWrapper[0] !== undefined) {
-                    e.preventDefault();
-                    $('.toolbar_secondary_wrapper.active').removeClass('active');
-                    $sectionWrapper.addClass('active');
-                    showSecondaryToolbar();
-                }
-                else {
-                    $('.toolbar_secondary_wrapper.active').removeClass('active');
-                    hideSecondaryToolbar()
-                }
-            });
-
-            // Dropdown toggle
-            $('.dropdown-toggle').on('click', function (e) {
-                $(this).next('.dropdown').toggle();
-            });
-
-            $(document).on('click', function (e) {
-                var target = e.target;
-                if (!$(target).is('.dropdown-toggle') && !$(target).parents().is('.dropdown-toggle')) {
-                    $('.dropdown').hide();
-                }
-            });
-
-            function showSecondaryToolbar() {
-                $toolbarSecondary.show();
-                $body.addClass('adminic-toolbar-secondary');
-            }
-
-            function hideSecondaryToolbar() {
-                $toolbarSecondary.hide();
-                $body.removeClass('adminic-toolbar-secondary');
-            }
-
-            $(document).keydown(function (e) {
-                if (e.which == "17") {
-                    cntrlIsPressed = true;
-                }
-            });
-
-            $(document).keyup(function () {
-                cntrlIsPressed = false;
-            });
-
-            var cntrlIsPressed = false;
+        if ($sectionWrapper[0] !== undefined) {
+          e.preventDefault();
+          $sectionWrapper.css('z-index', 999).addClass('active');
+          showSecondaryToolbar();
         }
-    };
+        else {
+
+          hideSecondaryToolbar()
+        }
+      });
+
+      $('.toolbar__header .close').on('click', function (e) {
+        hideSecondaryToolbar();
+      });
+
+      function showSecondaryToolbar() {
+        var $tabActive = $('.tab.active');
+
+        if ($tabActive.length > 0) {
+          var tabId = $tabActive.attr('id');
+          var tabKey = tabId.substring(5);
+          var $sectionWrapper = $('#toolbar-' + tabKey);
+          if ($sectionWrapper[0] !== undefined) {
+            $sectionWrapper.addClass('active');
+            $toolbarSecondary.show();
+          }
+          else {
+            hideSecondaryToolbar();
+          }
+        }
+        setBodyPadding(compactBreakpoint);
+      }
+
+      function hideSecondaryToolbar() {
+        $toolbarSecondary.hide();
+        $('.wrapper').removeClass('active');
+        $body.removeClass('adminic-toolbar-secondary');
+      }
+
+      function setBodyPadding(compactBreakpoint) {
+        if (compactBreakpoint.matches) {
+          var $tabActive = $('.tab.active');
+          if ($tabActive.length > 0) {
+            var tabId = $tabActive.attr('id');
+            var tabKey = tabId.substring(5);
+            var $sectionWrapper = $('#toolbar-' + tabKey);
+            if ($sectionWrapper[0] !== undefined && $sectionWrapper.hasClass) {
+              $sectionWrapper.addClass('active');
+              $body.addClass('adminic-toolbar-secondary');
+            }
+          }
+        }
+        else {
+          $body.removeClass('adminic-toolbar-secondary');
+        }
+      }
+    }
+  };
 
 }(jQuery, Drupal));

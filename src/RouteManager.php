@@ -35,6 +35,11 @@ class RouteManager {
   private $routes = [];
 
   /**
+   * @var array
+   */
+  private $activeRoutes = [];
+
+  /**
    * RouteManager constructor.
    *
    * @param \Drupal\Core\Routing\RouteProvider $routeProvider
@@ -54,24 +59,6 @@ class RouteManager {
   }
 
   /**
-   * Get available routes from drupal.
-   *
-   * @return array
-   *   Array of available routes.
-   */
-  protected function getAvailableRoutes() {
-    $allRoutes = $this->routeProvider->getAllRoutes();
-
-    $routes = [];
-    foreach ($allRoutes as $route_name => $route) {
-      $title = $route->getDefault('_title');
-      $routes[$route_name] = $title;
-    }
-
-    return $routes;
-  }
-
-  /**
    * Get current route name.
    *
    * @return null|string
@@ -81,38 +68,53 @@ class RouteManager {
   }
 
   /**
+   * Get route default title.
+   *
+   * @param string $routeName
+   *
+   * @param array $routeParameters
+   * @return mixed
+   */
+  public function getDefaultTitle(string $routeName, array $routeParameters) {
+    if ($this->isRouteValid($routeName, $routeParameters)) {
+      $routes = $this->getRoutes();
+
+      return $routes[$routeName]['title'];
+    }
+
+    return NULL;
+  }
+
+  /**
    * Check if route is valid.
    *
    * @param string $routeName
    *   Route name.
+   * @param array $routeParams
+   *   Route Parameters.
    *
    * @return bool
    *   True if route is valid or flase.
    */
-  public function isRouteValid(string $routeName) {
+  public function isRouteValid(string $routeName, array $routeParams) {
     $isValidRoute = array_key_exists($routeName, $this->getRoutes());
     if (!$isValidRoute) {
       return FALSE;
     }
+
+    $requiredParameters = $this->getRoutes()[$routeName]['parameters'];
+    foreach ($requiredParameters as $parameter) {
+      if (!array_key_exists($parameter, $routeParams)) {
+        return FALSE;
+      }
+    }
+
     $isRouteAccessible = $this->isRouteAccessible($routeName);
     if (!$isRouteAccessible) {
       return FALSE;
     }
 
     return TRUE;
-  }
-
-  /**
-   * Check if current user has access to route.
-   *
-   * @param string $routeName
-   *   Route name.
-   *
-   * @return bool
-   *   True if user has access to route or flase.
-   */
-  public function isRouteAccessible(string $routeName) {
-    return $this->accessManager->checkNamedRoute($routeName, [], $this->currentUser);
   }
 
   /**
@@ -129,20 +131,63 @@ class RouteManager {
   }
 
   /**
-   * Get route default title.
+   * Get available routes from drupal.
    *
-   * @param string $routeName
-   *
-   * @return mixed
+   * @return array
+   *   Array of available routes.
    */
-  public function getDefaultTitle(string $routeName) {
-    if ($this->isRouteValid($routeName)) {
-      $routes = $this->getRoutes();
+  protected function getAvailableRoutes() {
+    $allRoutes = $this->routeProvider->getAllRoutes();
 
-      return $routes[$routeName];
+    $routes = [];
+    foreach ($allRoutes as $routeName => $route) {
+      $parameters = $route->getOption('parameters');
+      $requiredParameters = empty($parameters) ? [] : array_keys($parameters);
+      $title = $route->getDefault('_title');
+      $routes[$routeName] = [
+        'title' => $title,
+        'parameters' => $requiredParameters,
+      ];
     }
 
-    return NULL;
+    return $routes;
+  }
+
+  /**
+   * Check if current user has access to route.
+   *
+   * @param string $routeName
+   *   Route name.
+   *
+   * @return bool
+   *   True if user has access to route or flase.
+   */
+  public function isRouteAccessible(string $routeName) {
+    return $this->accessManager->checkNamedRoute($routeName, [], $this->currentUser);
+  }
+
+  public function getActiveRoutes() {
+    if (empty($this->activeRoutes)) {
+      $this->setActiveRoutes();
+    }
+    return $this->activeRoutes;
+  }
+
+  public function setActiveRoutes() {
+    $activeRoutes = [];
+    $currentRouteObject = $this->currentRouteMatch->getRouteObject();
+    $allRoutes = $this->routeProvider->getAllRoutes();
+
+    $currentPath = $currentRouteObject->getPath();
+
+    foreach ($allRoutes as $route_name => $route) {
+      $path = $route->getPath();
+      if (strpos($currentPath, $path) === 0) {
+        $activeRoutes[$route_name] = $route;
+      };
+    }
+
+    $this->activeRoutes = $activeRoutes;
   }
 
 }

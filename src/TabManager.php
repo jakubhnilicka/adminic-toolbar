@@ -2,6 +2,9 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Url;
+
 class TabManager {
 
   /**
@@ -25,47 +28,34 @@ class TabManager {
   private $activeTabs = [];
 
   /**
+   * @var \Drupal\Core\Extension\ModuleHandler
+   */
+  private $moduleHandler;
+
+  /**
    * TabManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
-    RouteManager $routeManager) {
+    RouteManager $routeManager,
+    ModuleHandler $moduleHandler) {
     $this->discoveryManager = $discoveryManager;
     $this->routeManager = $routeManager;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
-   * Get all defined tabs from all config files.
+   * Add tab to active tabs.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
    */
-  protected function parseTabs() {
-    $config = $this->discoveryManager->getConfig();
-
-    $configTabs = [];
-    foreach ($config as $configFile) {
-      if ($configFile['set']['id'] == 'default' && isset($configFile['set']['tabs'])) {
-        foreach ($configFile['set']['tabs'] as $tab) {
-          $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : 0;
-          $configTabs[] = $tab;
-        }
-      }
-    }
-    uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
-
-    foreach ($configTabs as $tab) {
-      $id = $tab['id'];
-      $section = isset($tab['section']) ? $tab['section'] : '';
-      $route = $tab['route'];
-      $isValid = $this->routeManager->isRouteValid($route);
-      if ($isValid) {
-        $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
-        $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
-        $active = FALSE;
-        $this->addTab(new Tab($id, $section, $route, $title, $active, $disabled));
-      }
-    }
+  public function addActiveTab(Tab $tab) {
+    $key = $this->getTabKey($tab);
+    $this->activeTabs[$key] = $tab;
   }
 
   /**
@@ -79,31 +69,6 @@ class TabManager {
    */
   public function getTabKey(Tab $tab) {
     return $tab->getId();
-  }
-
-  /**
-   * Add tab.
-   *
-   * @param \Drupal\adminic_toolbar\Tab $tab
-   */
-  public function addTab(Tab $tab) {
-    $key = $this->getTabKey($tab);
-    $this->tabs[$key] = $tab;
-    // Remove tab if exists and is disabled
-    if (isset($this->tabs[$key]) && $tab->isDisabled()) {
-      unset($this->tabs[$key]);
-    }
-
-  }
-
-  /**
-   * Add tab to active tabs.
-   *
-   * @param \Drupal\adminic_toolbar\Tab $tab
-   */
-  public function addActiveTab(Tab $tab) {
-    $key = $this->getTabKey($tab);
-    $this->activeTabs[$key] = $tab;
   }
 
   /**
@@ -126,6 +91,63 @@ class TabManager {
     }
 
     return $this->tabs;
+  }
+
+  /**
+   * Get all defined tabs from all config files.
+   */
+  protected function parseTabs() {
+    $config = $this->discoveryManager->getConfig();
+
+    $weight = 0;
+    $configTabs = [];
+    foreach ($config as $configFile) {
+      if (isset($configFile['tabs'])) {
+        foreach ($configFile['tabs'] as $tab) {
+          $tab['weight'] = isset($tab['weight']) ? $tab['weight'] : $weight;
+          $tab['set'] = isset($tab['set']) ? $tab['set'] : 'default';
+          $key = $tab['id'];
+          $configTabs[$key] = $tab;
+          $weight++;
+        }
+      }
+    }
+
+    uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
+
+    foreach ($configTabs as $tab) {
+      $id = $tab['id'];
+      $section = isset($tab['section']) ? $tab['section'] : '';
+      $route = $tab['route'];
+      $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
+      $isValid = $this->routeManager->isRouteValid($route, $route_params);
+      if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
+        $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
+        $title = empty($title) ? '' : $title;
+        $url = Url::fromRoute($route, $route_params);
+        $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
+        $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
+        $active = FALSE;
+        $this->addTab(new Tab($id, $section, $url, $title, $active, $disabled, $badge));
+      }
+    }
+  }
+
+  /**
+   * Add tab.
+   *
+   * @param \Drupal\adminic_toolbar\Tab $tab
+   */
+  public function addTab(Tab $tab) {
+    $key = $this->getTabKey($tab);
+    $this->tabs[$key] = $tab;
+    // Remove tab if exists and is disabled
+    if (isset($this->tabs[$key]) && $tab->isDisabled()) {
+      unset($this->tabs[$key]);
+    }
+
   }
 
   /**

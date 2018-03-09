@@ -1,12 +1,6 @@
 {{ attach_library('adminic_toolbar/user_account') }}
-<div class="toolbar__user_account">
-  <div class="user_account--left">
-    <div class="user_account--image"><a href="{{ profile_url }}"></a></div>
-  </div>
-  <div class="user_account--right">
-    <div class="user_name">{{ name }}</div>
-    <a href="{{ profile_url }}">Profile</a>
-    <a href="{{ edit_url }}">Edit</a>
-    <a href="{{ logout_url }}">Logout</a>
-  </div>
+<div class="user_account">
+  <div class="user_account__avatar"></div>
+  <div class="user_account__name">{{ name }}</div>
+  <div class="user_account__links">{{ dropdown }}</div>
 </div>

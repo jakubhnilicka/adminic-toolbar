@@ -2,6 +2,8 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Url;
+
 class Tab {
 
   /**
@@ -15,9 +17,9 @@ class Tab {
   private $section;
 
   /**
-   * @var string
+   * @var \Drupal\Core\Url
    */
-  private $route;
+  private $url;
 
   /**
    * @var string
@@ -34,33 +36,27 @@ class Tab {
    */
   private $disabled;
 
+  private $badge;
+
   /**
    * Tab constructor.
    *
    * @param string $id
    * @param string $section
-   * @param string $route
+   * @param \Drupal\Core\Url $url
    * @param string $title
    * @param bool $active
    * @param bool $disabled
+   * @param $badge
    */
-  public function __construct(string $id, string $section, string $route, string $title, bool $active, bool $disabled) {
+  public function __construct(string $id, string $section, Url $url, string $title, bool $active, bool $disabled, $badge) {
     $this->id = $id;
     $this->section = $section;
-    $this->route = $route;
+    $this->url = $url;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
-  }
-
-  /**
-   * Get tab id.
-   *
-   * @return string
-   *   Return tab id.
-   */
-  public function getId() {
-    return $this->id;
+    $this->badge = $badge;
   }
 
   /**
@@ -74,36 +70,6 @@ class Tab {
   }
 
   /**
-   * Get tab route.
-   *
-   * @return string
-   *   Return tab route.
-   */
-  public function getRoute() {
-    return $this->route;
-  }
-
-  /**
-   * Get tab title.
-   *
-   * @return string
-   *   Return tab title.
-   */
-  public function getTitle() {
-    return $this->title;
-  }
-
-  /**
-   * Get tab state.
-   *
-   * @return string
-   *   Return tab active state.
-   */
-  public function isActive() {
-    return $this->active;
-  }
-
-  /**
    * Get tab state.
    *
    * @return string
@@ -111,13 +77,6 @@ class Tab {
    */
   public function isDisabled() {
     return $this->active;
-  }
-
-  /**
-   * Set tab as active.
-   */
-  public function setActive() {
-    $this->active = TRUE;
   }
 
   /**
@@ -137,10 +96,73 @@ class Tab {
     return [
       '#theme' => 'toolbar_section_tab',
       '#title' => $this->getTitle(),
-      '#route' => $this->getRoute(),
+      '#route' => $this->getUrl(),
       '#active' => $this->isActive(),
       '#id' => $this->getId(),
+      '#badge' => $this->getBadge(),
     ];
+  }
+
+  /**
+   * Get tab title.
+   *
+   * @return string
+   *   Return tab title.
+   */
+  public function getTitle() {
+    return $this->title;
+  }
+
+  /**
+   * Get tab route.
+   *
+   * @return string
+   *   Return tab route.
+   */
+  public function getUrl() {
+    /** @var \Drupal\Core\Url $url */
+    $url = $this->url;
+    return $url->toString();
+  }
+
+  public function getRawUrl() {
+    return $this->url;
+  }
+  /**
+   * Get badge route.
+   *
+   * @return string
+   *   Return tab route.
+   */
+  public function getBadge() {
+    return $this->badge;
+  }
+
+  /**
+   * Get tab state.
+   *
+   * @return string
+   *   Return tab active state.
+   */
+  public function isActive() {
+    return $this->active;
+  }
+
+  /**
+   * Set tab as active.
+   */
+  public function setActive() {
+    $this->active = TRUE;
+  }
+
+  /**
+   * Get tab id.
+   *
+   * @return string
+   *   Return tab id.
+   */
+  public function getId() {
+    return $this->id;
   }
 
 }

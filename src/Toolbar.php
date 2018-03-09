@@ -87,10 +87,9 @@ class Toolbar {
 
     /** @var \Drupal\adminic_toolbar\Section $section */
     foreach ($primarySections as $section) {
-      if ($section->hasCallback()) {
-        //$widgetManager = $this->toolbarWidgetPluginManager;
-        $callback = $section->getCallback();
-        $widget = $this->toolbarWidgetPluginManager->createInstance($callback);
+      if ($section->hasType()) {
+        $type = $section->getType();
+        $widget = $this->toolbarWidgetPluginManager->createInstance($type);
         $widgets[] = $widget->getRenderArray();
       }
       else {
@@ -98,20 +97,41 @@ class Toolbar {
       }
     }
 
+    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')
+      ->getRenderArray();
+
+    $header = [
+      '#theme' => 'toolbar_header',
+      '#title' => t('Drupal'),
+      '#title_link' => '<front>',
+    ];
+
     if ($widgets) {
       return [
         '#theme' => 'toolbar_primary',
+        '#header' => $header,
         '#title' => 'Drupal',
         '#widgets' => $widgets,
+        '#user_account' => $userAccount,
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [
-          'keys' => ['toolbar_primary'],
-          'contexts' => ['user.permissions', 'url.path'],
+          //'keys' => ['toolbar_primary'],
+          //'contexts' => ['user.permissions', 'url.path'],
         ],
       ];
     }
 
     return NULL;
+  }
+
+  /**
+   * Check if current user can access toolbar.
+   *
+   * @return bool
+   *   Retrun true if user can access toolbar or false.
+   */
+  protected function userCanAccessToolbar() {
+    return $this->currentUser->hasPermission('can use adminic toolbar');
   }
 
   /**
@@ -133,13 +153,19 @@ class Toolbar {
     foreach ($secondaryWrappers as $key => $wrapper) {
       $active = FALSE;
       if (!empty($activeTab)) {
-        $active = ($key == $activeTab->getId());
+        //$active = ($key == $activeTab->getId());
       }
       if ($wrapper['sections']) {
-        $wrappers[] = [
-          '#theme' => 'toolbar_secondary_wrapper',
+        $header = [
+          '#theme' => 'toolbar_header',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
+          '#close' => TRUE,
+        ];
+
+        $wrappers[] = [
+          '#theme' => 'toolbar_secondary_wrapper',
+          '#header' => $header,
           '#sections' => $wrapper['sections'],
           '#active' => $active,
           '#id' => $key,
@@ -205,16 +231,6 @@ class Toolbar {
     }
 
     return NULL;
-  }
-
-  /**
-   * Check if current user can access toolbar.
-   *
-   * @return bool
-   *   Retrun true if user can access toolbar or false.
-   */
-  protected function userCanAccessToolbar() {
-    return $this->currentUser->hasPermission('can use adminic toolbar');
   }
 
 }
