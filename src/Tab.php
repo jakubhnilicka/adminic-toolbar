@@ -2,6 +2,8 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Url;
+
 class Tab {
 
   /**
@@ -15,9 +17,9 @@ class Tab {
   private $section;
 
   /**
-   * @var string
+   * @var \Drupal\Core\Url
    */
-  private $route;
+  private $url;
 
   /**
    * @var string
@@ -33,6 +35,7 @@ class Tab {
    * @var bool
    */
   private $disabled;
+
   private $badge;
 
   /**
@@ -40,16 +43,16 @@ class Tab {
    *
    * @param string $id
    * @param string $section
-   * @param string $route
+   * @param \Drupal\Core\Url $url
    * @param string $title
    * @param bool $active
    * @param bool $disabled
    * @param $badge
    */
-  public function __construct(string $id, string $section, string $route, string $title, bool $active, bool $disabled, $badge) {
+  public function __construct(string $id, string $section, Url $url, string $title, bool $active, bool $disabled, $badge) {
     $this->id = $id;
     $this->section = $section;
-    $this->route = $route;
+    $this->url = $url;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
@@ -93,7 +96,7 @@ class Tab {
     return [
       '#theme' => 'toolbar_section_tab',
       '#title' => $this->getTitle(),
-      '#route' => $this->getRoute(),
+      '#route' => $this->getUrl(),
       '#active' => $this->isActive(),
       '#id' => $this->getId(),
       '#badge' => $this->getBadge(),
@@ -116,10 +119,15 @@ class Tab {
    * @return string
    *   Return tab route.
    */
-  public function getRoute() {
-    return $this->route;
+  public function getUrl() {
+    /** @var \Drupal\Core\Url $url */
+    $url = $this->url;
+    return $url->toString();
   }
 
+  public function getRawUrl() {
+    return $this->url;
+  }
   /**
    * Get badge route.
    *

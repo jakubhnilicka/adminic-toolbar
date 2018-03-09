@@ -161,7 +161,7 @@ class SectionManager {
     $currentRouteName = $this->routeManager->getCurrentRoute();
     $links = $this->linkManager->getLinks();
     foreach ($links as $key => &$link) {
-      if ($link->getRoute() == $currentRouteName) {
+      if ($link->getUrl() == $currentRouteName) {
         $link->setActive();
         $this->linkManager->addActiveLink($link);
       }
@@ -173,7 +173,7 @@ class SectionManager {
       $activeRoutes = $this->routeManager->getActiveRoutes();
       $links = $this->linkManager->getLinks();
       foreach ($links as &$link) {
-        $linkRoute = $link->getRoute();
+        $linkRoute = $link->getUrl();
         if (array_key_exists($linkRoute, $activeRoutes)) {
           $link->setActive();
           $this->linkManager->addActiveLink($link);
@@ -223,7 +223,7 @@ class SectionManager {
         $tab->setActive();
         $this->tabManager->addActiveTab($tab);
       }
-      elseif ($tab->getRoute() == $currentRouteName) {
+      elseif ($tab->getUrl() == $currentRouteName) {
         $tab->setActive();
         $this->tabManager->addActiveTab($tab);
       }
@@ -235,7 +235,7 @@ class SectionManager {
       $activeRoutes = $this->routeManager->getActiveRoutes();
       $tabs = $this->tabManager->getTabs();
       foreach ($tabs as $tab) {
-        $tabRoute = $tab->getRoute();
+        $tabRoute = $tab->getUrl();
         if (array_key_exists($tabRoute, $activeRoutes)) {
           $tab->setActive();
           $this->tabManager->addActiveTab($tab);
@@ -308,7 +308,7 @@ class SectionManager {
 
       $secondaryWrappers[$tab->getId()] = [
         'title' => $tab->getTitle(),
-        'route' => $tab->getRoute(),
+        'route' => $tab->getUrl(),
         'sections' => $sections,
       ];
     }

@@ -3,6 +3,7 @@
 namespace Drupal\adminic_toolbar;
 
 use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Url;
 
 class LinkManager {
 
@@ -68,7 +69,14 @@ class LinkManager {
    *   Return formated key.
    */
   public function getLinkKey(Link $link) {
-    return sprintf('%s.%s', $link->getWidget(), $link->getRoute());
+    /** @var \Drupal\Core\Url $url */
+    $url = $link->getRawUrl();
+    $routeName = $url->getRouteName();
+    $routeParams = $url->getRouteParameters();
+    $routeParams = implode('.', $routeParams);
+    $routeParams = empty($routeParams) ? '': '.' . $routeParams;
+    $key = $routeName . $routeParams;
+    return sprintf('%s.%s', $link->getWidget(), $key);
   }
 
   /**
@@ -108,14 +116,17 @@ class LinkManager {
     foreach ($configLinks as $link) {
       $widget = $link['widget'];
       $route = $link['route'];
+      $route_params = isset($link['route_params']) ? $link['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route);
       if ($isValid) {
         $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
         $title = empty($title) ? '' : $title;
+        $url = Url::fromRoute($route, $route_params);
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
         $badge = isset($link['badge']) ? $link['badge'] : NULL;
+
         $active = FALSE;
-        $this->addLink(new Link($widget, $route, $title, $active, $disabled, $badge));
+        $this->addLink(new Link($widget, $url, $title, $active, $disabled, $badge));
       }
     }
   }

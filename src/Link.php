@@ -2,6 +2,8 @@
 
 namespace Drupal\adminic_toolbar;
 
+use Drupal\Core\Url;
+
 class Link {
 
   /**
@@ -10,9 +12,9 @@ class Link {
   private $widget;
 
   /**
-   * @var string
+   * @var \Drupal\Core\Url
    */
-  private $route;
+  private $url;
 
   /**
    * @var string
@@ -28,21 +30,22 @@ class Link {
    * @var bool
    */
   private $disabled;
+
   private $badge;
 
   /**
    * Link constructor.
    *
    * @param string $widget
-   * @param string $route
+   * @param \Drupal\Core\Url $url
    * @param string $title
    * @param bool $active
    * @param bool $disabled
    * @param $badge
    */
-  public function __construct(string $widget, string $route, string $title, bool $active, bool $disabled, $badge) {
+  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, $badge) {
     $this->widget = $widget;
-    $this->route = $route;
+    $this->url = $url;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
@@ -83,7 +86,7 @@ class Link {
     return [
       '#theme' => 'toolbar_section_link',
       '#title' => $this->getTitle(),
-      '#route' => $this->getRoute(),
+      '#route' => $this->getUrl(),
       '#active' => $this->isActive(),
       '#badge' => $this->getBadge(),
     ];
@@ -105,8 +108,14 @@ class Link {
    * @return string
    *   Return link route.
    */
-  public function getRoute() {
-    return $this->route;
+  public function getUrl() {
+    /** @var \Drupal\Core\Url $url */
+    $url = $this->url;
+    return $url->toString();
+  }
+
+  public function getRawUrl() {
+    return $this->url;
   }
 
   /**

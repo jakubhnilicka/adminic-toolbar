@@ -3,6 +3,7 @@
 namespace Drupal\adminic_toolbar;
 
 use Drupal\Core\Extension\ModuleHandler;
+use Drupal\Core\Url;
 
 class TabManager {
 
@@ -120,14 +121,16 @@ class TabManager {
       $id = $tab['id'];
       $section = isset($tab['section']) ? $tab['section'] : '';
       $route = $tab['route'];
+      $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route);
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
         $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route);
         $title = empty($title) ? '' : $title;
+        $url = Url::fromRoute($route, $route_params);
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
         $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
         $active = FALSE;
-        $this->addTab(new Tab($id, $section, $route, $title, $active, $disabled, $badge));
+        $this->addTab(new Tab($id, $section, $url, $title, $active, $disabled, $badge));
       }
     }
   }
