@@ -129,9 +129,9 @@ class RouteManager {
     $allRoutes = $this->routeProvider->getAllRoutes();
 
     $routes = [];
-    foreach ($allRoutes as $route_name => $route) {
+    foreach ($allRoutes as $routeName => $route) {
       $title = $route->getDefault('_title');
-      $routes[$route_name] = $title;
+      $routes[$routeName] = $title;
     }
 
     return $routes;

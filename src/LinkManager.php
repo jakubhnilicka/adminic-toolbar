@@ -111,6 +111,7 @@ class LinkManager {
       $isValid = $this->routeManager->isRouteValid($route);
       if ($isValid) {
         $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route);
+        $title = empty($title) ? '' : $title;
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
         $badge = isset($link['badge']) ? $link['badge'] : NULL;
         $active = FALSE;
