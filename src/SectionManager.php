@@ -161,7 +161,9 @@ class SectionManager {
     $currentRouteName = $this->routeManager->getCurrentRoute();
     $links = $this->linkManager->getLinks();
     foreach ($links as $key => &$link) {
-      if ($link->getUrl() == $currentRouteName) {
+      $url = $link->getRawUrl();
+      $linkRouteName = $url->getRouteName();
+      if ($linkRouteName == $currentRouteName) {
         $link->setActive();
         $this->linkManager->addActiveLink($link);
       }
@@ -173,8 +175,9 @@ class SectionManager {
       $activeRoutes = $this->routeManager->getActiveRoutes();
       $links = $this->linkManager->getLinks();
       foreach ($links as &$link) {
-        $linkRoute = $link->getUrl();
-        if (array_key_exists($linkRoute, $activeRoutes)) {
+        $url = $link->getRawUrl();
+        $linkRouteName = $url->getRouteName();
+        if (array_key_exists($linkRouteName, $activeRoutes)) {
           $link->setActive();
           $this->linkManager->addActiveLink($link);
         }
