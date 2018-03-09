@@ -79,6 +79,12 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['page_info'] = [
+    'variables' => [
+      'dropdown' => NULL,
+    ],
+  ];
+
   $items['drd'] = [
     'variables' => [
       'trigger_content' => NULL,

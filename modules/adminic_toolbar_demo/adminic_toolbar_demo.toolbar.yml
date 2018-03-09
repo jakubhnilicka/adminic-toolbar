@@ -1,3 +1,6 @@
+widgets:
+ - {id: 'page_info', weight: 99, type: 'page_info'}
+
 links:
  - {widget: 'content.default', route: 'node.add_page', title: 'Add node', weight: 10}
  - {widget: 'content.default', route: 'node.add', route_params: {node_type: 'page'}, title: 'Add page', weight: 11}

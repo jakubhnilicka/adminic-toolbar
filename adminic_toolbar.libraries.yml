@@ -15,6 +15,12 @@ user_account:
     component:
       css/user_account.css: {}
 
+page_info:
+  version: VERSION
+  css:
+    component:
+      css/page_info.css: {}
+
 drd:
   version: VERSION
   css:
