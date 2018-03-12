@@ -1,5 +1,5 @@
 widgets:
- - {id: 'page_info', weight: 99, type: 'page_info'}
+ - {id: 'page_info', weight: 99, type: 'page_info', disabled: true}
 
 links:
  - {widget: 'content.default', route: 'node.add_page', title: 'Add node', weight: 10}
