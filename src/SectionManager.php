@@ -138,10 +138,10 @@ class SectionManager {
       if ($section['set'] == $this->discoveryManager->getActiveSet()) {
         $id = $section['id'];
         $title = isset($section['title']) ? $section['title'] : NULL;
-        $tab = isset($section['tab']) ? $section['tab'] : NULL;
+        $tab_id = isset($section['tab_id']) ? $section['tab_id'] : NULL;
         $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
         $type = isset($section['type']) ? $section['type'] : NULL;
-        $newSection = new Section($id, $title, $tab, $disabled, $type);
+        $newSection = new Section($id, $title, $tab_id, $disabled, $type);
         $this->addSection($newSection);
         if ($activeLink && $id == $activeLink->getWidget()) {
           $this->addActiveSection($newSection);
