@@ -119,7 +119,7 @@ class TabManager {
 
     foreach ($configTabs as $tab) {
       $id = $tab['id'];
-      $section = isset($tab['section']) ? $tab['section'] : '';
+      $widget_id = isset($tab['widget_id']) ? $tab['widget_id'] : '';
       $route = $tab['route'];
       $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route, $route_params);
@@ -130,7 +130,7 @@ class TabManager {
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
         $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
         $active = FALSE;
-        $this->addTab(new Tab($id, $section, $url, $title, $active, $disabled, $badge));
+        $this->addTab(new Tab($id, $widget_id, $url, $title, $active, $disabled, $badge));
       }
     }
   }

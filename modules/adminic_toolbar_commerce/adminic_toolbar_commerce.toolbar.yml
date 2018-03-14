@@ -1,29 +1,29 @@
-tabs:
-- {id: 'commerce', section: 'commerce', route: 'commerce.admin_commerce' }
-
 widgets:
 - {id: 'default', weight: -99}
 - {id: 'general', title: 'General', weight: 10}
 # Primary Toolbar Widgets
 - {id: 'commerce', title: 'Commerce', weight: 0}
 # Secondary Toolbar Widgets
-- {id: 'commerce.content', tab: 'commerce', title: 'Shop'}
-- {id: 'commerce.settings', tab: 'commerce', title: 'Settings'}
+- {id: 'commerce.content', tab_id: 'commerce', title: 'Shop'}
+- {id: 'commerce.settings', tab_id: 'commerce', title: 'Settings'}
+
+tabs:
+- {id: 'commerce', widget_id: 'commerce', route: 'commerce.admin_commerce' }
 
 links:
 # Content Links
-- {widget: 'commerce.content', route: 'entity.commerce_order.collection'}
-- {widget: 'commerce.content', route: 'entity.commerce_product.collection'}
-- {widget: 'commerce.content', route: 'entity.commerce_promotion.collection'}
-- {widget: 'commerce.content', route: 'entity.commerce_store.collection'}
-# Setting Lings
-- {widget: 'commerce.settings', route: 'entity.commerce_product_type.collection'}
-- {widget: 'commerce.content', route: 'entity.commerce_product_attribute.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_product_variation_type.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_order_type.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_order_item_type.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_checkout_flow.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_payment_gateway.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_store_type.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_tax_type.collection'}
-- {widget: 'commerce.settings', route: 'entity.commerce_currency.collection'}
+- {widget_id: 'commerce.content', route: 'entity.commerce_order.collection'}
+- {widget_id: 'commerce.content', route: 'entity.commerce_product.collection'}
+- {widget_id: 'commerce.content', route: 'entity.commerce_promotion.collection'}
+- {widget_id: 'commerce.content', route: 'entity.commerce_store.collection'}
+- {widget_id: 'commerce.content', route: 'entity.commerce_product_attribute.collection'}
+# Setting Links
+- {widget_id: 'commerce.settings', route: 'entity.commerce_product_type.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_product_variation_type.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_order_type.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_order_item_type.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_checkout_flow.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_payment_gateway.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_store_type.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_tax_type.collection'}
+- {widget_id: 'commerce.settings', route: 'entity.commerce_currency.collection'}

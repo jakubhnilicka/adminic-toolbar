@@ -103,7 +103,7 @@ class LinkManager {
       if (isset($configFile['links'])) {
         foreach ($configFile['links'] as $link) {
           $link['weight'] = isset($link['weight']) ? $link['weight'] : $weight;
-          $key = sprintf('%s.%s', $link['widget'], $link['route']);
+          $key = sprintf('%s.%s', $link['widget_id'], $link['route']);
           $configLinks[$key] = $link;
           $weight++;
         }
@@ -114,8 +114,14 @@ class LinkManager {
     $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
     foreach ($configLinks as $link) {
-      $widget = $link['widget'];
-      $route = $link['route'];
+      if (!$widget_id = $link['widget_id']) {
+        $obj = print_r((object) $link, TRUE);
+        throw new \Exception('Link widget_id missing ' . $obj);
+      };
+      if (!$route = $link['route']) {
+        $obj = print_r((object) $link, TRUE);
+        throw new \Exception('Link route missing ' . $obj);
+      }
       $route_params = isset($link['route_params']) ? $link['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid) {
@@ -126,7 +132,7 @@ class LinkManager {
         $badge = isset($link['badge']) ? $link['badge'] : NULL;
 
         $active = FALSE;
-        $this->addLink(new Link($widget, $url, $title, $active, $disabled, $badge));
+        $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));
       }
     }
   }
