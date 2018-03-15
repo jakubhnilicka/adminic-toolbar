@@ -8,6 +8,7 @@ namespace Drupal\adminic_toolbar;
  */
 
 use Drupal\Core\Extension\ModuleHandler;
+use Exception;
 
 /**
  * Class SectionsManager.
@@ -148,41 +149,31 @@ class SectionsManager {
   protected function parseSections() {
     $this->setActiveLinks();
     $config = $this->discoveryManager->getConfig();
-    $activeLink = $this->linkManager->getActiveLink();
 
     $weight = 0;
     $configSections = [];
     foreach ($config as $configFile) {
       if (isset($configFile['widgets'])) {
         foreach ($configFile['widgets'] as $section) {
+          // If weight is empty set computed value.
           $section['weight'] = isset($section['weight']) ? $section['weight'] : $weight;
+          // If set is empty set default set.
           $section['set'] = isset($section['set']) ? $section['set'] : 'default';
+          // TODO: get key from method.
           $key = $section['id'];
           $configSections[$key] = $section;
           $weight++;
         }
       }
     }
+    // Sort tabs by weight.
     uasort($configSections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
+    // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_sections', $configSections);
 
-    foreach ($configSections as $section) {
-      if ($section['set'] == $this->discoveryManager->getActiveSet()) {
-        $id = $section['id'];
-        $title = isset($section['title']) ? $section['title'] : '';
-        $tab_id = isset($section['tab_id']) ? $section['tab_id'] : '';
-        $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
-        $type = isset($section['type']) ? $section['type'] : '';
-        $newSection = new Section($id, $title, $tab_id, $disabled, $type);
-        $this->addSection($newSection);
-        if ($activeLink && $id == $activeLink->getWidget()) {
-          $this->addActiveSection($newSection);
-        }
-      }
-    }
-
-    $this->setActiveTabs();
+    // Add tabs.
+    $this->addSections($configSections);
   }
 
   /**
@@ -457,6 +448,54 @@ class SectionsManager {
     }
 
     return NULL;
+  }
+
+  /**
+   * Add sections.
+   *
+   * @param array $configSections
+   *   Array of sections.
+   */
+  protected function addSections(array $configSections) {
+    $activeLink = $this->linkManager->getActiveLink();
+
+    foreach ($configSections as $section) {
+      if ($section['set'] == $this->discoveryManager->getActiveSet()) {
+        $this->validateSection($section);
+
+        $id = NULL;
+        $title = isset($section['title']) ? $section['title'] : '';
+        $tab_id = isset($section['tab_id']) ? $section['tab_id'] : '';
+        $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
+        $type = isset($section['type']) ? $section['type'] : '';
+        $newSection = new Section($id, $title, $tab_id, $disabled, $type);
+        $this->addSection($newSection);
+
+        if ($activeLink && $id == $activeLink->getWidget()) {
+          $this->addActiveSection($newSection);
+        }
+      }
+    }
+
+    $this->setActiveTabs();
+  }
+
+  /**
+   * Validate section required parameters.
+   *
+   * @param array $section
+   *   Section array.
+   */
+  protected function validateSection(array $section) {
+    try {
+      $obj = json_encode($section);
+      if (!$id = $section['id']) {
+        throw new Exception('Section ID parameter missing ' . $obj);
+      };
+    }
+    catch (Exception $e) {
+      print $e->getMessage();
+    }
   }
 
 }

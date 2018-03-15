@@ -146,29 +146,42 @@ class TabsManager {
     // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
 
-    foreach ($configTabs as $tab) {
-      $id = NULL;
-      $widget_id = NULL;
-      $route = NULL;
-      // Validate required parameters.
-      try {
-        $obj = print_r((object) $tab, TRUE);
-        if (!$id = $tab['id']) {
-          throw new Exception('Tab ID parameter missing ' . $obj);
-        };
-        if (!$widget_id = $tab['widget_id']) {
-          throw new Exception('Tab widget_id parameter missing ' . $obj);
-        };
-        if (!$route = $tab['route']) {
-          throw new Exception('Tab route parameter missing ' . $obj);
-        }
-      }
-      catch (Exception $e) {
-        print $e->getMessage();
-      }
+    // Add tabs.
+    $this->addTabs($configTabs);
+  }
 
+  /**
+   * Get first active tab.
+   *
+   * @return \Drupal\adminic_toolbar\Tab
+   *   Return first active tab.
+   */
+  public function getActiveTab() {
+    $activeTabs = $this->activeTabs;
+    if ($activeTabs) {
+      return reset($activeTabs);
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Add tabs.
+   *
+   * @param array $configTabs
+   *   Array of tabs.
+   */
+  protected function addTabs(array $configTabs) {
+    foreach ($configTabs as $tab) {
+
+      $this->validateTab($tab);
+
+      $id = $tab['id'];
+      $widget_id = $tab['widget_id'];
+      $route = $tab['route'];
       $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route, $route_params);
+
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
         $title = isset($tab['title']) ? $tab['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
         $title = empty($title) ? '' : $title;
@@ -198,18 +211,27 @@ class TabsManager {
   }
 
   /**
-   * Get first active tab.
+   * Validate tab required parameters.
    *
-   * @return \Drupal\adminic_toolbar\Tab
-   *   Return first active tab.
+   * @param array $tab
+   *   Tab array.
    */
-  public function getActiveTab() {
-    $activeTabs = $this->activeTabs;
-    if ($activeTabs) {
-      return reset($activeTabs);
+  protected function validateTab(array $tab) {
+    try {
+      $obj = json_encode($tab);
+      if (!isset($tab['id'])) {
+        throw new Exception('Tab ID parameter missing ' . $obj);
+      };
+      if (!isset($tab['widget_id'])) {
+        throw new Exception('Tab widget_id parameter missing ' . $obj);
+      };
+      if (!isset($tab['route'])) {
+        throw new Exception('Tab route parameter missing ' . $obj);
+      }
     }
-
-    return NULL;
+    catch (Exception $e) {
+      print $e->getMessage();
+    }
   }
 
 }

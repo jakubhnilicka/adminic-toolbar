@@ -143,38 +143,7 @@ class LinksManager {
     // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
-    foreach ($configLinks as $link) {
-      $widget_id = NULL;
-      $route = NULL;
-      // Validate required parameters.
-      try {
-        // TODO: print object as defined in yml file.
-        $obj = json_encode($link);
-        if (!$widget_id = $link['widget_id']) {
-          throw new Exception('Link widget_id parameter missing ' . $obj);
-        };
-        if (!$route = $link['route']) {
-          throw new Exception('Link route parameter missing ' . $obj);
-        }
-      }
-      catch (Exception $e) {
-        print $e->getMessage();
-        return;
-      }
-
-      $route_params = isset($link['route_params']) ? $link['route_params'] : [];
-      $isValid = $this->routeManager->isRouteValid($route, $route_params);
-      if ($isValid) {
-        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
-        $title = empty($title) ? '' : $title;
-        $url = Url::fromRoute($route, $route_params);
-        $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
-        $badge = isset($link['badge']) ? $link['badge'] : '';
-
-        $active = FALSE;
-        $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));
-      }
-    }
+    $this->addLinks($configLinks);
   }
 
   /**
@@ -204,6 +173,55 @@ class LinksManager {
       return reset($activeLinks);
     }
     return NULL;
+  }
+
+  /**
+   * Add links.
+   *
+   * @param array $configLinks
+   *   Links array.
+   */
+  protected function addLinks(array $configLinks) {
+    foreach ($configLinks as $link) {
+      $this->validateLink($link);
+
+      $widget_id = $link['widget_id'];
+      $route = $link['route'];
+      $route_params = isset($link['route_params']) ? $link['route_params'] : [];
+      $isValid = $this->routeManager->isRouteValid($route, $route_params);
+
+      if ($isValid) {
+        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
+        $title = empty($title) ? '' : $title;
+        $url = Url::fromRoute($route, $route_params);
+        $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
+        $badge = isset($link['badge']) ? $link['badge'] : '';
+
+        $active = FALSE;
+        $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));
+      }
+    }
+  }
+
+  /**
+   * Validate link required parameters.
+   *
+   * @param array $link
+   *   Links array.
+   */
+  protected function validateLink(array $link) {
+    try {
+      $obj = json_encode($link);
+      if (!isset($link['widget_id'])) {
+        throw new Exception('Link widget_id parameter missing ' . $obj);
+      };
+      if (!isset($link['route'])) {
+        throw new Exception('Link route parameter missing ' . $obj);
+      }
+    }
+    catch (Exception $e) {
+      print $e->getMessage();
+    }
   }
 
 }
