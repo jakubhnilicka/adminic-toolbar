@@ -281,7 +281,7 @@ class SectionsManager {
     $sectionValidTabs = array_filter(
       $tabs, function ($tab) use ($sectionId) {
       /** @var \Drupal\adminic_toolbar\Tab $tab */
-      return $tab->getSection() == $sectionId;
+      return $tab->getWidget() == $sectionId;
     }
     );
 

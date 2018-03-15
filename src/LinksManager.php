@@ -129,7 +129,7 @@ class LinksManager {
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
         $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
-        $badge = isset($link['badge']) ? $link['badge'] : NULL;
+        $badge = isset($link['badge']) ? $link['badge'] : '';
 
         $active = FALSE;
         $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));

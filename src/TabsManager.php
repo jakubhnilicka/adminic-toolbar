@@ -128,7 +128,7 @@ class TabsManager {
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
-        $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
+        $badge = isset($tab['badge']) ? $tab['badge'] : '';
         $active = FALSE;
         $this->addTab(new Tab($id, $widget_id, $url, $title, $active, $disabled, $badge));
       }
