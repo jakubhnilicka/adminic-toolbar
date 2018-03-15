@@ -2,17 +2,31 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * DiscoveryManager.php.
+ */
+
 use Drupal\Core\Discovery\YamlDiscovery;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
+/**
+ * Class DiscoveryManager.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class DiscoveryManager {
 
   /**
+   * Interface for classes that manage a set of enabled modules.
+   *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   private $moduleHandler;
 
   /**
+   * Configuration array.
+   *
    * @var array
    */
   private $config = [];
@@ -21,13 +35,14 @@ class DiscoveryManager {
    * DiscoveryManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Interface for classes that manage a set of enabled modules.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler) {
     $this->moduleHandler = $moduleHandler;
   }
 
   /**
-   * Load all confuguration files for toolbar and convert them to array.
+   * Load all configuration files for toolbar and convert them to array.
    *
    * @return array
    *   Configuration parsed from yaml files.
@@ -36,6 +51,7 @@ class DiscoveryManager {
     $discovery = new YamlDiscovery('toolbar', $this->moduleHandler->getModuleDirectories());
     $configs = $discovery->findAll();
 
+    // Add computed weight to every config file.
     foreach ($configs as $key => $config) {
       // Allways load adminic toolbar before others.
       if ($key == 'adminic_toolbar') {
@@ -46,6 +62,7 @@ class DiscoveryManager {
         $configs[$key]['weight'] = 0;
       }
     }
+
     // Sort by weight.
     uasort($configs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
@@ -56,6 +73,7 @@ class DiscoveryManager {
    * Get loaded config.
    *
    * @return array
+   *   Return config array.
    */
   public function getConfig() {
     if (empty($this->config)) {
@@ -65,7 +83,14 @@ class DiscoveryManager {
     return $this->config;
   }
 
+  /**
+   * Get activated set.
+   *
+   * @return string
+   *   Return set machine name.
+   */
   public function getActiveSet() {
+    // TODO: Allow working with sets.
     return 'default';
   }
 

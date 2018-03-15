@@ -2,39 +2,61 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * RouteManager.php.
+ */
+
 use Drupal\Core\Access\AccessManager;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Routing\RouteProvider;
 use Drupal\Core\Session\AccountProxy;
 
+/**
+ * Class RouteManager.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class RouteManager {
 
   /**
+   * A Route Provider front-end for all Drupal-stored routes.
+   *
    * @var \Drupal\Core\Routing\RouteProvider
    */
   private $routeProvider;
 
   /**
+   * Default object for current_route_match service.
+   *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
   private $currentRouteMatch;
 
   /**
+   * Attaches access check services to routes and runs them on request.
+   *
    * @var \Drupal\Core\Access\AccessManager
    */
   private $accessManager;
 
   /**
+   * A proxied implementation of AccountInterface.
+   *
    * @var \Drupal\Core\Session\AccountProxy
    */
   private $currentUser;
 
   /**
+   * Array of routes.
+   *
    * @var array
    */
   private $routes = [];
 
   /**
+   * Array of active routes.
+   *
    * @var array
    */
   private $activeRoutes = [];
@@ -43,9 +65,13 @@ class RouteManager {
    * RouteManager constructor.
    *
    * @param \Drupal\Core\Routing\RouteProvider $routeProvider
+   *   A Route Provider front-end for all Drupal-stored routes.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   Default object for current_route_match service.
    * @param \Drupal\Core\Access\AccessManager $accessManager
+   *   Attaches access check services to routes and runs them on request.
    * @param \Drupal\Core\Session\AccountProxy $currentUser
+   *   A proxied implementation of AccountInterface.
    */
   public function __construct(
     RouteProvider $routeProvider,
@@ -59,9 +85,10 @@ class RouteManager {
   }
 
   /**
-   * Get current route name.
+   * Returns the route name.
    *
-   * @return null|string
+   * @return string|null
+   *   The route name. NULL if no route is matched.
    */
   public function getCurrentRoute() {
     return $this->currentRouteMatch->getRouteName();
@@ -71,9 +98,12 @@ class RouteManager {
    * Get route default title.
    *
    * @param string $routeName
-   *
+   *   Route name.
    * @param array $routeParameters
+   *   Route parameters.
+   *
    * @return mixed
+   *   Route title. NULL if route don't have title.
    */
   public function getDefaultTitle(string $routeName, array $routeParameters) {
     if ($this->isRouteValid($routeName, $routeParameters)) {
@@ -86,7 +116,7 @@ class RouteManager {
   }
 
   /**
-   * Check if route is valid.
+   * Check if route is valid and accesible for current user..
    *
    * @param string $routeName
    *   Route name.
@@ -94,7 +124,7 @@ class RouteManager {
    *   Route Parameters.
    *
    * @return bool
-   *   True if route is valid or flase.
+   *   TRUE if route is valid and accessible or FALSE.
    */
   public function isRouteValid(string $routeName, array $routeParams) {
     $isValidRoute = array_key_exists($routeName, $this->getRoutes());
@@ -118,9 +148,10 @@ class RouteManager {
   }
 
   /**
-   * Get routes.
+   * Get list of routes.
    *
    * @return array
+   *   Array of available routes.
    */
   public function getRoutes() {
     if (empty($this->routes)) {
@@ -131,10 +162,10 @@ class RouteManager {
   }
 
   /**
-   * Get available routes from drupal.
+   * Get all the routes on the system simplified to array.
    *
    * @return array
-   *   Array of available routes.
+   *   Array of system drupal routes.
    */
   protected function getAvailableRoutes() {
     $allRoutes = $this->routeProvider->getAllRoutes();
@@ -163,16 +194,30 @@ class RouteManager {
    *   True if user has access to route or flase.
    */
   public function isRouteAccessible(string $routeName) {
+    // TODO: Add route parameters validation.
     return $this->accessManager->checkNamedRoute($routeName, [], $this->currentUser);
   }
 
+  /**
+   * Get array of active routes.
+   *
+   * @return array
+   *   Return array of active routes.
+   */
   public function getActiveRoutes() {
     if (empty($this->activeRoutes)) {
       $this->setActiveRoutes();
     }
+
     return $this->activeRoutes;
   }
 
+  /**
+   * Set active routes.
+   *
+   * @return array
+   *   Return array of active routes.
+   */
   public function setActiveRoutes() {
     $activeRoutes = [];
     $currentRouteObject = $this->currentRouteMatch->getRouteObject();
@@ -188,6 +233,8 @@ class RouteManager {
     }
 
     $this->activeRoutes = $activeRoutes;
+
+    return $this->activeRoutes;
   }
 
 }
