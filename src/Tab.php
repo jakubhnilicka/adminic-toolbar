@@ -24,7 +24,7 @@ class Tab {
   private $id;
 
   /**
-   * Widget where tab belong to.
+   * Widget where tab belongs to.
    *
    * @var string
    */

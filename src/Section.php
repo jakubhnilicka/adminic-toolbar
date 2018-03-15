@@ -2,30 +2,75 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * Section.php.
+ */
+
+/**
+ * Class Section.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class Section {
 
-  private $title;
-
-  private $links = NULL;
-
+  /**
+   * Section ID.
+   *
+   * @var string
+   */
   private $id;
 
+  /**
+   * Section title.
+   *
+   * @var string
+   */
+  private $title;
+
+  /**
+   * Section links.
+   *
+   * @var array
+   */
+  private $links = NULL;
+
+  /**
+   * Tab where section belongs to.
+   *
+   * @var string
+   */
   private $tab;
 
+  /**
+   * Type of section.
+   *
+   * @var string
+   */
   private $type;
 
+  /**
+   * Section disabled state.
+   *
+   * @var bool
+   */
   private $disabled;
 
   /**
    * Section constructor.
    *
    * @param string $id
-   * @param string|null $title
+   *   Section ID.
+   * @param string $title
+   *   Section title.
    * @param string $tab
-   * @param $disabled
+   *   Tab where section belongs to.
    * @param string $type
+   *   Type of section.
+   * @param bool $disabled
+   *   Section disabled state.
    */
-  public function __construct($id, $title, $tab, $disabled, $type) {
+  public function __construct(string $id, string $title, string $tab, bool $disabled, string $type) {
     $this->id = $id;
     $this->title = $title;
     $this->tab = $tab;
@@ -44,6 +89,16 @@ class Section {
   }
 
   /**
+   * Get section title.
+   *
+   * @return string
+   *   Retrun section title.
+   */
+  public function getTitle() {
+    return $this->title;
+  }
+
+  /**
    * Get section tab.
    *
    * @return string
@@ -54,50 +109,23 @@ class Section {
   }
 
   /**
-   * Get section callback.
+   * Get section type.
    *
    * @return string
-   *   Retrun section callback.
+   *   Retrun section type.
    */
   public function getType() {
     return $this->type;
   }
 
   /**
-   * Has section callback?
+   * Has section type defined.
    *
    * @return bool
+   *   Return TRUE if type is defined or FALSE.
    */
   public function hasType() {
     return !is_null($this->type);
-  }
-
-  public function isDisabled() {
-    return $this->disabled;
-  }
-
-  /**
-   * Return section render array.
-   *
-   * @return array
-   *   Return section render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section',
-      '#title' => $this->getTitle(),
-      '#links' => $this->getLinks(),
-    ];
-  }
-
-  /**
-   * Get section title.
-   *
-   * @return string
-   *   Retrun section title.
-   */
-  public function getTitle() {
-    return $this->title;
   }
 
   /**
@@ -114,10 +142,34 @@ class Section {
    * Set section links.
    *
    * @param array $links
-   *   Array of links.
+   *   Return array of links.
    */
-  public function setLinks($links) {
+  public function setLinks(array $links) {
     $this->links = $links;
+  }
+
+  /**
+   * Is tab disabled.
+   *
+   * @return bool
+   *   If disabled return TRUE else FALSE.
+   */
+  public function isDisabled() {
+    return $this->disabled;
+  }
+
+  /**
+   * Return section render array.
+   *
+   * @return array
+   *   Return section render array.
+   */
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section',
+      '#title' => $this->getTitle(),
+      '#links' => $this->getLinks(),
+    ];
   }
 
 }

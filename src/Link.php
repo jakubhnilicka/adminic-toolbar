@@ -17,7 +17,7 @@ use Drupal\Core\Url;
 class Link {
 
   /**
-   * Widget where link belong to.
+   * Widget where link belongs to.
    *
    * @var string
    */
