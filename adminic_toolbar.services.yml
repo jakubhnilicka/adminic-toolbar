@@ -18,15 +18,15 @@ services:
     arguments: ['@router.route_provider', '@current_route_match', '@access_manager', '@current_user']
 
   adminic_toolbar.tabs_manager:
-    class: Drupal\adminic_toolbar\TabManager
+    class: Drupal\adminic_toolbar\TabsManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
 
   adminic_toolbar.sections_manager:
-    class: Drupal\adminic_toolbar\SectionManager
+    class: Drupal\adminic_toolbar\SectionsManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.tabs_manager', '@module_handler', '@adminic_toolbar.widget.manager']
 
   adminic_toolbar.links_manager:
-    class: Drupal\adminic_toolbar\LinkManager
+    class: Drupal\adminic_toolbar\LinksManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
 
   adminic_toolbar.widget.manager:
