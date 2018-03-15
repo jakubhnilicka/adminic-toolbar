@@ -179,7 +179,7 @@ class Link {
     return [
       '#theme' => 'toolbar_section_link',
       '#title' => $this->getTitle(),
-      '#route' => $this->getUrl(),
+      '#url' => $this->getUrl(),
       '#active' => $this->isActive(),
       '#badge' => $this->getBadge(),
     ];

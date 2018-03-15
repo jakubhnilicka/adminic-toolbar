@@ -61,18 +61,18 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
 
   $items['toolbar_section_tab'] = [
     'variables' => [
+      'id' => NULL,
       'title' => NULL,
-      'route' => NULL,
+      'url' => NULL,
       'active' => FALSE,
       'badge' => NULL,
-      'id' => NULL,
     ],
   ];
 
   $items['toolbar_section_link'] = [
     'variables' => [
       'title' => NULL,
-      'route' => NULL,
+      'url' => NULL,
       'active' => FALSE,
       'badge' => NULL,
     ],

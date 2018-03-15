@@ -4,7 +4,7 @@
   active ? 'active'
 ] %}
 {% set tab_id = 'tab--' ~ id|clean_class %}
-<a {{ attributes.addClass(tab_classes).setAttribute('id', tab_id) }} href="{{ route }}">
+<a {{ attributes.addClass(tab_classes).setAttribute('id', tab_id) }} href="{{ url }}">
   <i class="ico"></i>
   <span>{{ title }}</span>
   {% if badge %}<span class="badge">{{ badge }}</span>{% endif %}

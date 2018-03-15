@@ -200,7 +200,7 @@ class Tab {
       '#theme' => 'toolbar_section_tab',
       '#id' => $this->getId(),
       '#title' => $this->getTitle(),
-      '#route' => $this->getUrl(),
+      '#url' => $this->getUrl(),
       '#active' => $this->isActive(),
       '#badge' => $this->getBadge(),
     ];
