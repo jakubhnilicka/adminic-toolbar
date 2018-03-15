@@ -463,7 +463,7 @@ class SectionsManager {
       if ($section['set'] == $this->discoveryManager->getActiveSet()) {
         $this->validateSection($section);
 
-        $id = NULL;
+        $id = $section['id'];
         $title = isset($section['title']) ? $section['title'] : '';
         $tab_id = isset($section['tab_id']) ? $section['tab_id'] : '';
         $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
