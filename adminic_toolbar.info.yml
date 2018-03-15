@@ -1,5 +1,5 @@
 name: Adminic Toolbar
-description: "Adminic Toolbar"
+description: "Alternative Drupal 8 Toolbar"
 core: 8.x
 package: Administration
 type: module

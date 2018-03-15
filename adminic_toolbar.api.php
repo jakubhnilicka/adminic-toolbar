@@ -1,32 +1,36 @@
 <?php
 
 /**
- * @addtogroup hooks
+ * @file
+ * Adminic Toolbar API.
  */
 
 /**
- * Alter links for toolbar
+ * Alter widgets for toolbar.
  *
- * @param array $configLinks
+ * @param array $configWidgets
+ *   Config widgets array.
  */
-function hook_toolbar_config_links_alter(&$configLinks) {
-  unset($configLinks['content.default.system.admin_content']);
+function hook_toolbar_config_widgets_alter(array &$configWidgets) {
+  unset($configWidgets['general']);
 }
 
 /**
- * Alter sections for toolbar
- *
- * @param array $configSections
- */
-function hook_toolbar_config_sections_alter(&$configSections) {
-  unset($configSections['general']);
-}
-
-/**
- * Alter tabs for toolbar
+ * Alter tabs for toolbar.
  *
  * @param array $configTabs
+ *   Config tabs array.
  */
-function hook_toolbar_config_tabs_alter(&$configTabs) {
+function hook_toolbar_config_tabs_alter(array &$configTabs) {
   unset($configTabs['media']);
+}
+
+/**
+ * Alter links for toolbar.
+ *
+ * @param array $configLinks
+ *   Config links array.
+ */
+function hook_toolbar_config_links_alter(array &$configLinks) {
+  unset($configLinks['content.default.system.admin_content']);
 }
