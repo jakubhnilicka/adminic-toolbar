@@ -4,24 +4,31 @@ services:
     factory: config.factory:get
     arguments:
       - system.site
+
   adminic_toolbar:
     class: Drupal\adminic_toolbar\Toolbar
-    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tab_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.section_manager', '@adminic_toolbar.section_manager']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.sections_manager']
+
   adminic_toolbar.discovery_manager:
     class: Drupal\adminic_toolbar\DiscoveryManager
     arguments: ['@module_handler']
+
   adminic_toolbar.route_manager:
     class: Drupal\adminic_toolbar\RouteManager
     arguments: ['@router.route_provider', '@current_route_match', '@access_manager', '@current_user']
-  adminic_toolbar.tab_manager:
-    class: Drupal\adminic_toolbar\TabManager
+
+  adminic_toolbar.tabs_manager:
+    class: Drupal\adminic_toolbar\TabsManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
-  adminic_toolbar.section_manager:
-    class: Drupal\adminic_toolbar\SectionManager
-    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.link_manager', '@adminic_toolbar.tab_manager', '@module_handler', '@adminic_toolbar.widget.manager']
-  adminic_toolbar.link_manager:
-    class: Drupal\adminic_toolbar\LinkManager
+
+  adminic_toolbar.sections_manager:
+    class: Drupal\adminic_toolbar\SectionsManager
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.tabs_manager', '@module_handler', '@adminic_toolbar.widget.manager']
+
+  adminic_toolbar.links_manager:
+    class: Drupal\adminic_toolbar\LinksManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
+
   adminic_toolbar.widget.manager:
     class: Drupal\adminic_toolbar\ToolbarWidgetPluginManager
     parent: default_plugin_manager

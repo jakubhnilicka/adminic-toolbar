@@ -2,42 +2,66 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * TabsManager.php.
+ */
+
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
+use Exception;
 
-class TabManager {
+/**
+ * Class TabsManager.
+ *
+ * @package Drupal\adminic_toolbar
+ */
+class TabsManager {
 
   /**
+   * Discovery manager.
+   *
    * @var \Drupal\adminic_toolbar\DiscoveryManager
    */
   private $discoveryManager;
 
   /**
+   * Route manager.
+   *
    * @var \Drupal\adminic_toolbar\RouteManager
    */
   private $routeManager;
 
   /**
+   * Tabs.
+   *
    * @var array
    */
   private $tabs = [];
 
   /**
+   * Active tabs.
+   *
    * @var array
    */
   private $activeTabs = [];
 
   /**
+   * Class that manages modules in a Drupal installation.
+   *
    * @var \Drupal\Core\Extension\ModuleHandler
    */
   private $moduleHandler;
 
   /**
-   * TabManager constructor.
+   * TabsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
+   *   Discovery manager.
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
+   *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
@@ -52,6 +76,7 @@ class TabManager {
    * Add tab to active tabs.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
    */
   public function addActiveTab(Tab $tab) {
     $key = $this->getTabKey($tab);
@@ -75,6 +100,7 @@ class TabManager {
    * Set tab as active.
    *
    * @param string $key
+   *   Tab key.
    */
   public function setActive(string $key) {
     $this->tabs[$key]->setActive();
@@ -84,6 +110,7 @@ class TabManager {
    * Get tabs.
    *
    * @return array
+   *   Return array of tabs.
    */
   public function getTabs() {
     if (empty($this->tabs)) {
@@ -113,14 +140,33 @@ class TabManager {
       }
     }
 
+    // Sort tabs by weight.
     uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
+    // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
 
     foreach ($configTabs as $tab) {
-      $id = $tab['id'];
-      $widget_id = isset($tab['widget_id']) ? $tab['widget_id'] : '';
-      $route = $tab['route'];
+      $id = NULL;
+      $widget_id = NULL;
+      $route = NULL;
+      // Validate required parameters.
+      try {
+        $obj = print_r((object) $tab, TRUE);
+        if (!$id = $tab['id']) {
+          throw new Exception('Tab ID parameter missing ' . $obj);
+        };
+        if (!$widget_id = $tab['widget_id']) {
+          throw new Exception('Tab widget_id parameter missing ' . $obj);
+        };
+        if (!$route = $tab['route']) {
+          throw new Exception('Tab route parameter missing ' . $obj);
+        }
+      }
+      catch (Exception $e) {
+        print $e->getMessage();
+      }
+
       $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {
@@ -128,7 +174,7 @@ class TabManager {
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
         $disabled = isset($tab['disabled']) ? $tab['disabled'] : FALSE;
-        $badge = isset($tab['badge']) ? $tab['badge'] : NULL;
+        $badge = isset($tab['badge']) ? $tab['badge'] : '';
         $active = FALSE;
         $this->addTab(new Tab($id, $widget_id, $url, $title, $active, $disabled, $badge));
       }
@@ -139,11 +185,12 @@ class TabManager {
    * Add tab.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
    */
   public function addTab(Tab $tab) {
     $key = $this->getTabKey($tab);
     $this->tabs[$key] = $tab;
-    // Remove tab if exists and is disabled
+    // Remove tab if exists and is disabled.
     if (isset($this->tabs[$key]) && $tab->isDisabled()) {
       unset($this->tabs[$key]);
     }

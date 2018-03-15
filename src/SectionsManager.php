@@ -1,72 +1,98 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jakubhnilicka
- * Date: 07.02.18
- * Time: 20:19
- */
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * SectionsManager.php.
+ */
+
 use Drupal\Core\Extension\ModuleHandler;
 
-class SectionManager {
+/**
+ * Class SectionsManager.
+ *
+ * @package Drupal\adminic_toolbar
+ */
+class SectionsManager {
 
   /**
+   * Discovery manager.
+   *
    * @var \Drupal\adminic_toolbar\DiscoveryManager
    */
   private $discoveryManager;
 
   /**
+   * Route manager.
+   *
    * @var \Drupal\adminic_toolbar\RouteManager
    */
   private $routeManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\LinkManager
+   * Links manager.
+   *
+   * @var \Drupal\adminic_toolbar\LinksManager
    */
   private $linkManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\TabManager
+   * Tabs manager.
+   *
+   * @var \Drupal\adminic_toolbar\TabsManager
    */
   private $tabManager;
 
   /**
+   * Sections.
+   *
    * @var array
    */
   private $sections = [];
 
   /**
+   * Active sections.
+   *
    * @var array
    */
   private $activeSections = [];
 
   /**
+   * Class that manages modules in a Drupal installation.
+   *
    * @var \Drupal\Core\Extension\ModuleHandler
    */
   private $moduleHandler;
 
   /**
+   * Toolbar widget plugin manager.
+   *
    * @var \Drupal\adminic_toolbar\ToolbarWidgetPluginManager
    */
   private $toolbarWidgetPluginManager;
 
   /**
-   * SectionManager constructor.
+   * SectionsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
+   *   Discovery manager.
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
-   * @param \Drupal\adminic_toolbar\LinkManager $linkManager
-   * @param \Drupal\adminic_toolbar\TabManager $tabManager
+   *   Route manager.
+   * @param \Drupal\adminic_toolbar\LinksManager $linkManager
+   *   Links manager.
+   * @param \Drupal\adminic_toolbar\TabsManager $tabManager
+   *   Tabs manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
+   *   Class that manages modules in a Drupal installation.
    * @param \Drupal\adminic_toolbar\ToolbarWidgetPluginManager $toolbarWidgetPluginManager
+   *   Toolbar widget plugin manager.
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
     RouteManager $routeManager,
-    LinkManager $linkManager,
-    TabManager $tabManager,
+    LinksManager $linkManager,
+    TabsManager $tabManager,
     ModuleHandler $moduleHandler,
     ToolbarWidgetPluginManager $toolbarWidgetPluginManager) {
     $this->discoveryManager = $discoveryManager;
@@ -82,15 +108,17 @@ class SectionManager {
    *
    * @return array
    *   Array of sections.
+   *
+   * @throws \Exception
    */
   public function getPrimarySections(): array {
     $sections = $this->getSections();
 
     $primarySections = array_filter(
       $sections, function ($section) {
-      /** @var \Drupal\adminic_toolbar\Section $section */
-      return $section->getTab() == NULL;
-    }
+        /** @var \Drupal\adminic_toolbar\Section $section */
+        return $section->getTab() == NULL;
+      }
     );
 
     return $primarySections;
@@ -100,6 +128,9 @@ class SectionManager {
    * Get sections.
    *
    * @return array
+   *   Retrun array of sections.
+   *
+   * @throws \Exception
    */
   public function getSections() {
     if (empty($this->sections)) {
@@ -111,6 +142,8 @@ class SectionManager {
 
   /**
    * Get all defined sections from all config files.
+   *
+   * @throws \Exception
    */
   protected function parseSections() {
     $this->setActiveLinks();
@@ -137,10 +170,10 @@ class SectionManager {
     foreach ($configSections as $section) {
       if ($section['set'] == $this->discoveryManager->getActiveSet()) {
         $id = $section['id'];
-        $title = isset($section['title']) ? $section['title'] : NULL;
-        $tab_id = isset($section['tab_id']) ? $section['tab_id'] : NULL;
+        $title = isset($section['title']) ? $section['title'] : '';
+        $tab_id = isset($section['tab_id']) ? $section['tab_id'] : '';
         $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
-        $type = isset($section['type']) ? $section['type'] : NULL;
+        $type = isset($section['type']) ? $section['type'] : '';
         $newSection = new Section($id, $title, $tab_id, $disabled, $type);
         $this->addSection($newSection);
         if ($activeLink && $id == $activeLink->getWidget()) {
@@ -154,6 +187,8 @@ class SectionManager {
 
   /**
    * Set active links.
+   *
+   * @throws \Exception
    */
   protected function setActiveLinks() {
     /** @var \Drupal\adminic_toolbar\Link $link */
@@ -189,16 +224,26 @@ class SectionManager {
    * Add section.
    *
    * @param \Drupal\adminic_toolbar\Section $section
+   *   Section.
    */
   public function addSection(Section $section) {
     $key = $this->getSectionKey($section);
     $this->sections[$key] = $section;
-    // Remove section if exists and is disabled
+    // Remove section if exists and is disabled.
     if (isset($this->sections[$key]) && $section->isDisabled()) {
       unset($this->sections[$key]);
     }
   }
 
+  /**
+   * Get section key.
+   *
+   * @param \Drupal\adminic_toolbar\Section $section
+   *   Section.
+   *
+   * @return string
+   *   Return section key.
+   */
   protected function getSectionKey(Section $section) {
     return $section->getId();
   }
@@ -207,6 +252,7 @@ class SectionManager {
    * Add active section.
    *
    * @param \Drupal\adminic_toolbar\Section $section
+   *   Section.
    */
   public function addActiveSection(Section $section) {
     $this->activeSections[] = $section;
@@ -253,7 +299,7 @@ class SectionManager {
   /**
    * Get first active section.
    *
-   * @return \Drupal\adminic_toolbar\Section|NULL
+   * @return \Drupal\adminic_toolbar\Section|null
    *   Return first active section or NULL.
    */
   public function getActiveSection() {
@@ -280,9 +326,9 @@ class SectionManager {
 
     $sectionValidTabs = array_filter(
       $tabs, function ($tab) use ($sectionId) {
-      /** @var \Drupal\adminic_toolbar\Tab $tab */
-      return $tab->getSection() == $sectionId;
-    }
+        /** @var \Drupal\adminic_toolbar\Tab $tab */
+        return $tab->getWidget() == $sectionId;
+      }
     );
 
     $sectionTabs = [];
@@ -304,6 +350,9 @@ class SectionManager {
    * Get secondary sections wrappers.
    *
    * @return array
+   *   Return array of secondary section wrappers.
+   *
+   * @throws \Exception
    */
   public function getSecondarySectionWrappers() {
     $tabs = $this->tabManager->getTabs();
@@ -326,8 +375,12 @@ class SectionManager {
    * Get secondary sections by tab.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
    *
    * @return array
+   *   Return array of secondary sections for specified tab.
+   *
+   * @throws \Exception
    */
   protected function getSecondarySectionsByTab(Tab $tab) {
     $sections = $this->getSections();
@@ -335,10 +388,10 @@ class SectionManager {
     /** @var \Drupal\adminic_toolbar\Tab $tab */
     $secondarySections = array_filter(
       $sections, function ($section) use ($tab) {
-      /** @var \Drupal\adminic_toolbar\Section $section */
-      $sectionTab = $section->getTab();
-      return !empty($sectionTab) && $sectionTab == $tab->getId();
-    }
+        /** @var \Drupal\adminic_toolbar\Section $section */
+        $sectionTab = $section->getTab();
+        return !empty($sectionTab) && $sectionTab == $tab->getId();
+      }
     );
 
     if (empty($secondarySections)) {
@@ -368,6 +421,8 @@ class SectionManager {
    *
    * @return array|null
    *   Retrun renderable array or null.
+   *
+   * @throws \Exception
    */
   protected function getSecondarySection(Section $section) {
     if ($section->hasType()) {
@@ -381,9 +436,9 @@ class SectionManager {
 
     $sectionValidLinks = array_filter(
       $links, function ($link) use ($sectionId) {
-      /** @var \Drupal\adminic_toolbar\Link $link */
-      return $link->getWidget() == $sectionId;
-    }
+        /** @var \Drupal\adminic_toolbar\Link $link */
+        return $link->getWidget() == $sectionId;
+      }
     );
 
     if (empty($sectionValidLinks)) {

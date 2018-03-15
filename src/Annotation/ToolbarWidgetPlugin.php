@@ -2,6 +2,11 @@
 
 namespace Drupal\adminic_toolbar\Annotation;
 
+/**
+ * @file
+ * ToolbarWidgetPlugin.php.
+ */
+
 use Drupal\Component\Annotation\Plugin;
 
 /**
@@ -13,4 +18,5 @@ class ToolbarWidgetPlugin extends Plugin {
 
   public $id;
   public $name;
+
 }
