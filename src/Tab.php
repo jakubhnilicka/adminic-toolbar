@@ -2,56 +2,90 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * Tab.php.
+ */
+
 use Drupal\Core\Url;
 
+/**
+ * Class Tab.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class Tab {
 
   /**
+   * Tab ID.
+   *
    * @var string
    */
   private $id;
 
   /**
+   * Widget where tab belong to.
+   *
    * @var string
    */
-  private $section;
+  private $widget;
 
   /**
+   * URL object for tab.
+   *
    * @var \Drupal\Core\Url
    */
   private $url;
 
   /**
+   * Tab title.
+   *
    * @var string
    */
   private $title;
 
   /**
+   * Tab active state.
+   *
    * @var bool
    */
   private $active;
 
   /**
+   * Tab disabled state.
+   *
    * @var bool
    */
   private $disabled;
 
+  /**
+   * Tab badge.
+   *
+   * @var string
+   */
   private $badge;
 
   /**
    * Tab constructor.
    *
    * @param string $id
-   * @param string $section
+   *   Tab ID.
+   * @param string $widget
+   *   Widget where tab belong to.
    * @param \Drupal\Core\Url $url
+   *   URL object for tab.
    * @param string $title
+   *   Tab title.
    * @param bool $active
+   *   Tab active state.
    * @param bool $disabled
-   * @param $badge
+   *   Tab disabled state.
+   * @param string $badge
+   *   Tab badge.
    */
-  public function __construct(string $id, string $section, Url $url, string $title, bool $active, bool $disabled, $badge) {
+  public function __construct(string $id, string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
     $this->id = $id;
-    $this->section = $section;
+    $this->widget = $widget;
     $this->url = $url;
     $this->title = $title;
     $this->active = $active;
@@ -60,47 +94,23 @@ class Tab {
   }
 
   /**
-   * Get tab section.
+   * Get tab id.
    *
    * @return string
-   *   Return tab section.
+   *   Return tab id.
    */
-  public function getSection() {
-    return $this->section;
+  public function getId() {
+    return $this->id;
   }
 
   /**
-   * Get tab state.
+   * Get tab widget.
    *
    * @return string
-   *   Return tab active state.
+   *   Return tab widget.
    */
-  public function isDisabled() {
-    return $this->active;
-  }
-
-  /**
-   * Set tab as inactive.
-   */
-  public function setInactive() {
-    $this->active = FALSE;
-  }
-
-  /**
-   * Return tab render array.
-   *
-   * @return array
-   *   Return tab render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section_tab',
-      '#title' => $this->getTitle(),
-      '#route' => $this->getUrl(),
-      '#active' => $this->isActive(),
-      '#id' => $this->getId(),
-      '#badge' => $this->getBadge(),
-    ];
+  public function getWidget() {
+    return $this->widget;
   }
 
   /**
@@ -114,10 +124,10 @@ class Tab {
   }
 
   /**
-   * Get tab route.
+   * Get tab URL.
    *
    * @return string
-   *   Return tab route.
+   *   Return link URL as string.
    */
   public function getUrl() {
     /** @var \Drupal\Core\Url $url */
@@ -125,21 +135,28 @@ class Tab {
     return $url->toString();
   }
 
+  /**
+   * Get tab URL object.
+   *
+   * @return \Drupal\Core\Url
+   *   Return tab URL object.
+   */
   public function getRawUrl() {
     return $this->url;
   }
+
   /**
-   * Get badge route.
+   * Get tab badge.
    *
    * @return string
-   *   Return tab route.
+   *   Return tab badge.
    */
   public function getBadge() {
     return $this->badge;
   }
 
   /**
-   * Get tab state.
+   * Is tab active.
    *
    * @return string
    *   Return tab active state.
@@ -156,13 +173,37 @@ class Tab {
   }
 
   /**
-   * Get tab id.
+   * Set tab as inactive.
+   */
+  public function setInactive() {
+    $this->active = FALSE;
+  }
+
+  /**
+   * Is tab disabled.
    *
    * @return string
-   *   Return tab id.
+   *   If disabled return TRUE else FALSE.
    */
-  public function getId() {
-    return $this->id;
+  public function isDisabled() {
+    return $this->disabled;
+  }
+
+  /**
+   * Return tab render array.
+   *
+   * @return array
+   *   Return tab render array.
+   */
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section_tab',
+      '#id' => $this->getId(),
+      '#title' => $this->getTitle(),
+      '#route' => $this->getUrl(),
+      '#active' => $this->isActive(),
+      '#badge' => $this->getBadge(),
+    ];
   }
 
 }

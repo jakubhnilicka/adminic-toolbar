@@ -38,14 +38,14 @@ class Link {
   private $title;
 
   /**
-   * Link is active.
+   * Link active state.
    *
    * @var bool
    */
   private $active;
 
   /**
-   * Link is disabled.
+   * Link disabled state.
    *
    * @var bool
    */
@@ -68,9 +68,9 @@ class Link {
    * @param string $title
    *   Link title.
    * @param bool $active
-   *   Link is active.
+   *   Link active state.
    * @param bool $disabled
-   *   Link is disabled.
+   *   Link disabled state
    * @param string $badge
    *   Link badge.
    */
@@ -163,7 +163,7 @@ class Link {
    * Is link disabled.
    *
    * @return bool
-   *   If disabled return TRUE eles FALSE.
+   *   If disabled return TRUE else FALSE.
    */
   public function isDisabled() {
     return $this->disabled;
