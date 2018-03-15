@@ -2,32 +2,53 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * LinksManager.php.
+ */
+
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
+use Exception;
 
+/**
+ * Class LinksManager.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class LinksManager {
 
   /**
+   * Discovery manager.
+   *
    * @var \Drupal\adminic_toolbar\DiscoveryManager
    */
   private $discoveryManager;
 
   /**
+   * Route manager.
+   *
    * @var \Drupal\adminic_toolbar\RouteManager
    */
   private $routeManager;
 
   /**
+   * Array of links.
+   *
    * @var array
    */
   private $links = [];
 
   /**
+   * Array of active links.
+   *
    * @var array
    */
   private $activeLinks = [];
 
   /**
+   * Class that manages modules in a Drupal installation.
+   *
    * @var \Drupal\Core\Extension\ModuleHandler
    */
   private $moduleHandler;
@@ -36,8 +57,11 @@ class LinksManager {
    * LinksManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
+   *   Discovery manager.
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
+   *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
@@ -74,7 +98,7 @@ class LinksManager {
     $routeName = $url->getRouteName();
     $routeParams = $url->getRouteParameters();
     $routeParams = implode('.', $routeParams);
-    $routeParams = empty($routeParams) ? '': '.' . $routeParams;
+    $routeParams = empty($routeParams) ? '' : '.' . $routeParams;
     $key = $routeName . $routeParams;
     return sprintf('%s.%s', $link->getWidget(), $key);
   }
@@ -83,6 +107,9 @@ class LinksManager {
    * Get links.
    *
    * @return array
+   *   Return array of links.
+   *
+   * @throws \Exception
    */
   public function getLinks() {
     if (empty($this->links)) {
@@ -109,19 +136,32 @@ class LinksManager {
         }
       }
     }
+
+    // Sort links by weight.
     uasort($configLinks, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
+    // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
     foreach ($configLinks as $link) {
-      if (!$widget_id = $link['widget_id']) {
-        $obj = print_r((object) $link, TRUE);
-        throw new \Exception('Link widget_id missing ' . $obj);
-      };
-      if (!$route = $link['route']) {
-        $obj = print_r((object) $link, TRUE);
-        throw new \Exception('Link route missing ' . $obj);
+      $widget_id = NULL;
+      $route = NULL;
+      // Validate required parameters.
+      try {
+        // TODO: print object as defined in yml file.
+        $obj = json_encode($link);
+        if (!$widget_id = $link['widget_id']) {
+          throw new Exception('Link widget_id parameter missing ' . $obj);
+        };
+        if (!$route = $link['route']) {
+          throw new Exception('Link route parameter missing ' . $obj);
+        }
       }
+      catch (Exception $e) {
+        print $e->getMessage();
+        return;
+      }
+
       $route_params = isset($link['route_params']) ? $link['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid) {
@@ -146,7 +186,7 @@ class LinksManager {
   public function addLink(Link $link) {
     $key = $this->getLinkKey($link);
     $this->links[$key] = $link;
-    // Remove link if exists and is disabled
+    // Remove link if exists and is disabled.
     if (isset($this->links[$key]) && $link->isDisabled()) {
       unset($this->links[$key]);
     }

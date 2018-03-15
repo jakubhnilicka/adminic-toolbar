@@ -9,6 +9,7 @@ namespace Drupal\adminic_toolbar;
 
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
+use Exception;
 
 /**
  * Class TabsManager.
@@ -146,9 +147,26 @@ class TabsManager {
     $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
 
     foreach ($configTabs as $tab) {
-      $id = $tab['id'];
-      $widget_id = isset($tab['widget_id']) ? $tab['widget_id'] : '';
-      $route = $tab['route'];
+      $id = NULL;
+      $widget_id = NULL;
+      $route = NULL;
+      // Validate required parameters.
+      try {
+        $obj = print_r((object) $tab, TRUE);
+        if (!$id = $tab['id']) {
+          throw new Exception('Tab ID parameter missing ' . $obj);
+        };
+        if (!$widget_id = $tab['widget_id']) {
+          throw new Exception('Tab widget_id parameter missing ' . $obj);
+        };
+        if (!$route = $tab['route']) {
+          throw new Exception('Tab route parameter missing ' . $obj);
+        }
+      }
+      catch (Exception $e) {
+        print $e->getMessage();
+      }
+
       $route_params = isset($tab['route_params']) ? $tab['route_params'] : [];
       $isValid = $this->routeManager->isRouteValid($route, $route_params);
       if ($isValid && $tab['set'] == $this->discoveryManager->getActiveSet()) {

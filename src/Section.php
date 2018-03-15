@@ -125,7 +125,7 @@ class Section {
    *   Return TRUE if type is defined or FALSE.
    */
   public function hasType() {
-    return !is_null($this->type);
+    return !empty($this->type);
   }
 
   /**
