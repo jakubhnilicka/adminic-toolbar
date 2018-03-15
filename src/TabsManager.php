@@ -5,7 +5,7 @@ namespace Drupal\adminic_toolbar;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
 
-class TabManager {
+class TabsManager {
 
   /**
    * @var \Drupal\adminic_toolbar\DiscoveryManager
@@ -33,7 +33,7 @@ class TabManager {
   private $moduleHandler;
 
   /**
-   * TabManager constructor.
+   * TabsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager

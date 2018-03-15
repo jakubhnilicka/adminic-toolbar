@@ -5,7 +5,7 @@ namespace Drupal\adminic_toolbar;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
 
-class LinkManager {
+class LinksManager {
 
   /**
    * @var \Drupal\adminic_toolbar\DiscoveryManager
@@ -33,7 +33,7 @@ class LinkManager {
   private $moduleHandler;
 
   /**
-   * LinkManager constructor.
+   * LinksManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager

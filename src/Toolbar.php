@@ -2,43 +2,67 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * Toolbar.php.
+ */
+
 use Drupal\Core\Config\Config;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxy;
 
+/**
+ * Class Toolbar.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class Toolbar {
 
   /**
+   * Defines the default configuration object.
+   *
    * @var \Drupal\Core\Config\Config
    */
   private $systemSite;
 
   /**
+   * Default object for current_route_match service.
+   *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
   private $currentRouteMatch;
 
   /**
-   * @var \Drupal\user\Plugin\views\argument_default\CurrentUser
+   * A proxied implementation of AccountInterface.
+   *
+   * @var \Drupal\Core\Session\AccountProxy
    */
   private $currentUser;
 
   /**
-   * @var \Drupal\adminic_toolbar\TabManager
+   * Tabs manager.
+   *
+   * @var \Drupal\adminic_toolbar\TabsManager
    */
-  private $tabManager;
+  private $tabsManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\LinkManager
+   * Links manager.
+   *
+   * @var \Drupal\adminic_toolbar\LinksManager
    */
-  private $linkManager;
+  private $linksManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\SectionManager
+   * Sections manager.
+   *
+   * @var \Drupal\adminic_toolbar\SectionsManager
    */
-  private $sectionManager;
+  private $sectionsManager;
 
   /**
+   * Toolbar widget plugin manager.
+   *
    * @var \Drupal\adminic_toolbar\ToolbarWidgetPluginManager
    */
   private $toolbarWidgetPluginManager;
@@ -47,25 +71,32 @@ class Toolbar {
    * Toolbar constructor.
    *
    * @param \Drupal\Core\Config\Config $systemSite
+   *   Defines the default configuration object.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   Default object for current_route_match service.
    * @param \Drupal\Core\Session\AccountProxy $currentUser
+   *   A proxied implementation of AccountInterface.
    * @param \Drupal\adminic_toolbar\ToolbarWidgetPluginManager $toolbarWidgetPluginManager
-   * @param \Drupal\adminic_toolbar\TabManager $tabManager
-   * @param \Drupal\adminic_toolbar\LinkManager $linkManager
-   * @param \Drupal\adminic_toolbar\SectionManager $sectionManager
+   *   Toolbar widget plugin manager.
+   * @param \Drupal\adminic_toolbar\TabsManager $tabsManager
+   *   Tabs manager.
+   * @param \Drupal\adminic_toolbar\LinksManager $linksManager
+   *   Links manager.
+   * @param \Drupal\adminic_toolbar\SectionsManager $sectionsManager
+   *   Sections manager.
    */
   public function __construct(
     Config $systemSite,
     CurrentRouteMatch $currentRouteMatch,
     AccountProxy $currentUser,
     ToolbarWidgetPluginManager $toolbarWidgetPluginManager,
-    TabManager $tabManager,
-    LinkManager $linkManager,
-    SectionManager $sectionManager) {
+    TabsManager $tabsManager,
+    LinksManager $linksManager,
+    SectionsManager $sectionsManager) {
     $this->currentUser = $currentUser;
-    $this->tabManager = $tabManager;
-    $this->linkManager = $linkManager;
-    $this->sectionManager = $sectionManager;
+    $this->tabsManager = $tabsManager;
+    $this->linksManager = $linksManager;
+    $this->sectionsManager = $sectionsManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->systemSite = $systemSite;
     $this->toolbarWidgetPluginManager = $toolbarWidgetPluginManager;
@@ -75,14 +106,14 @@ class Toolbar {
    * Get render array for primary toolbar.
    *
    * @return array|null
-   *   Retrun renderable array or null.
+   *   Retrun renderable array or null if empty.
    */
   public function getPrimaryToolbar() {
     if (!$this->userCanAccessToolbar()) {
       return NULL;
     }
 
-    $primarySections = $this->sectionManager->getPrimarySections();
+    $primarySections = $this->sectionsManager->getPrimarySections();
     $widgets = [];
 
     /** @var \Drupal\adminic_toolbar\Section $section */
@@ -93,12 +124,12 @@ class Toolbar {
         $widgets[] = $widget->getRenderArray();
       }
       else {
-        $widgets[] = $this->sectionManager->getPrimarySection($section);
+        $widgets[] = $this->sectionsManager->getPrimarySection($section);
       }
     }
 
-    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')
-      ->getRenderArray();
+    // Append user account to primary toolbar.
+    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_header',
@@ -115,8 +146,8 @@ class Toolbar {
         '#user_account' => $userAccount,
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [
-          //'keys' => ['toolbar_primary'],
-          //'contexts' => ['user.permissions', 'url.path'],
+          'keys' => ['toolbar_primary'],
+          'contexts' => ['user.permissions', 'url.path'],
         ],
       ];
     }
@@ -145,16 +176,13 @@ class Toolbar {
       return NULL;
     }
 
-    $secondaryWrappers = $this->sectionManager->getSecondarySectionWrappers();
+    $secondaryWrappers = $this->sectionsManager->getSecondarySectionWrappers();
+
     /** @var \Drupal\adminic_toolbar\Tab $activeTab */
-    $activeTab = $this->tabManager->getActiveTab();
     $wrappers = [];
 
     foreach ($secondaryWrappers as $key => $wrapper) {
       $active = FALSE;
-      if (!empty($activeTab)) {
-        //$active = ($key == $activeTab->getId());
-      }
       if ($wrapper['sections']) {
         $header = [
           '#theme' => 'toolbar_header',

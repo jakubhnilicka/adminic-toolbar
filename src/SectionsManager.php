@@ -10,7 +10,7 @@ namespace Drupal\adminic_toolbar;
 
 use Drupal\Core\Extension\ModuleHandler;
 
-class SectionManager {
+class SectionsManager {
 
   /**
    * @var \Drupal\adminic_toolbar\DiscoveryManager
@@ -23,12 +23,12 @@ class SectionManager {
   private $routeManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\LinkManager
+   * @var \Drupal\adminic_toolbar\LinksManager
    */
   private $linkManager;
 
   /**
-   * @var \Drupal\adminic_toolbar\TabManager
+   * @var \Drupal\adminic_toolbar\TabsManager
    */
   private $tabManager;
 
@@ -53,20 +53,20 @@ class SectionManager {
   private $toolbarWidgetPluginManager;
 
   /**
-   * SectionManager constructor.
+   * SectionsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
-   * @param \Drupal\adminic_toolbar\LinkManager $linkManager
-   * @param \Drupal\adminic_toolbar\TabManager $tabManager
+   * @param \Drupal\adminic_toolbar\LinksManager $linkManager
+   * @param \Drupal\adminic_toolbar\TabsManager $tabManager
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    * @param \Drupal\adminic_toolbar\ToolbarWidgetPluginManager $toolbarWidgetPluginManager
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
     RouteManager $routeManager,
-    LinkManager $linkManager,
-    TabManager $tabManager,
+    LinksManager $linkManager,
+    TabsManager $tabManager,
     ModuleHandler $moduleHandler,
     ToolbarWidgetPluginManager $toolbarWidgetPluginManager) {
     $this->discoveryManager = $discoveryManager;
