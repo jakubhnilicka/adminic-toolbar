@@ -2,32 +2,52 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * TabsManager.php.
+ */
+
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
 
+/**
+ * Class TabsManager.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class TabsManager {
 
   /**
+   * Discovery manager.
+   *
    * @var \Drupal\adminic_toolbar\DiscoveryManager
    */
   private $discoveryManager;
 
   /**
+   * Route manager.
+   *
    * @var \Drupal\adminic_toolbar\RouteManager
    */
   private $routeManager;
 
   /**
+   * Tabs.
+   *
    * @var array
    */
   private $tabs = [];
 
   /**
+   * Active tabs.
+   *
    * @var array
    */
   private $activeTabs = [];
 
   /**
+   * Class that manages modules in a Drupal installation.
+   *
    * @var \Drupal\Core\Extension\ModuleHandler
    */
   private $moduleHandler;
@@ -36,8 +56,11 @@ class TabsManager {
    * TabsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
+   *   Discovery manager.
    * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
+   *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
@@ -52,6 +75,7 @@ class TabsManager {
    * Add tab to active tabs.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
    */
   public function addActiveTab(Tab $tab) {
     $key = $this->getTabKey($tab);
@@ -75,6 +99,7 @@ class TabsManager {
    * Set tab as active.
    *
    * @param string $key
+   *   Tab key.
    */
   public function setActive(string $key) {
     $this->tabs[$key]->setActive();
@@ -84,6 +109,7 @@ class TabsManager {
    * Get tabs.
    *
    * @return array
+   *   Return array of tabs.
    */
   public function getTabs() {
     if (empty($this->tabs)) {
@@ -113,8 +139,10 @@ class TabsManager {
       }
     }
 
+    // Sort tabs by weight.
     uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
+    // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
 
     foreach ($configTabs as $tab) {
@@ -139,11 +167,12 @@ class TabsManager {
    * Add tab.
    *
    * @param \Drupal\adminic_toolbar\Tab $tab
+   *   Tab.
    */
   public function addTab(Tab $tab) {
     $key = $this->getTabKey($tab);
     $this->tabs[$key] = $tab;
-    // Remove tab if exists and is disabled
+    // Remove tab if exists and is disabled.
     if (isset($this->tabs[$key]) && $tab->isDisabled()) {
       unset($this->tabs[$key]);
     }
