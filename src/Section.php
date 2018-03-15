@@ -65,17 +65,17 @@ class Section {
    *   Section title.
    * @param string $tab
    *   Tab where section belongs to.
-   * @param string $type
-   *   Type of section.
    * @param bool $disabled
    *   Section disabled state.
+   * @param string $type
+   *   Type of section.
    */
   public function __construct(string $id, string $title, string $tab, bool $disabled, string $type) {
     $this->id = $id;
     $this->title = $title;
     $this->tab = $tab;
-    $this->type = $type;
     $this->disabled = $disabled;
+    $this->type = $type;
   }
 
   /**
