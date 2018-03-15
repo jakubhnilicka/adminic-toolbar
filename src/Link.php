@@ -2,48 +2,79 @@
 
 namespace Drupal\adminic_toolbar;
 
+/**
+ * @file
+ * Link.php.
+ */
+
 use Drupal\Core\Url;
 
+/**
+ * Class Link.
+ *
+ * @package Drupal\adminic_toolbar
+ */
 class Link {
 
   /**
+   * Widget where link belong to.
+   *
    * @var string
    */
   private $widget;
 
   /**
+   * URL object for link.
+   *
    * @var \Drupal\Core\Url
    */
   private $url;
 
   /**
+   * Link title.
+   *
    * @var string
    */
   private $title;
 
-  /*
+  /**
+   * Link is active.
+   *
    * @var bool
    */
   private $active;
 
   /**
+   * Link is disabled.
+   *
    * @var bool
    */
   private $disabled;
 
+  /**
+   * Link badge.
+   *
+   * @var string
+   */
   private $badge;
 
   /**
    * Link constructor.
    *
    * @param string $widget
+   *   Widget where link belong to.
    * @param \Drupal\Core\Url $url
+   *   URL object for link.
    * @param string $title
+   *   Link title.
    * @param bool $active
+   *   Link is active.
    * @param bool $disabled
-   * @param $badge
+   *   Link is disabled.
+   * @param string $badge
+   *   Link badge.
    */
-  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, $badge) {
+  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
     $this->widget = $widget;
     $this->url = $url;
     $this->title = $title;
@@ -53,43 +84,13 @@ class Link {
   }
 
   /**
-   * Get link section.
+   * Get link widget.
    *
    * @return string
-   *   Return link section.
+   *   Return link widget.
    */
   public function getWidget() {
     return $this->widget;
-  }
-
-  public function getBadge() {
-    return $this->badge;
-  }
-  /**
-   * Set link as inactive.
-   */
-  public function setInactive() {
-    $this->active = FALSE;
-  }
-
-  public function isDisabled() {
-    return $this->disabled;
-  }
-
-  /**
-   * Return link render array.
-   *
-   * @return array
-   *   Return links render array.
-   */
-  public function getRenderArray() {
-    return [
-      '#theme' => 'toolbar_section_link',
-      '#title' => $this->getTitle(),
-      '#route' => $this->getUrl(),
-      '#active' => $this->isActive(),
-      '#badge' => $this->getBadge(),
-    ];
   }
 
   /**
@@ -103,10 +104,10 @@ class Link {
   }
 
   /**
-   * Get link route.
+   * Get link URL.
    *
    * @return string
-   *   Return link route.
+   *   Return link URL as string.
    */
   public function getUrl() {
     /** @var \Drupal\Core\Url $url */
@@ -114,8 +115,24 @@ class Link {
     return $url->toString();
   }
 
+  /**
+   * Get link URL object.
+   *
+   * @return \Drupal\Core\Url
+   *   Return link URL object.
+   */
   public function getRawUrl() {
     return $this->url;
+  }
+
+  /**
+   * Get link badge.
+   *
+   * @return mixed
+   *   Return link badge.
+   */
+  public function getBadge() {
+    return $this->badge;
   }
 
   /**
@@ -133,6 +150,39 @@ class Link {
    */
   public function setActive() {
     $this->active = TRUE;
+  }
+
+  /**
+   * Set link as inactive.
+   */
+  public function setInactive() {
+    $this->active = FALSE;
+  }
+
+  /**
+   * Is link disabled.
+   *
+   * @return bool
+   *   If disabled return TRUE eles FALSE.
+   */
+  public function isDisabled() {
+    return $this->disabled;
+  }
+
+  /**
+   * Return link render array.
+   *
+   * @return array
+   *   Return link render array.
+   */
+  public function getRenderArray() {
+    return [
+      '#theme' => 'toolbar_section_link',
+      '#title' => $this->getTitle(),
+      '#route' => $this->getUrl(),
+      '#active' => $this->isActive(),
+      '#badge' => $this->getBadge(),
+    ];
   }
 
 }
