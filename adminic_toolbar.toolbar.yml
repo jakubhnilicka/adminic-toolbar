@@ -18,7 +18,7 @@ widgets:
 - {id: 'users.configuration', tab_id: 'users', title: 'Settings'}
 # Block Layout Tab
 - {id: 'blocks.default', tab_id: 'blocks'}
-# Apearance Tab
+# Appearance Tab
 - {id: 'appearance.default', tab_id: 'appearance'}
 - {id: 'appearance.settings', tab_id: 'appearance', title: 'User Account', type: 'appearance_settings'}
 # Extend Tab
