@@ -88,6 +88,8 @@ class SectionsManager {
    *   Class that manages modules in a Drupal installation.
    * @param \Drupal\adminic_toolbar\ToolbarWidgetPluginManager $toolbarWidgetPluginManager
    *   Toolbar widget plugin manager.
+   *
+   * @todo Check names for $linkManager, $tabManager, when classes are LinksManager, TabsManager.
    */
   public function __construct(
     DiscoveryManager $discoveryManager,
@@ -112,7 +114,7 @@ class SectionsManager {
    *
    * @throws \Exception
    */
-  public function getPrimarySections(): array {
+  public function getPrimarySections() {
     $sections = $this->getSections();
 
     $primarySections = array_filter(
@@ -129,7 +131,7 @@ class SectionsManager {
    * Get sections.
    *
    * @return array
-   *   Retrun array of sections.
+   *   Return array of sections.
    *
    * @throws \Exception
    */
@@ -179,35 +181,18 @@ class SectionsManager {
   /**
    * Set active links.
    *
+   * @todo What do you mean, the link is active?
+   *
    * @throws \Exception
    */
   protected function setActiveLinks() {
-    /** @var \Drupal\adminic_toolbar\Link $link */
-    // Try to select active links from config links hiearchy.
-    $currentRouteName = $this->routeManager->getCurrentRoute();
-    $links = $this->linkManager->getLinks();
-    foreach ($links as $key => &$link) {
-      $url = $link->getRawUrl();
-      $linkRouteName = $url->getRouteName();
-      if ($linkRouteName == $currentRouteName) {
-        $link->setActive();
-        $this->linkManager->addActiveLink($link);
-      }
-    }
+    // Try to select active links from config links hierarchy.
+    $this->setActiveLinksViaConfig();
 
-    // If active links are empty, select active links from routes.
-    $activeLinks = $this->linkManager->getActiveLink();
-    if (empty($activeLinks)) {
-      $activeRoutes = $this->routeManager->getActiveRoutes();
-      $links = $this->linkManager->getLinks();
-      foreach ($links as &$link) {
-        $url = $link->getRawUrl();
-        $linkRouteName = $url->getRouteName();
-        if (array_key_exists($linkRouteName, $activeRoutes)) {
-          $link->setActive();
-          $this->linkManager->addActiveLink($link);
-        }
-      }
+    // If active link is still empty, select active link from routes.
+    $activeLink = $this->linkManager->getActiveLink();
+    if (empty($activeLink)) {
+      $this->setActiveLinksViaRoutes();
     }
   }
 
@@ -220,7 +205,7 @@ class SectionsManager {
   public function addSection(Section $section) {
     $key = $this->getSectionKey($section);
     $this->sections[$key] = $section;
-    // Remove section if exists and is disabled.
+    // Remove section if exists but is disabled.
     if (isset($this->sections[$key]) && $section->isDisabled()) {
       unset($this->sections[$key]);
     }
@@ -251,9 +236,11 @@ class SectionsManager {
 
   /**
    * Set active tabs.
+   *
+   * @todo Refactor after better understanding.
    */
   protected function setActiveTabs() {
-    // Try to get active tabs from tybs hiearchy.
+    // Try to get active tabs from tabs hierarchy.
     $activeSections = $this->getActiveSection();
     $currentRouteName = $this->routeManager->getCurrentRoute();
     $tabs = $this->tabManager->getTabs();
@@ -309,7 +296,7 @@ class SectionsManager {
    *   Section.
    *
    * @return array|null
-   *   Retrun renderable array or NULL.
+   *   Return renderable array or NULL.
    */
   public function getPrimarySection(Section $section) {
     $tabs = $this->tabManager->getTabs();
@@ -374,6 +361,7 @@ class SectionsManager {
    * @throws \Exception
    */
   protected function getSecondarySectionsByTab(Tab $tab) {
+    $renderedSections = [];
     $sections = $this->getSections();
 
     /** @var \Drupal\adminic_toolbar\Tab $tab */
@@ -385,16 +373,8 @@ class SectionsManager {
       }
     );
 
-    if (empty($secondarySections)) {
-      return NULL;
-    }
-
-    $renderedSections = [];
-    foreach ($secondarySections as $key => $secondarySection) {
-      $section = $this->getSecondarySection($secondarySection);
-      if ($section != NULL) {
-        $renderedSections[$key] = $section;
-      }
+    if (!empty($secondarySections)) {
+      $renderedSections = $this->getRenderedSections($secondarySections);
     }
 
     if ($renderedSections) {
@@ -411,7 +391,7 @@ class SectionsManager {
    *   Section.
    *
    * @return array|null
-   *   Retrun renderable array or null.
+   *   Return renderable array or null.
    *
    * @throws \Exception
    */
@@ -489,13 +469,82 @@ class SectionsManager {
   protected function validateSection(array $section) {
     try {
       $obj = json_encode($section);
-      if (!$id = $section['id']) {
+      if (empty($section['id'])) {
         throw new Exception('Section ID parameter missing ' . $obj);
       };
     }
     catch (Exception $e) {
       print $e->getMessage();
     }
+  }
+
+  /**
+   * Select active link from routes.
+   *
+   * @todo Find a better name.
+   */
+  protected function setActiveLinksViaRoutes() {
+    $activeRoutes = $this->routeManager->getActiveRoutes();
+    $links = $this->linkManager->getLinks();
+    foreach ($links as &$link) {
+      /** @var \Drupal\adminic_toolbar\Link $link */
+      $url = $link->getRawUrl();
+      $linkRouteName = $url->getRouteName();
+      if (array_key_exists($linkRouteName, $activeRoutes)) {
+        $this->activateLinkByLink($link);
+      }
+    }
+  }
+
+  /**
+   * Select active links from config links hierarchy.
+   *
+   * @todo Find a better name.
+   */
+  protected function setActiveLinksViaConfig() {
+    $currentRouteName = $this->routeManager->getCurrentRoute();
+    $links = $this->linkManager->getLinks();
+    foreach ($links as &$link) {
+      /** @var \Drupal\adminic_toolbar\Link $link */
+      $url = $link->getRawUrl();
+      $linkRouteName = $url->getRouteName();
+      if ($linkRouteName == $currentRouteName) {
+        $this->activateLinkByLink($link);
+      }
+    }
+  }
+
+  /**
+   * Set link to active and add it to active links.
+   *
+   * @param \Drupal\adminic_toolbar\Link $link
+   *   Link.
+   */
+  protected function activateLinkByLink(Link $link) {
+    $link->setActive();
+    $this->linkManager->addActiveLink($link);
+  }
+
+  /**
+   * Get rendered section.
+   *
+   * @param array $secondarySections
+   *   Array keyed by what?
+   *
+   * @todo Add better explanation.
+   *
+   * @return array
+   *   Array of renderable arrays.
+   */
+  protected function getRenderedSections(array $secondarySections) {
+    $renderedSections = [];
+    foreach ($secondarySections as $key => $secondarySection) {
+      $section = $this->getSecondarySection($secondarySection);
+      if ($section) {
+        $renderedSections[$key] = $section;
+      }
+    }
+    return $renderedSections;
   }
 
 }

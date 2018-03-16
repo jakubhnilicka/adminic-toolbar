@@ -201,6 +201,8 @@ class RouteManager {
   /**
    * Get array of active routes.
    *
+   * @todo Explain, what is Active route.
+   *
    * @return array
    *   Return array of active routes.
    */
@@ -214,6 +216,8 @@ class RouteManager {
 
   /**
    * Set active routes.
+   *
+   * @todo Explain, what is Active route.
    *
    * @return array
    *   Return array of active routes.
