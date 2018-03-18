@@ -1,6 +1,5 @@
 @import "variables";
 .user_account {
-  border-top: 1px solid $primary-divider;
   padding: ($unit * 2) ($unit * 1.5);
   position: relative;
 }
@@ -23,18 +22,15 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: $primary-color;
   line-height: $unit * 3;
   display: none;
 }
 .user_account__links .drdt {
-  border: 1px solid $primary-divider;
   border-radius: $unit / 2;
   line-height: $unit;
   padding: $unit;
   width: $unit * 3;
   height: $unit * 3;
-  color: $primary-color;
   @extend .user_bg;
 }
 .user_account__links .drdc {
@@ -42,18 +38,13 @@
 }
 .user_account__links .drdc a {
   display: block;
-  color: $primary-link;
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: $unit * 2;
   margin: ($unit / 2) 0;
   text-align: left;
 }
-.user_account__links .drdc a:active,
-.user_account__links .drdc a:focus,
-.user_account__links .drdc a:hover {
-  color: $primary-link-hover;
-}
+
 @media only screen and (min-width: $compact-breakpoint) {
   .user_account {
     padding: ($unit * 2);
