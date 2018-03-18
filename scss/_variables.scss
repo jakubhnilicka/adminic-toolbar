@@ -2,28 +2,70 @@ $unit: 8px;
 $compact-breakpoint: 60em;
 $transition_ease: cubic-bezier(.43,.22,.46,.9);
 
+// Primary Toolbar background color.
+$primary-bg: #19212e;
+
+// Primary Toolbar header background color.
+$primary-header-bg: #2056c9;
+// Primary Toolbar header text color.
+$primary-header-color: #fff;
+
+// Primary Toolbar text color.
+$primary-color: #919bad;
+// Primary Toolbar link color.
+$primary-link: $primary-color;
+$primary-link-bg: null;
+// Primary Toolbar link hover color.
+$primary-link-hover: #2056c9;
+$primary-link-hover-bg: darken($primary-bg, 4%);
+// Primary Toolbar link active color.
+$primary-link-active: #39d3d6;
+$primary-link-active-bg: null;
+
+// Primary Toolbar divider color.
+$primary-divider: darken($primary-bg, 4%);
+
+// Primary Toolbar scrollbar background color.
+$primary-scroll-bg: darken($primary-bg, 8%);
+// Primary Toolbar scroll drag background color.
+$primary-scroll: $primary-link-hover;
+
+// Secondary Toolbar background color.
+$secondary-bg: #f2f3f4;
+// Secondary Toolbar header background color.
+$secondary-header-bg: $secondary-bg;
+// Secondary Toolbar header text color.
+$secondary-header-color: #919bad;
+
+// Secondary Toolbar text color.
+$secondary-color: darken(#919bad, 16%);
+// Secondary Toolbar link color.
+$secondary-link: $secondary-color;
+$secondary-link-bg: null;
+// Secondary Toolbar link hover color.
+$secondary-link-hover: #2056c9;
+$secondary-link-hover-bg: darken($secondary-bg, 4%);
+// Secondary Toolbar link active color.
+$secondary-link-active: #2056c9;
+$secondary-link-active-bg: null;
+
+// Secondary Toolbar divider color.
+$secondary-divider: darken($secondary-bg, 4%);
+
+// Secondary Toolbar scrollbar background color.
+$secondary-scroll-bg: darken($secondary-bg, 4%);
+// Secondary Toolbar scroll drag background color.
+$secondary-scroll: darken($secondary-bg, 16%);
+
+
 $primary-width-compact: $unit * 6;
 $primary-width-normal: $unit * 20;
-$primary-bg: #19212e;
-$primary-color: #919bad;
-$primary-link: $primary-color;
-$primary-link-hover: #2056c9;
-$primary-link-active: #fff;
-$primary-header-bg: #2056c9;
-$primary-header-color: #fff;
-$primary-divider: darken($primary-bg, 4%);
-$primary-scroll-bg: darken($primary-bg, 8%);
-$primary-scroll: $primary-link-hover;
 
 $secondary-width-compact: $unit * 24;
 $secondary-width-normal: $unit * 28;
-$secondary-bg: #f2f3f4;
-$secondary-color: #919bad;
-$secondary-link: $primary-color;
-$secondary-link-hover: #2056c9;
-$secondary-link-active: #000;
-$secondary-header-bg: $secondary-bg;
-$secondary-header-color: #919bad;
-$secondary-divider: darken($secondary-bg, 4%);
-$secondary-scroll-bg: darken($secondary-bg, 4%);
-$secondary-scroll: darken($secondary-bg, 16%);
+
+@mixin bg-color($color) {
+  @if $color {
+    background-color: $color;
+  }
+}

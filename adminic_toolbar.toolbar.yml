@@ -1,10 +1,26 @@
 sets:
 - {id: 'default', title: 'Default'}
 
-widgets:
+primary_sections:
 # Primary Tabs
 - {id: 'default'}
 - {id: 'general', title: 'General'}
+
+primary_sections_tabs:
+- {id: 'content', primary_section_id: 'default', route_name: 'system.admin_content'}
+#- {id: 'media', widget_id: 'default', route: 'system.admin_content', disabled: true, title: 'Media'}
+- {id: 'structure', widget_id: 'default', route: 'system.admin_structure'}
+- {id: 'users', widget_id: 'default', route: 'entity.user.collection'}
+- {id: 'blocks', widget_id: 'general', route: 'block.admin_display'}
+- {id: 'appearance', widget_id: 'general', route: 'system.themes_page'}
+- {id: 'extend', widget_id: 'general', route: 'system.modules_list'}
+- {id: 'configuration', widget_id: 'general', route: 'system.admin_config'}
+- {id: 'language', widget_id: 'general', route: 'system.admin_config_regional', title: 'Language'}
+- {id: 'reports', widget_id: 'general', route: 'system.admin_reports'}
+- {id: 'help', widget_id: 'general', route: 'help.main'}
+
+
+secondary_sections:
 # Content Tab
 - {id: 'content.default', tab_id: 'content'}
 # Media Tab
@@ -18,7 +34,7 @@ widgets:
 - {id: 'users.configuration', tab_id: 'users', title: 'Settings'}
 # Block Layout Tab
 - {id: 'blocks.default', tab_id: 'blocks'}
-# Apearance Tab
+# Appearance Tab
 - {id: 'appearance.default', tab_id: 'appearance'}
 - {id: 'appearance.settings', tab_id: 'appearance', title: 'User Account', type: 'appearance_settings'}
 # Extend Tab
@@ -41,22 +57,11 @@ widgets:
 # Help Tab
 - {id: 'help.default', tab_id: 'help'}
 
-tabs:
-- {id: 'content', widget_id: 'default', route: 'system.admin_content'}
-#- {id: 'media', widget_id: 'default', route: 'system.admin_content', disabled: true, title: 'Media'}
-- {id: 'structure', widget_id: 'default', route: 'system.admin_structure'}
-- {id: 'users', widget_id: 'default', route: 'entity.user.collection'}
-- {id: 'blocks', widget_id: 'general', route: 'block.admin_display'}
-- {id: 'appearance', widget_id: 'general', route: 'system.themes_page'}
-- {id: 'extend', widget_id: 'general', route: 'system.modules_list'}
-- {id: 'configuration', widget_id: 'general', route: 'system.admin_config'}
-- {id: 'language', widget_id: 'general', route: 'system.admin_config_regional', title: 'Language'}
-- {id: 'reports', widget_id: 'general', route: 'system.admin_reports'}
-- {id: 'help', widget_id: 'general', route: 'help.main'}
 
-links:
+
+secondary_sections_links:
 # Content Tab
-- {widget_id: 'content.default', route: 'system.admin_content', title: 'Nodes'}
+- {secondary_section_id: 'content.default', route_name: 'system.admin_content', title: 'Nodes'}
 - {widget_id: 'content.default', route: 'comment.admin'}
 - {widget_id: 'content.default', route: 'view.media.media_page_list'}
 - {widget_id: 'content.default', route: 'entity.block_content.collection', title: 'Blocks'}
