@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarWidgetPluginManager.php.
+ * ToolbarPluginManager.php.
  */
 
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -13,11 +13,11 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 use Traversable;
 
 /**
- * Class ToolbarWidgetPluginManager.
+ * Class ToolbarPluginManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarWidgetPluginManager extends DefaultPluginManager {
+class ToolbarPluginManager extends DefaultPluginManager {
 
   /**
    * ToolbarWidgetPluginManager constructor.
@@ -31,15 +31,15 @@ class ToolbarWidgetPluginManager extends DefaultPluginManager {
    */
   public function __construct(Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct(
-      'Plugin/ToolbarWidget',
+      'Plugin/ToolbarPlugin',
       $namespaces,
       $module_handler,
-      'Drupal\adminic_toolbar\ToolbarWidgetPluginInterface',
-      'Drupal\adminic_toolbar\Annotation\ToolbarWidgetPlugin'
+      'Drupal\adminic_toolbar\ToolbarPluginInterface',
+      'Drupal\adminic_toolbar\Annotation\ToolbarPlugin'
     );
 
-    $this->alterInfo('toolbar_widget_info');
-    $this->setCacheBackend($cache_backend, 'toolbar_widget_plugins');
+    $this->alterInfo('toolbar_plugin_info');
+    $this->setCacheBackend($cache_backend, 'toolbar_plugins');
   }
 
 }

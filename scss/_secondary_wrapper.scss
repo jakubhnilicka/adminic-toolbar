@@ -6,7 +6,6 @@
   height: 100vh;
   transform: translateX(-100%);
   transition: all 0.25s $transition_ease;
-  background-color: $secondary-bg;
 }
 .wrapper.active {
   transform: translateX(0);

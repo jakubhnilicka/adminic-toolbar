@@ -42,28 +42,28 @@ class Toolbar {
   /**
    * Tabs manager.
    *
-   * @var \Drupal\adminic_toolbar\TabsManager
+   * @var \Drupal\adminic_toolbar\ToolbarTabsManager
    */
   private $tabsManager;
 
   /**
    * Links manager.
    *
-   * @var \Drupal\adminic_toolbar\LinksManager
+   * @var \Drupal\adminic_toolbar\ToolbarLinksManager
    */
   private $linksManager;
 
   /**
    * Sections manager.
    *
-   * @var \Drupal\adminic_toolbar\SectionsManager
+   * @var \Drupal\adminic_toolbar\ToolbarSectionsManager
    */
   private $sectionsManager;
 
   /**
    * Toolbar widget plugin manager.
    *
-   * @var \Drupal\adminic_toolbar\ToolbarWidgetPluginManager
+   * @var \Drupal\adminic_toolbar\ToolbarPluginManager
    */
   private $toolbarWidgetPluginManager;
 
@@ -76,23 +76,23 @@ class Toolbar {
    *   Default object for current_route_match service.
    * @param \Drupal\Core\Session\AccountProxy $currentUser
    *   A proxied implementation of AccountInterface.
-   * @param \Drupal\adminic_toolbar\ToolbarWidgetPluginManager $toolbarWidgetPluginManager
+   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarWidgetPluginManager
    *   Toolbar widget plugin manager.
-   * @param \Drupal\adminic_toolbar\TabsManager $tabsManager
+   * @param \Drupal\adminic_toolbar\ToolbarTabsManager $tabsManager
    *   Tabs manager.
-   * @param \Drupal\adminic_toolbar\LinksManager $linksManager
+   * @param \Drupal\adminic_toolbar\ToolbarLinksManager $linksManager
    *   Links manager.
-   * @param \Drupal\adminic_toolbar\SectionsManager $sectionsManager
+   * @param \Drupal\adminic_toolbar\ToolbarSectionsManager $sectionsManager
    *   Sections manager.
    */
   public function __construct(
     Config $systemSite,
     CurrentRouteMatch $currentRouteMatch,
     AccountProxy $currentUser,
-    ToolbarWidgetPluginManager $toolbarWidgetPluginManager,
-    TabsManager $tabsManager,
-    LinksManager $linksManager,
-    SectionsManager $sectionsManager) {
+    ToolbarPluginManager $toolbarWidgetPluginManager,
+    ToolbarTabsManager $tabsManager,
+    ToolbarLinksManager $linksManager,
+    ToolbarSectionsManager $sectionsManager) {
     $this->currentUser = $currentUser;
     $this->tabsManager = $tabsManager;
     $this->linksManager = $linksManager;
@@ -107,6 +107,8 @@ class Toolbar {
    *
    * @return array|null
    *   Retrun renderable array or null if empty.
+   *
+   * @throws \Exception
    */
   public function getPrimaryToolbar() {
     if (!$this->userCanAccessToolbar()) {
@@ -116,7 +118,7 @@ class Toolbar {
     $primarySections = $this->sectionsManager->getPrimarySections();
     $widgets = [];
 
-    /** @var \Drupal\adminic_toolbar\Section $section */
+    /** @var \Drupal\adminic_toolbar\ToolbarSection $section */
     foreach ($primarySections as $section) {
       if ($section->hasType()) {
         $type = $section->getType();
@@ -132,7 +134,7 @@ class Toolbar {
     $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')->getRenderArray();
 
     $header = [
-      '#theme' => 'toolbar_header',
+      '#theme' => 'toolbar_primary_header',
       '#title' => t('Drupal'),
       '#title_link' => '<front>',
     ];
@@ -170,6 +172,8 @@ class Toolbar {
    *
    * @return array|null
    *   Retrun renderable array or null.
+   *
+   * @throws \Exception
    */
   public function getSecondaryToolbar() {
     if (!$this->userCanAccessToolbar()) {
@@ -178,14 +182,14 @@ class Toolbar {
 
     $secondaryWrappers = $this->sectionsManager->getSecondarySectionWrappers();
 
-    /** @var \Drupal\adminic_toolbar\Tab $activeTab */
+    /** @var \Drupal\adminic_toolbar\ToolbarTab $activeTab */
     $wrappers = [];
 
     foreach ($secondaryWrappers as $key => $wrapper) {
       $active = FALSE;
       if ($wrapper['sections']) {
         $header = [
-          '#theme' => 'toolbar_header',
+          '#theme' => 'toolbar_secondary_header',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
           '#close' => TRUE,

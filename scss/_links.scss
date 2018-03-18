@@ -3,7 +3,6 @@
 .toolbar_links {
   margin-bottom: ($unit * 2) - 1;
   padding-bottom: ($unit * 2);
-  //border-bottom: 1px solid transparent;
 }
 
 .toolbar_links__header {
@@ -37,18 +36,9 @@
 }
 
 // Primary toolbar section.
-.toolbar__primary .toolbar_links {
-  //border-bottom: 1px solid $primary-divider;
-}
-
 .toolbar__primary .toolbar_links__header {
   display: none;
 }
-
-.toolbar__primary .toolbar_links nav a {
-  color: $primary-link;
-}
-
 .toolbar__primary .toolbar_links nav a span:not(.badge) {
   display: none;
 }
@@ -57,8 +47,6 @@
   position: absolute;
   top: -($unit / 4);
   right: $unit;
-  background-color: $primary-header-bg;
-  color: #fff;
   font-size: 10px;
   line-height: 10px;
   height: 10px;
@@ -69,44 +57,10 @@
   text-align: center;
 }
 
-.toolbar__primary .toolbar_links nav a .badge {
-  background-color: $primary-header-bg;
-}
-
-.toolbar__primary .toolbar_links nav a.active {
-  color: $primary-link-active;
-}
-
-.toolbar__primary .toolbar_links nav a:hover,
-.toolbar__primary .toolbar_links nav a:focus {
-  color: $primary-link-hover;
-  background-color: darken($primary-bg, 4%);
-}
-
 // Secondary toolbar section.
-.toolbar__secondary .toolbar_links {
-  //border-bottom: 1px solid $secondary-divider;
-}
-
-.toolbar__secondary .toolbar_links nav a .badge {
-  background-color: $primary-header-bg;
-}
-
 .toolbar__secondary .toolbar_links nav a {
-  color: $secondary-link;
   padding: $unit ($unit * 1.5) $unit ($unit * 6);
 }
-
-.toolbar__secondary .toolbar_links nav a.active {
-  color: $secondary-link-active;
-}
-
-.toolbar__secondary .toolbar_links nav a:hover,
-.toolbar__secondary .toolbar_links nav a:focus {
-  color: $secondary-link-hover;
-  background-color: darken($secondary-bg, 4%);
-}
-
 .toolbar_links:last-child {
   border-bottom: none;
 }
@@ -122,7 +76,6 @@
     display: block;
   }
   .toolbar__secondary .toolbar_links nav a {
-    color: $secondary-link;
     padding: $unit ($unit * 2) $unit ($unit * 6);
   }
   .toolbar_links nav a .ico {

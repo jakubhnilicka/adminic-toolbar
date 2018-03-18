@@ -4,17 +4,17 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * Tab.php.
+ * ToolbarTab.php.
  */
 
 use Drupal\Core\Url;
 
 /**
- * Class Tab.
+ * Class ToolbarTab.
  *
  * @package Drupal\adminic_toolbar
  */
-class Tab {
+class ToolbarTab {
 
   /**
    * Tab ID.

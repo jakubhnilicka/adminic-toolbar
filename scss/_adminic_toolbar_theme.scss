@@ -1,0 +1,128 @@
+
+/**
+ * Top Toolbar.
+ */
+.toolbar__top {
+  background-color: #f5f6f7;
+  color: #999;
+}
+
+/**
+ * Primary Toolbar.
+ */
+.toolbar__primary {
+  background-color: $primary-bg;
+
+// Header.
+   .toolbar__header {
+     border-bottom: 1px solid $primary-divider;
+   }
+.toolbar__header a {
+  background-color: $primary-header-bg;
+  color: $primary-header-color;
+}
+.toolbar__header a:hover {
+  background-color: darken($primary-header-bg, 4%);
+}
+
+// Tabs
+   .toolbar_links nav a {
+     color: $primary-link;
+   @include bg-color($primary-link-bg);
+   }
+
+.toolbar_links nav a.active {
+  color: $primary-link-active;
+@include bg-color($primary-link-active-bg);
+}
+
+.toolbar_links nav a:hover {
+  color: $primary-link-hover;
+@include bg-color($primary-link-hover-bg);
+}
+
+// Badge.
+   .toolbar_links nav a .badge {
+     background-color: $primary-link-hover;
+   }
+
+// Scroll bar.
+   .nano > .nano-pane {
+     background: $primary-scroll-bg;
+   }
+.nano > .nano-pane > .nano-slider {
+  background: $primary-scroll;
+}
+}
+/**
+ * Secondary Toolbar.
+ */
+.toolbar__secondary {
+.toolbar__header {
+  background-color: $secondary-header-bg;
+  color: $secondary-header-color;
+  border-bottom: 1px solid $secondary-divider
+}
+.toolbar__header a:hover {
+  background-color: darken($secondary-header-bg, 4%);
+}
+.toolbar__header .close:hover {
+  background-color: darken($secondary-header-bg, 4%);
+}
+
+// Links
+   .toolbar_links nav a {
+     color: $secondary-link;
+   @include bg-color($secondary-link-bg);
+   }
+.toolbar_links nav a.active {
+  color: $secondary-link-active;
+@include bg-color($secondary-link-active-bg);
+}
+.toolbar_links nav a:hover {
+  color: $secondary-link-hover;
+@include bg-color($secondary-link-hover-bg);
+}
+
+// Badge.
+   .toolbar_links nav a .badge {
+     background-color: $primary-header-bg;
+     color: #fff;
+   }
+
+// Wrapper.
+   .wrapper {
+     background-color: $secondary-bg;
+   }
+// Scrollbar.
+   .nano > .nano-pane {
+     background: $secondary-scroll-bg;
+   }
+.nano > .nano-pane > .nano-slider {
+  background: $secondary-scroll;
+}
+}
+
+/**
+ * User account.
+ */
+.user_account {
+  border-top: 1px solid $primary-divider;
+}
+.user_account__name {
+  color: $primary-color;
+}
+.user_account__links {
+.drdt {
+  border: 1px solid $primary-divider;
+  color: $primary-color;
+}
+.drdc a {
+  color: $primary-link;
+}
+.drdc a:active,
+.drdc a:focus,
+.drdc a:hover {
+  color: $primary-link-hover;
+}
+}
