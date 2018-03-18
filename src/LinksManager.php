@@ -18,6 +18,15 @@ use Exception;
  */
 class LinksManager {
 
+  const YML_LINKS_KEY = 'secondary_sections_links';
+  const YML_LINKS_SECONDARY_SECTION_KEY = 'secondary_section_id';
+  const YML_LINKS_ROUTE_NAME_KEY = 'route_name';
+  const YML_LINKS_ROUTE_PARAMETERS_KEY = 'route_parameterss';
+  const YML_LINKS_TITLE_KEY = 'title';
+  const YML_LINKS_DISABLED_KEY = 'disabled';
+  const YML_LINKS_BADGE_KEY = 'badge';
+  const YML_LINKS_WEIGHT_KEY = 'weight';
+
   /**
    * Discovery manager.
    *
@@ -73,14 +82,109 @@ class LinksManager {
   }
 
   /**
-   * Add link to active links.
+   * Get all defined links from all config files.
+   */
+  public function parseLinks() {
+    $config = $this->discoveryManager->getConfig();
+
+    $configLinks = [];
+    $weight = 0;
+    foreach ($config as $configFile) {
+      if (isset($configFile[self::YML_LINKS_KEY])) {
+        foreach ($configFile[self::YML_LINKS_KEY] as $link) {
+          $link[self::YML_LINKS_WEIGHT_KEY] = isset($link[self::YML_LINKS_WEIGHT_KEY]) ? $link[self::YML_LINKS_WEIGHT_KEY] : $weight++;
+          $key = sprintf('%s.%s', $link[self::YML_LINKS_SECONDARY_SECTION_KEY], $link[self::YML_LINKS_ROUTE_NAME_KEY]);
+          $configLinks[$key] = $link;
+        }
+      }
+    }
+
+    // Sort links by weight.
+    uasort($configLinks, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+
+    // Call hook alters.
+    $this->moduleHandler->alter('toolbar_config_links', $configLinks);
+
+    $this->addLinks($configLinks);
+  }
+
+  /**
+   * Add links.
+   *
+   * @param array $configLinks
+   *   Links array.
+   */
+  protected function addLinks(array $configLinks) {
+    foreach ($configLinks as $link) {
+      $this->validateLink($link);
+
+      $widget_id = $link[self::YML_LINKS_SECONDARY_SECTION_KEY];
+      $route = $link[self::YML_LINKS_ROUTE_NAME_KEY];
+      $route_params = isset($link[self::YML_LINKS_ROUTE_PARAMETERS_KEY]) ? $link[self::YML_LINKS_ROUTE_PARAMETERS_KEY] : [];
+      $isValid = $this->routeManager->isRouteValid($route, $route_params);
+
+      if ($isValid) {
+        $title = isset($link[self::YML_LINKS_TITLE_KEY]) ? $link[self::YML_LINKS_TITLE_KEY] : $this->routeManager->getDefaultTitle($route, $route_params);
+        $title = empty($title) ? '' : $title;
+        $url = Url::fromRoute($route, $route_params);
+        $disabled = isset($link[self::YML_LINKS_DISABLED_KEY]) ? $link[self::YML_LINKS_DISABLED_KEY] : FALSE;
+        $badge = isset($link[self::YML_LINKS_BADGE_KEY]) ? $link[self::YML_LINKS_BADGE_KEY] : '';
+
+        $active = FALSE;
+        $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));
+      }
+    }
+  }
+
+  /**
+   * Add link.
    *
    * @param \Drupal\adminic_toolbar\Link $link
    *   Link.
    */
-  public function addActiveLink(Link $link) {
+  public function addLink(Link $link) {
     $key = $this->getLinkKey($link);
-    $this->activeLinks[$key] = $link;
+    $this->links[$key] = $link;
+    // Remove link if exists and is disabled.
+    if (isset($this->links[$key]) && $link->isDisabled()) {
+      unset($this->links[$key]);
+    }
+  }
+
+  /**
+   * Validate link required parameters.
+   *
+   * @param array $link
+   *   Links array.
+   */
+  protected function validateLink(array $link) {
+    try {
+      $obj = json_encode($link);
+      if (!isset($link[self::YML_LINKS_SECONDARY_SECTION_KEY])) {
+        throw new Exception('Link widget_id parameter missing ' . $obj);
+      };
+      if (!isset($link[self::YML_LINKS_ROUTE_NAME_KEY])) {
+        throw new Exception('Link route parameter missing ' . $obj);
+      }
+    }
+    catch (Exception $e) {
+      print $e->getMessage();
+    }
+  }
+
+  /**
+   * Get links.
+   *
+   * @return array
+   *   Return array of links.
+   *
+   * @throws \Exception
+   */
+  public function getLinks() {
+    if (empty($this->links)) {
+      $this->parseLinks();
+    }
+    return $this->links;
   }
 
   /**
@@ -104,61 +208,14 @@ class LinksManager {
   }
 
   /**
-   * Get links.
-   *
-   * @return array
-   *   Return array of links.
-   *
-   * @throws \Exception
-   */
-  public function getLinks() {
-    if (empty($this->links)) {
-      $this->parseLinks();
-    }
-    return $this->links;
-  }
-
-  /**
-   * Get all defined links from all config files.
-   */
-  public function parseLinks() {
-    $config = $this->discoveryManager->getConfig();
-
-    $configLinks = [];
-    $weight = 0;
-    foreach ($config as $configFile) {
-      if (isset($configFile['links'])) {
-        foreach ($configFile['links'] as $link) {
-          $link['weight'] = isset($link['weight']) ? $link['weight'] : $weight;
-          $key = sprintf('%s.%s', $link['widget_id'], $link['route']);
-          $configLinks[$key] = $link;
-          $weight++;
-        }
-      }
-    }
-
-    // Sort links by weight.
-    uasort($configLinks, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
-
-    // Call hook alters.
-    $this->moduleHandler->alter('toolbar_config_links', $configLinks);
-
-    $this->addLinks($configLinks);
-  }
-
-  /**
-   * Add link.
+   * Add link to active links.
    *
    * @param \Drupal\adminic_toolbar\Link $link
    *   Link.
    */
-  public function addLink(Link $link) {
+  public function addActiveLink(Link $link) {
     $key = $this->getLinkKey($link);
-    $this->links[$key] = $link;
-    // Remove link if exists and is disabled.
-    if (isset($this->links[$key]) && $link->isDisabled()) {
-      unset($this->links[$key]);
-    }
+    $this->activeLinks[$key] = $link;
   }
 
   /**
@@ -173,55 +230,6 @@ class LinksManager {
       return reset($activeLinks);
     }
     return NULL;
-  }
-
-  /**
-   * Add links.
-   *
-   * @param array $configLinks
-   *   Links array.
-   */
-  protected function addLinks(array $configLinks) {
-    foreach ($configLinks as $link) {
-      $this->validateLink($link);
-
-      $widget_id = $link['widget_id'];
-      $route = $link['route'];
-      $route_params = isset($link['route_params']) ? $link['route_params'] : [];
-      $isValid = $this->routeManager->isRouteValid($route, $route_params);
-
-      if ($isValid) {
-        $title = isset($link['title']) ? $link['title'] : $this->routeManager->getDefaultTitle($route, $route_params);
-        $title = empty($title) ? '' : $title;
-        $url = Url::fromRoute($route, $route_params);
-        $disabled = isset($link['disabled']) ? $link['disabled'] : FALSE;
-        $badge = isset($link['badge']) ? $link['badge'] : '';
-
-        $active = FALSE;
-        $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));
-      }
-    }
-  }
-
-  /**
-   * Validate link required parameters.
-   *
-   * @param array $link
-   *   Links array.
-   */
-  protected function validateLink(array $link) {
-    try {
-      $obj = json_encode($link);
-      if (!isset($link['widget_id'])) {
-        throw new Exception('Link widget_id parameter missing ' . $obj);
-      };
-      if (!isset($link['route'])) {
-        throw new Exception('Link route parameter missing ' . $obj);
-      }
-    }
-    catch (Exception $e) {
-      print $e->getMessage();
-    }
   }
 
 }
