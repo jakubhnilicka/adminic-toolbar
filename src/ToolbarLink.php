@@ -89,7 +89,7 @@ class ToolbarLink {
    * @return string
    *   Return link widget.
    */
-  public function getWidget() {
+  public function getToolbarPlugin() {
     return $this->widget;
   }
 

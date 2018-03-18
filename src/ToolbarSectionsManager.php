@@ -56,17 +56,10 @@ class ToolbarSectionsManager {
   private $tabManager;
 
   /**
-   * Sections.
+   * Primary Sections.
    *
    * @var array
    */
-  private $sections = [];
-
-  /**
- * Primary Sections.
- *
- * @var array
- */
   private $primarySections = [];
 
   /**
@@ -136,7 +129,7 @@ class ToolbarSectionsManager {
    * @throws \Exception
    */
   protected function parsePrimarySections() {
-    $this->setActiveLinks();
+    $this->setActiveLinksTrail();
     $config = $this->discoveryManager->getConfig();
 
     $weight = 0;
@@ -172,8 +165,6 @@ class ToolbarSectionsManager {
    *   Array of sections.
    */
   protected function addPrimarySections(array $configSections) {
-    $activeLink = $this->linkManager->getActiveLink();
-
     foreach ($configSections as $section) {
       if ($section[self::YML_SECTION_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
         $this->validateSection($section);
@@ -185,14 +176,11 @@ class ToolbarSectionsManager {
         $type = isset($section[self::YML_SECTION_PLUGIN_ID_KEY]) ? $section[self::YML_SECTION_PLUGIN_ID_KEY] : '';
         $newSection = new ToolbarSection($id, $title, $tab_id, $disabled, $type);
         $this->addPrimarySection($newSection);
-
-        if ($activeLink && $id == $activeLink->getWidget()) {
-          $this->addActiveSection($newSection);
-        }
       }
     }
 
-    $this->setActiveTabs();
+    // Aktivuje automaticke otevreni tabu.
+    $this->setActiveTabsTrail();
   }
 
   /**
@@ -227,12 +215,47 @@ class ToolbarSectionsManager {
   }
 
   /**
+   * Get renderable array for primary section.
+   *
+   * @param \Drupal\adminic_toolbar\ToolbarSection $section
+   *   Section.
+   *
+   * @return array|null
+   *   Return renderable array or NULL.
+   */
+  public function getPrimarySection(ToolbarSection $section) {
+    $tabs = $this->tabManager->getTabs();
+    $sectionId = $section->getId();
+
+    $sectionValidTabs = array_filter(
+      $tabs, function ($tab) use ($sectionId) {
+        /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
+        return $tab->getWidget() == $sectionId;
+      }
+    );
+
+    $sectionTabs = [];
+    /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
+    foreach ($sectionValidTabs as $tab) {
+      $sectionTabs[] = $tab->getRenderArray();
+    }
+
+    if ($sectionTabs) {
+      $section->setLinks($sectionTabs);
+
+      return $section->getRenderArray();
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get all defined sections from all config files.
    *
    * @throws \Exception
    */
   protected function parseSecondarySections() {
-    $this->setActiveLinks();
+    $this->setActiveLinksTrail();
     $config = $this->discoveryManager->getConfig();
 
     $weight = 0;
@@ -281,13 +304,11 @@ class ToolbarSectionsManager {
         $newSection = new ToolbarSection($id, $title, $tab_id, $disabled, $type);
         $this->addSecondarySection($newSection);
 
-        if ($activeLink && $id == $activeLink->getWidget()) {
+        if ($activeLink && $id == $activeLink->getToolbarPlugin()) {
           $this->addActiveSection($newSection);
         }
       }
     }
-
-    $this->setActiveTabs();
   }
 
   /**
@@ -319,162 +340,6 @@ class ToolbarSectionsManager {
     }
 
     return $this->secondarySections;
-  }
-
-
-
-
-
-
-
-
-
-
-
-  /**
-   * Set active links.
-   *
-   * @todo What do you mean, the link is active?
-   *
-   * @throws \Exception
-   */
-  protected function setActiveLinks() {
-    // Try to select active links from config links hierarchy.
-    $this->setActiveLinksViaConfig();
-
-    // If active link is still empty, select active link from routes.
-    $activeLink = $this->linkManager->getActiveLink();
-    if (empty($activeLink)) {
-      $this->setActiveLinksViaRoutes();
-    }
-  }
-
-  /**
-   * Add section.
-   *
-   * @param \Drupal\adminic_toolbar\ToolbarSection $section
-   *   Section.
-   */
-  public function addSection(ToolbarSection $section) {
-    $key = $this->getSectionKey($section);
-    $this->sections[$key] = $section;
-    // Remove section if exists but is disabled.
-    if (isset($this->sections[$key]) && $section->isDisabled()) {
-      unset($this->sections[$key]);
-    }
-  }
-
-  /**
-   * Get section key.
-   *
-   * @param \Drupal\adminic_toolbar\ToolbarSection $section
-   *   Section.
-   *
-   * @return string
-   *   Return section key.
-   */
-  protected function getSectionKey(ToolbarSection $section) {
-    return $section->getId();
-  }
-
-  /**
-   * Add active section.
-   *
-   * @param \Drupal\adminic_toolbar\ToolbarSection $section
-   *   Section.
-   */
-  public function addActiveSection(ToolbarSection $section) {
-    $this->activeSections[] = $section;
-  }
-
-  /**
-   * Set active tabs.
-   *
-   * @todo Refactor after better understanding.
-   */
-  protected function setActiveTabs() {
-    // Try to get active tabs from tabs hierarchy.
-    $activeSections = $this->getActiveSection();
-    $currentRouteName = $this->routeManager->getCurrentRoute();
-    $tabs = $this->tabManager->getTabs();
-    /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
-    foreach ($tabs as $key => &$tab) {
-      $tabUrl = $tab->getRawUrl();
-      $tabRouteName = $tabUrl->getRouteName();
-      if ($activeSections && $tab->getId() == $activeSections->getTab()) {
-        $tab->setActive();
-        $this->tabManager->addActiveTab($tab);
-      }
-      elseif ($tabRouteName == $currentRouteName) {
-        $tab->setActive();
-        $this->tabManager->addActiveTab($tab);
-      }
-    }
-
-    // Set active tabs from routes.
-    $activeTabs = $this->tabManager->getActiveTab();
-    if (empty($activeTabs)) {
-      $activeRoutes = $this->routeManager->getActiveRoutes();
-      $tabs = $this->tabManager->getTabs();
-      foreach ($tabs as $tab) {
-        $tabUrl = $tab->getRawUrl();
-        $tabRouteName = $tabUrl->getRouteName();
-        if (array_key_exists($tabRouteName, $activeRoutes)) {
-          $tab->setActive();
-          $this->tabManager->addActiveTab($tab);
-        }
-      }
-    }
-  }
-
-  /**
-   * Get first active section.
-   *
-   * @return \Drupal\adminic_toolbar\ToolbarSection|null
-   *   Return first active section or NULL.
-   */
-  public function getActiveSection() {
-    $activeSections = $this->activeSections;
-    if ($activeSections) {
-      return reset($activeSections);
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Get renderable array for primary section.
-   *
-   * @param \Drupal\adminic_toolbar\ToolbarSection $section
-   *   Section.
-   *
-   * @return array|null
-   *   Return renderable array or NULL.
-   */
-  public function getPrimarySection(ToolbarSection $section) {
-    $tabs = $this->tabManager->getTabs();
-    $sectionId = $section->getId();
-
-    $sectionValidTabs = array_filter(
-      $tabs, function ($tab) use ($sectionId) {
-        /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
-        return $tab->getWidget() == $sectionId;
-      }
-    );
-
-    $sectionTabs = [];
-    /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
-    foreach ($sectionValidTabs as $tab) {
-      $sectionTabs[] = $tab->getRenderArray();
-    }
-
-    if ($sectionTabs) {
-      $section->setLinks($sectionTabs);
-
-      return $section->getRenderArray();
-    }
-
-    return NULL;
   }
 
   /**
@@ -561,7 +426,7 @@ class ToolbarSectionsManager {
     $sectionValidLinks = array_filter(
       $links, function ($link) use ($sectionId) {
         /** @var \Drupal\adminic_toolbar\ToolbarLink $link */
-        return $link->getWidget() == $sectionId;
+        return $link->getToolbarPlugin() == $sectionId;
       }
     );
 
@@ -583,7 +448,101 @@ class ToolbarSectionsManager {
     return NULL;
   }
 
+  /**
+   * Add active section.
+   *
+   * @param \Drupal\adminic_toolbar\ToolbarSection $section
+   *   Section.
+   */
+  public function addActiveSection(ToolbarSection $section) {
+    $this->activeSections[] = $section;
+  }
 
+  /**
+   * Get first active section.
+   *
+   * @return \Drupal\adminic_toolbar\ToolbarSection|null
+   *   Return first active section or NULL.
+   */
+  public function getActiveSection() {
+    $activeSections = $this->activeSections;
+    if ($activeSections) {
+      return reset($activeSections);
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get section key.
+   *
+   * @param \Drupal\adminic_toolbar\ToolbarSection $section
+   *   Section.
+   *
+   * @return string
+   *   Return section key.
+   */
+  protected function getSectionKey(ToolbarSection $section) {
+    return $section->getId();
+  }
+
+  /**
+   * Set active links.
+   *
+   * @todo What do you mean, the link is active?
+   *
+   * @throws \Exception
+   */
+  protected function setActiveLinksTrail() {
+    // Try to select active links from config links hierarchy.
+    $this->setActiveLinksTrailViaConfig();
+
+    // If active link is still empty, select active link from routes.
+    $activeLink = $this->linkManager->getActiveLink();
+    if (empty($activeLink)) {
+      $this->setActiveLinksTrailViaRoutes();
+    }
+  }
+
+  /**
+   * Set active tabs.
+   *
+   * @todo Refactor after better understanding.
+   */
+  protected function setActiveTabsTrail() {
+    // Try to get active tabs from tabs hierarchy.
+    $activeSections = $this->getActiveSection();
+    $currentRouteName = $this->routeManager->getCurrentRoute();
+    $tabs = $this->tabManager->getTabs();
+    /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
+    foreach ($tabs as $key => &$tab) {
+      $tabUrl = $tab->getRawUrl();
+      $tabRouteName = $tabUrl->getRouteName();
+      if ($activeSections && $tab->getId() == $activeSections->getTab()) {
+        $tab->setActive();
+        $this->tabManager->addActiveTab($tab);
+      }
+      elseif ($tabRouteName == $currentRouteName) {
+        $tab->setActive();
+        $this->tabManager->addActiveTab($tab);
+      }
+    }
+
+    // Set active tabs from routes.
+    $activeTabs = $this->tabManager->getActiveTab();
+    if (empty($activeTabs)) {
+      $activeRoutes = $this->routeManager->getActiveRoutes();
+      $tabs = $this->tabManager->getTabs();
+      foreach ($tabs as $tab) {
+        $tabUrl = $tab->getRawUrl();
+        $tabRouteName = $tabUrl->getRouteName();
+        if (array_key_exists($tabRouteName, $activeRoutes)) {
+          $tab->setActive();
+          $this->tabManager->addActiveTab($tab);
+        }
+      }
+    }
+  }
 
   /**
    * Validate section required parameters.
@@ -607,8 +566,10 @@ class ToolbarSectionsManager {
    * Select active link from routes.
    *
    * @todo Find a better name.
+   *
+   * @throws \Exception
    */
-  protected function setActiveLinksViaRoutes() {
+  protected function setActiveLinksTrailViaRoutes() {
     $activeRoutes = $this->routeManager->getActiveRoutes();
     $links = $this->linkManager->getLinks();
     foreach ($links as &$link) {
@@ -625,8 +586,10 @@ class ToolbarSectionsManager {
    * Select active links from config links hierarchy.
    *
    * @todo Find a better name.
+   *
+   * @throws \Exception
    */
-  protected function setActiveLinksViaConfig() {
+  protected function setActiveLinksTrailViaConfig() {
     $currentRouteName = $this->routeManager->getCurrentRoute();
     $links = $this->linkManager->getLinks();
     foreach ($links as &$link) {
@@ -660,6 +623,8 @@ class ToolbarSectionsManager {
    *
    * @return array
    *   Array of renderable arrays.
+   *
+   * @throws \Exception
    */
   protected function getRenderedSections(array $secondarySections) {
     $renderedSections = [];

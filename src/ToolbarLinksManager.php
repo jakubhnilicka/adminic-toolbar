@@ -204,7 +204,7 @@ class ToolbarLinksManager {
     $routeParams = implode('.', $routeParams);
     $routeParams = empty($routeParams) ? '' : '.' . $routeParams;
     $key = $routeName . $routeParams;
-    return sprintf('%s.%s', $link->getWidget(), $key);
+    return sprintf('%s.%s', $link->getToolbarPlugin(), $key);
   }
 
   /**
