@@ -1,4 +1,4 @@
-sets:
+presets:
 - {id: 'default', title: 'Default'}
 
 primary_sections:

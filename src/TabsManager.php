@@ -18,11 +18,11 @@ use Exception;
  */
 class TabsManager {
 
-  const YML_TABS_KEY = 'tabs';
+  const YML_TABS_KEY = 'primary_sections_tabs';
   const YML_TAB_WEIGHT_KEY = 'weight';
-  const YML_TAB_PRESET_KEY = 'set';
+  const YML_TAB_PRESET_KEY = 'preset';
   const YML_TABS_ID_KEY = 'id';
-  const YML_TABS_PRIMARY_SECTION_KEY = 'widget_id';
+  const YML_TABS_PRIMARY_SECTION_KEY = 'primary_section_id';
   const YML_TABS_ROUTE_NAME_KEY = 'route';
   const YML_TABS_ROUTE_PARAMETERS_KEY = 'route_params';
   const YML_TABS_TITLE_KEY = 'title';
