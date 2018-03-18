@@ -119,7 +119,37 @@ class ToolbarPrimarySectionTabsManager {
    *   Array of tabs.
    */
   protected function createTabsCollection(array $configTabs) {
-    $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+    $activeSection = $this->toolbarRouteManager->getActiveSecondarySection();
+
+    $activeTabs = [];
+    // Set by active section.
+    if (!empty($activeSection)) {
+      array_walk($configTabs, function ($tab) use ($activeSection, &$activeTabs) {
+        if ($tab['id'] == $activeSection['tab_id']) {
+          $activeTabs[$tab['id']] = $tab;
+        }
+      });
+    }
+
+    // Set by current route.
+    if (empty($activeTabs)) {
+      $activeRoutesName = $this->toolbarRouteManager->getCurrentRoute();
+      array_walk($configTabs, function ($tab) use ($activeRoutesName, &$activeTabs) {
+        if ($tab['route_name'] == $activeRoutesName) {
+          $activeTabs[$tab['id']] = $tab;
+        }
+      });
+    }
+
+    // Set by path trail.
+    if (empty($activeTabs)) {
+      $activeRoutes = $this->toolbarRouteManager->getActiveRoutesByPath();
+      array_walk($configTabs, function ($tab) use ($activeRoutes, &$activeTabs) {
+        if (array_key_exists($tab['route_name'], $activeRoutes)) {
+          $activeTabs[$tab['id']] = $tab;
+        }
+      });
+    }
 
     foreach ($configTabs as $tab) {
 
@@ -138,7 +168,7 @@ class ToolbarPrimarySectionTabsManager {
         $disabled = isset($tab[self::TAB_DISABLED]) ? $tab[self::TAB_DISABLED] : FALSE;
         $badge = isset($tab[self::TAB_BADGE]) ? $tab[self::TAB_BADGE] : '';
         $active = FALSE;
-        if (array_key_exists($routeName, $activeRoutes)) {
+        if (array_key_exists($id, $activeTabs)) {
           $active = TRUE;
         }
         $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));

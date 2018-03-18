@@ -122,8 +122,9 @@ class ToolbarSecondarySectionLinksManager {
         $activeRoutes[$link['route_name']] = $link;
       }
     });
+    $this->toolbarRouteManager->setActiveLinks($activeRoutes);
     if (empty($activeRoutes)) {
-      $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+      $activeRoutes = $this->toolbarRouteManager->getActiveRoutesByPath();
     }
 
     foreach ($configLinks as $link) {

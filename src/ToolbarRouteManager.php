@@ -60,6 +60,7 @@ class ToolbarRouteManager {
    * @var array
    */
   private $activeRoutes = [];
+  private $activeSecondarySection;
 
   /**
    * RouteManager constructor.
@@ -199,22 +200,6 @@ class ToolbarRouteManager {
   }
 
   /**
-   * Get array of active routes.
-   *
-   * @todo Explain, what is Active route.
-   *
-   * @return array
-   *   Return array of active routes.
-   */
-  public function getActiveRoutes() {
-    if (empty($this->activeRoutes)) {
-      $this->setActiveRoutes();
-    }
-
-    return $this->activeRoutes;
-  }
-
-  /**
    * Set active routes.
    *
    * @todo Explain, what is Active route.
@@ -222,7 +207,7 @@ class ToolbarRouteManager {
    * @return array
    *   Return array of active routes.
    */
-  public function setActiveRoutes() {
+  public function getActiveRoutesByPath() {
     // TODO: set active route if in config by config.
     $activeRoutes = [];
     $currentRouteObject = $this->currentRouteMatch->getRouteObject();
@@ -237,9 +222,36 @@ class ToolbarRouteManager {
       };
     }
 
-    $this->activeRoutes = $activeRoutes;
+    //$this->activeRoutes = $activeRoutes;
 
+    return $activeRoutes;
+  }
+
+  /**
+   * @param array $activeRoutes
+   */
+  function setActiveLinks(array $activeRoutes) {
+    $this->activeRoutes = $activeRoutes;
+  }
+
+  /**
+   * Get array of active routes.
+   *
+   * @todo Explain, what is Active route.
+   *
+   * @return array
+   *   Return array of active routes.
+   */
+  public function getActiveLinks() {
     return $this->activeRoutes;
+  }
+
+  function setActiveSecondarySection(array $secondarySection) {
+    $this->activeSecondarySection = $secondarySection;
+  }
+
+  function getActiveSecondarySection() {
+    return $this->activeSecondarySection;
   }
 
 }

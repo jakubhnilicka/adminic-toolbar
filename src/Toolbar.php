@@ -110,6 +110,10 @@ class Toolbar {
     $this->secondarySectionsManager = $secondarySectionsManager;
   }
 
+  protected function generateActiveTrails() {
+    $this->linksManager->getLinks();
+    $this->secondarySectionsManager->getSecondarySections();
+  }
   /**
    * Get render array for primary toolbar.
    *
@@ -123,6 +127,7 @@ class Toolbar {
       return NULL;
     }
 
+    $this->generateActiveTrails();
     $primarySections = $this->primarySectionsManager->getPrimarySections();
     $widgets = [];
 

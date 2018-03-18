@@ -162,6 +162,13 @@ class ToolbarSecondarySectionsManager {
    *   Array of sections.
    */
   protected function createSecondarySectionsCollection(array $configSections) {
+    $activeSecondarySection = NULL;
+    $activeRoutes = $this->toolbarRouteManager->getActiveLinks();
+    if (!empty($activeRoutes)) {
+      $firstActiveRoute = reset($activeRoutes);
+      $activeSecondarySection = $firstActiveRoute['secondary_section_id'];
+    }
+
     foreach ($configSections as $section) {
       if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validateSecondarySectionInput($section);
@@ -173,6 +180,10 @@ class ToolbarSecondarySectionsManager {
         $type = isset($section[self::SECTION_PLUGIN_ID]) ? $section[self::SECTION_PLUGIN_ID] : '';
         $newSection = new ToolbarPrimarySection($id, $title, $tab_id, $disabled, $type);
         $this->addSecondarySection($newSection);
+
+        if ($activeSecondarySection != NULL && $id == $activeSecondarySection) {
+          $this->toolbarRouteManager->setActiveSecondarySection($section);
+        }
       }
     }
   }
