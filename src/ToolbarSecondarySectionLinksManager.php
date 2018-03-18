@@ -115,6 +115,8 @@ class ToolbarSecondarySectionLinksManager {
    *   Links array.
    */
   protected function createLinksCollection(array $configLinks) {
+    $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+
     foreach ($configLinks as $link) {
       $this->validateLink($link);
 
@@ -129,8 +131,10 @@ class ToolbarSecondarySectionLinksManager {
         $url = Url::fromRoute($route, $route_params);
         $disabled = isset($link[self::LINK_DISABLED]) ? $link[self::LINK_DISABLED] : FALSE;
         $badge = isset($link[self::LINK_BADGE]) ? $link[self::LINK_BADGE] : '';
-
         $active = FALSE;
+        if (array_key_exists($route, $activeRoutes)) {
+          $active = TRUE;
+        }
         $this->addLink(new ToolbarSecondarySectionLink($widget_id, $url, $title, $active, $disabled, $badge));
       }
     }

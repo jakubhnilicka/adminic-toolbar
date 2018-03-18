@@ -223,6 +223,7 @@ class ToolbarRouteManager {
    *   Return array of active routes.
    */
   public function setActiveRoutes() {
+    // TODO: set active route if in config by config.
     $activeRoutes = [];
     $currentRouteObject = $this->currentRouteMatch->getRouteObject();
     $allRoutes = $this->routeProvider->getAllRoutes();

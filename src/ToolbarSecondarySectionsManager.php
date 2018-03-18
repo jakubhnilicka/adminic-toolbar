@@ -162,8 +162,6 @@ class ToolbarSecondarySectionsManager {
    *   Array of sections.
    */
   protected function createSecondarySectionsCollection(array $configSections) {
-    //$activeLink = $this->toolbarLinkManager->getActiveLink();
-
     foreach ($configSections as $section) {
       if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validateSecondarySectionInput($section);
@@ -175,10 +173,6 @@ class ToolbarSecondarySectionsManager {
         $type = isset($section[self::SECTION_PLUGIN_ID]) ? $section[self::SECTION_PLUGIN_ID] : '';
         $newSection = new ToolbarPrimarySection($id, $title, $tab_id, $disabled, $type);
         $this->addSecondarySection($newSection);
-
-        //if ($activeLink && $id == $activeLink->getToolbarPlugin()) {
-        //  $this->addActiveSection($newSection);
-        //}
       }
     }
   }
@@ -315,31 +309,6 @@ class ToolbarSecondarySectionsManager {
 
     return NULL;
   }
-
-  /**
-   * Add active section.
-   *
-   * @param \Drupal\adminic_toolbar\ToolbarPrimarySection $section
-   *   Section.
-   */
-  /*public function addActiveSection(ToolbarPrimarySection $section) {
-    $this->activeSections[] = $section;
-  }*/
-
-  /**
-   * Get first active section.
-   *
-   * @return \Drupal\adminic_toolbar\ToolbarPrimarySection|null
-   *   Return first active section or NULL.
-   */
-  /*public function getActiveSection() {
-    $activeSections = $this->activeSections;
-    if ($activeSections) {
-      return reset($activeSections);
-    }
-
-    return NULL;
-  }*/
 
   /**
    * Get section key.

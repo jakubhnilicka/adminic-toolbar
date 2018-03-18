@@ -154,8 +154,6 @@ class ToolbarPrimarySectionsManager {
    *   Array of sections.
    */
   protected function createPrimarySectionsCollection(array $configSections) {
-    //$this->setActiveLinksTrailViaRoutes();
-
     foreach ($configSections as $section) {
       if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validatePrimarySectionInput($section);
@@ -169,9 +167,6 @@ class ToolbarPrimarySectionsManager {
         $this->addPrimarySection($newSection);
       }
     }
-
-    // Aktivuje automaticke otevreni tabu.
-    //$this->setActiveTabsTrail();
   }
 
   /**

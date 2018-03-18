@@ -119,6 +119,8 @@ class ToolbarPrimarySectionTabsManager {
    *   Array of tabs.
    */
   protected function createTabsCollection(array $configTabs) {
+    $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+
     foreach ($configTabs as $tab) {
 
       $this->validateTab($tab);
@@ -136,6 +138,9 @@ class ToolbarPrimarySectionTabsManager {
         $disabled = isset($tab[self::TAB_DISABLED]) ? $tab[self::TAB_DISABLED] : FALSE;
         $badge = isset($tab[self::TAB_BADGE]) ? $tab[self::TAB_BADGE] : '';
         $active = FALSE;
+        if (array_key_exists($routeName, $activeRoutes)) {
+          $active = TRUE;
+        }
         $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
       }
     }
