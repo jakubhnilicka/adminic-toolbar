@@ -23,8 +23,8 @@ class TabsManager {
   const YML_TAB_PRESET_KEY = 'preset';
   const YML_TABS_ID_KEY = 'id';
   const YML_TABS_PRIMARY_SECTION_KEY = 'primary_section_id';
-  const YML_TABS_ROUTE_NAME_KEY = 'route';
-  const YML_TABS_ROUTE_PARAMETERS_KEY = 'route_params';
+  const YML_TABS_ROUTE_NAME_KEY = 'route_name';
+  const YML_TABS_ROUTE_PARAMETERS_KEY = 'route_parameters';
   const YML_TABS_TITLE_KEY = 'title';
   const YML_TABS_DISABLED_KEY = 'disabled';
   const YML_TABS_BADGE_KEY = 'badge';
@@ -124,19 +124,19 @@ class TabsManager {
       $this->validateTab($tab);
 
       $id = $tab[self::YML_TABS_ID_KEY];
-      $widget_id = $tab[self::YML_TABS_PRIMARY_SECTION_KEY];
-      $route = $tab[self::YML_TABS_ROUTE_NAME_KEY];
-      $route_params = isset($tab[self::YML_TABS_ROUTE_PARAMETERS_KEY]) ? $tab[self::YML_TABS_ROUTE_PARAMETERS_KEY] : [];
-      $isValid = $this->routeManager->isRouteValid($route, $route_params);
+      $primarySectionId = $tab[self::YML_TABS_PRIMARY_SECTION_KEY];
+      $routeName = $tab[self::YML_TABS_ROUTE_NAME_KEY];
+      $routeParameters = isset($tab[self::YML_TABS_ROUTE_PARAMETERS_KEY]) ? $tab[self::YML_TABS_ROUTE_PARAMETERS_KEY] : [];
+      $isRouteValid = $this->routeManager->isRouteValid($routeName, $routeParameters);
 
-      if ($isValid && $tab[self::YML_TAB_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
-        $title = isset($tab[self::YML_TABS_TITLE_KEY]) ? $tab[self::YML_TABS_TITLE_KEY] : $this->routeManager->getDefaultTitle($route, $route_params);
+      if ($isRouteValid && $tab[self::YML_TAB_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
+        $title = isset($tab[self::YML_TABS_TITLE_KEY]) ? $tab[self::YML_TABS_TITLE_KEY] : $this->routeManager->getDefaultTitle($routeName, $routeParameters);
         $title = empty($title) ? '' : $title;
-        $url = Url::fromRoute($route, $route_params);
+        $url = Url::fromRoute($routeName, $routeParameters);
         $disabled = isset($tab[self::YML_TABS_DISABLED_KEY]) ? $tab[self::YML_TABS_DISABLED_KEY] : FALSE;
         $badge = isset($tab[self::YML_TABS_BADGE_KEY]) ? $tab[self::YML_TABS_BADGE_KEY] : '';
         $active = FALSE;
-        $this->addTab(new Tab($id, $widget_id, $url, $title, $active, $disabled, $badge));
+        $this->addTab(new Tab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
       }
     }
   }

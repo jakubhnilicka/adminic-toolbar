@@ -17,6 +17,16 @@ use Exception;
  */
 class SectionsManager {
 
+  const PRIMARY_SECTIONS = 'secondary_sections';
+  const SECONDARY_SECTIONS = 'secondary_sections';
+  const YML_SECTION_WEIGHT_KEY = 'weight';
+  const YML_SECTION_PRESET_KEY = 'preset';
+  const YML_SECTION_ID_KEY = 'id';
+  const YML_SECTION_TITLE_KEY = 'title';
+  const YML_SECTION_TAB_ID_KEY = 'tab_id';
+  const YML_SECTION_DISABLED_KEY = 'disabled';
+  const YML_SECTION_PLUGIN_ID_KEY = 'plugin_id';
+
   /**
    * Discovery manager.
    *
@@ -155,14 +165,14 @@ class SectionsManager {
     $weight = 0;
     $configSections = [];
     foreach ($config as $configFile) {
-      if (isset($configFile['widgets'])) {
-        foreach ($configFile['widgets'] as $section) {
+      if (isset($configFile[self::PRIMARY_SECTIONS])) {
+        foreach ($configFile[self::PRIMARY_SECTIONS] as $section) {
           // If weight is empty set computed value.
-          $section['weight'] = isset($section['weight']) ? $section['weight'] : $weight;
+          $section[self::YML_SECTION_WEIGHT_KEY] = isset($section[self::YML_SECTION_WEIGHT_KEY]) ? $section[self::YML_SECTION_WEIGHT_KEY] : $weight;
           // If set is empty set default set.
-          $section['set'] = isset($section['set']) ? $section['set'] : 'default';
+          $section[self::YML_SECTION_PRESET_KEY] = isset($section[self::YML_SECTION_PRESET_KEY]) ? $section[self::YML_SECTION_PRESET_KEY] : 'default';
           // TODO: get key from method.
-          $key = $section['id'];
+          $key = $section[self::YML_SECTION_ID_KEY];
           $configSections[$key] = $section;
           $weight++;
         }
@@ -340,7 +350,7 @@ class SectionsManager {
       $sections = $this->getSecondarySectionsByTab($tab);
 
       $secondaryWrappers[$tab->getId()] = [
-        'title' => $tab->getTitle(),
+        self::YML_SECTION_TITLE_KEY => $tab->getTitle(),
         'route' => $tab->getUrl(),
         'sections' => $sections,
       ];
@@ -440,14 +450,14 @@ class SectionsManager {
     $activeLink = $this->linkManager->getActiveLink();
 
     foreach ($configSections as $section) {
-      if ($section['set'] == $this->discoveryManager->getActiveSet()) {
+      if ($section[self::YML_SECTION_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
         $this->validateSection($section);
 
-        $id = $section['id'];
-        $title = isset($section['title']) ? $section['title'] : '';
-        $tab_id = isset($section['tab_id']) ? $section['tab_id'] : '';
-        $disabled = isset($section['disabled']) ? $section['disabled'] : FALSE;
-        $type = isset($section['type']) ? $section['type'] : '';
+        $id = $section[self::YML_SECTION_ID_KEY];
+        $title = isset($section[self::YML_SECTION_TITLE_KEY]) ? $section[self::YML_SECTION_TITLE_KEY] : '';
+        $tab_id = isset($section[self::YML_SECTION_TAB_ID_KEY]) ? $section[self::YML_SECTION_TAB_ID_KEY] : '';
+        $disabled = isset($section[self::YML_SECTION_DISABLED_KEY]) ? $section[self::YML_SECTION_DISABLED_KEY] : FALSE;
+        $type = isset($section[self::YML_SECTION_PLUGIN_ID_KEY]) ? $section[self::YML_SECTION_PLUGIN_ID_KEY] : '';
         $newSection = new Section($id, $title, $tab_id, $disabled, $type);
         $this->addSection($newSection);
 
@@ -469,7 +479,7 @@ class SectionsManager {
   protected function validateSection(array $section) {
     try {
       $obj = json_encode($section);
-      if (empty($section['id'])) {
+      if (empty($section[self::YML_SECTION_ID_KEY])) {
         throw new Exception('Section ID parameter missing ' . $obj);
       };
     }
