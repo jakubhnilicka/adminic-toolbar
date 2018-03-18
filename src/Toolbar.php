@@ -107,6 +107,8 @@ class Toolbar {
    *
    * @return array|null
    *   Retrun renderable array or null if empty.
+   *
+   * @throws \Exception
    */
   public function getPrimaryToolbar() {
     if (!$this->userCanAccessToolbar()) {
@@ -132,7 +134,7 @@ class Toolbar {
     $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')->getRenderArray();
 
     $header = [
-      '#theme' => 'toolbar_header',
+      '#theme' => 'toolbar_primary_header',
       '#title' => t('Drupal'),
       '#title_link' => '<front>',
     ];
@@ -170,6 +172,8 @@ class Toolbar {
    *
    * @return array|null
    *   Retrun renderable array or null.
+   *
+   * @throws \Exception
    */
   public function getSecondaryToolbar() {
     if (!$this->userCanAccessToolbar()) {
@@ -185,7 +189,7 @@ class Toolbar {
       $active = FALSE;
       if ($wrapper['sections']) {
         $header = [
-          '#theme' => 'toolbar_header',
+          '#theme' => 'toolbar_secondary_header',
           '#title' => $wrapper['title'],
           '#title_link' => $wrapper['route'],
           '#close' => TRUE,

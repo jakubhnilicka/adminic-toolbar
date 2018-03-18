@@ -35,7 +35,15 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['toolbar_header'] = [
+  $items['toolbar_primary_header'] = [
+    'variables' => [
+      'title' => NULL,
+      'title_link' => NULL,
+      'close' => FALSE,
+    ],
+  ];
+
+  $items['toolbar_secondary_header'] = [
     'variables' => [
       'title' => NULL,
       'title_link' => NULL,
