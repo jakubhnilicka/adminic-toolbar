@@ -18,28 +18,28 @@ use Exception;
  */
 class ToolbarLinksManager {
 
-  const YML_LINKS_KEY = 'secondary_sections_links';
-  const YML_LINKS_SECONDARY_SECTION_KEY = 'secondary_section_id';
-  const YML_LINKS_ROUTE_NAME_KEY = 'route_name';
-  const YML_LINKS_ROUTE_PARAMETERS_KEY = 'route_parameterss';
-  const YML_LINKS_TITLE_KEY = 'title';
-  const YML_LINKS_DISABLED_KEY = 'disabled';
-  const YML_LINKS_BADGE_KEY = 'badge';
-  const YML_LINKS_WEIGHT_KEY = 'weight';
+  const LINKS = 'secondary_sections_links';
+  const LINK_SECONDARY_SECTION = 'secondary_section_id';
+  const LINK_ROUTE_NAME = 'route_name';
+  const LINK_ROUTE_PARAMETERS = 'route_parameters';
+  const LINK_TITLE = 'title';
+  const LINK_BADGE = 'badge';
+  const LINK_WEIGHT = 'weight';
+  const LINK_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
    */
-  private $discoveryManager;
+  private $toolbarConfigDiscovery;
 
   /**
    * Route manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarRouteManager
    */
-  private $routeManager;
+  private $toolbarRouteManager;
 
   /**
    * Array of links.
@@ -65,35 +65,35 @@ class ToolbarLinksManager {
   /**
    * LinksManager constructor.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $discoveryManager
+   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $toolbarConfigDiscovery
    *   Discovery manager.
-   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $routeManager
+   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $toolbarRouteManager
    *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
-    ToolbarConfigDiscovery $discoveryManager,
-    ToolbarRouteManager $routeManager,
+    ToolbarConfigDiscovery $toolbarConfigDiscovery,
+    ToolbarRouteManager $toolbarRouteManager,
     ModuleHandler $moduleHandler) {
-    $this->routeManager = $routeManager;
-    $this->discoveryManager = $discoveryManager;
+    $this->toolbarRouteManager = $toolbarRouteManager;
+    $this->toolbarConfigDiscovery = $toolbarConfigDiscovery;
     $this->moduleHandler = $moduleHandler;
   }
 
   /**
    * Get all defined links from all config files.
    */
-  public function parseLinks() {
-    $config = $this->discoveryManager->getConfig();
+  public function discoverySecondarySectionsLinks() {
+    $config = $this->toolbarConfigDiscovery->getConfig();
 
     $configLinks = [];
     $weight = 0;
     foreach ($config as $configFile) {
-      if (isset($configFile[self::YML_LINKS_KEY])) {
-        foreach ($configFile[self::YML_LINKS_KEY] as $link) {
-          $link[self::YML_LINKS_WEIGHT_KEY] = isset($link[self::YML_LINKS_WEIGHT_KEY]) ? $link[self::YML_LINKS_WEIGHT_KEY] : $weight++;
-          $key = sprintf('%s.%s', $link[self::YML_LINKS_SECONDARY_SECTION_KEY], $link[self::YML_LINKS_ROUTE_NAME_KEY]);
+      if (isset($configFile[self::LINKS])) {
+        foreach ($configFile[self::LINKS] as $link) {
+          $link[self::LINK_WEIGHT] = isset($link[self::LINK_WEIGHT]) ? $link[self::LINK_WEIGHT] : $weight++;
+          $key = sprintf('%s.%s', $link[self::LINK_SECONDARY_SECTION], $link[self::LINK_ROUTE_NAME]);
           $configLinks[$key] = $link;
         }
       }
@@ -105,7 +105,7 @@ class ToolbarLinksManager {
     // Call hook alters.
     $this->moduleHandler->alter('toolbar_config_links', $configLinks);
 
-    $this->addLinks($configLinks);
+    $this->createLinksCollection($configLinks);
   }
 
   /**
@@ -114,21 +114,21 @@ class ToolbarLinksManager {
    * @param array $configLinks
    *   Links array.
    */
-  protected function addLinks(array $configLinks) {
+  protected function createLinksCollection(array $configLinks) {
     foreach ($configLinks as $link) {
       $this->validateLink($link);
 
-      $widget_id = $link[self::YML_LINKS_SECONDARY_SECTION_KEY];
-      $route = $link[self::YML_LINKS_ROUTE_NAME_KEY];
-      $route_params = isset($link[self::YML_LINKS_ROUTE_PARAMETERS_KEY]) ? $link[self::YML_LINKS_ROUTE_PARAMETERS_KEY] : [];
-      $isValid = $this->routeManager->isRouteValid($route, $route_params);
+      $widget_id = $link[self::LINK_SECONDARY_SECTION];
+      $route = $link[self::LINK_ROUTE_NAME];
+      $route_params = isset($link[self::LINK_ROUTE_PARAMETERS]) ? $link[self::LINK_ROUTE_PARAMETERS] : [];
+      $isValid = $this->toolbarRouteManager->isRouteValid($route, $route_params);
 
       if ($isValid) {
-        $title = isset($link[self::YML_LINKS_TITLE_KEY]) ? $link[self::YML_LINKS_TITLE_KEY] : $this->routeManager->getDefaultTitle($route, $route_params);
+        $title = isset($link[self::LINK_TITLE]) ? $link[self::LINK_TITLE] : $this->toolbarRouteManager->getDefaultTitle($route, $route_params);
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
-        $disabled = isset($link[self::YML_LINKS_DISABLED_KEY]) ? $link[self::YML_LINKS_DISABLED_KEY] : FALSE;
-        $badge = isset($link[self::YML_LINKS_BADGE_KEY]) ? $link[self::YML_LINKS_BADGE_KEY] : '';
+        $disabled = isset($link[self::LINK_DISABLED]) ? $link[self::LINK_DISABLED] : FALSE;
+        $badge = isset($link[self::LINK_BADGE]) ? $link[self::LINK_BADGE] : '';
 
         $active = FALSE;
         $this->addLink(new ToolbarLink($widget_id, $url, $title, $active, $disabled, $badge));
@@ -160,10 +160,10 @@ class ToolbarLinksManager {
   protected function validateLink(array $link) {
     try {
       $obj = json_encode($link);
-      if (!isset($link[self::YML_LINKS_SECONDARY_SECTION_KEY])) {
+      if (!isset($link[self::LINK_SECONDARY_SECTION])) {
         throw new Exception('Link widget_id parameter missing ' . $obj);
       };
-      if (!isset($link[self::YML_LINKS_ROUTE_NAME_KEY])) {
+      if (!isset($link[self::LINK_ROUTE_NAME])) {
         throw new Exception('Link route parameter missing ' . $obj);
       }
     }
@@ -182,7 +182,7 @@ class ToolbarLinksManager {
    */
   public function getLinks() {
     if (empty($this->links)) {
-      $this->parseLinks();
+      $this->discoverySecondarySectionsLinks();
     }
     return $this->links;
   }

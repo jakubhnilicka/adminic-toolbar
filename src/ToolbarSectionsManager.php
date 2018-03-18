@@ -19,41 +19,41 @@ class ToolbarSectionsManager {
 
   const PRIMARY_SECTIONS = 'primary_sections';
   const SECONDARY_SECTIONS = 'secondary_sections';
-  const YML_SECTION_WEIGHT_KEY = 'weight';
-  const YML_SECTION_PRESET_KEY = 'preset';
-  const YML_SECTION_ID_KEY = 'id';
-  const YML_SECTION_TITLE_KEY = 'title';
-  const YML_SECTION_TAB_ID_KEY = 'tab_id';
-  const YML_SECTION_DISABLED_KEY = 'disabled';
-  const YML_SECTION_PLUGIN_ID_KEY = 'plugin_id';
+  const SECTION_ID = 'id';
+  const SECTION_TAB_ID = 'tab_id';
+  const SECTION_PLUGIN_ID = 'plugin_id';
+  const SECTION_TITLE = 'title';
+  const SECTION_PRESET = 'preset';
+  const SECTION_WEIGHT = 'weight';
+  const SECTION_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
    */
-  private $discoveryManager;
+  private $toolbarConfigDiscovery;
 
   /**
    * Route manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarRouteManager
    */
-  private $routeManager;
+  private $toolbarRouteManager;
 
   /**
    * Links manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarLinksManager
    */
-  private $linkManager;
+  private $toolbarLinkManager;
 
   /**
    * Tabs manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarTabsManager
    */
-  private $tabManager;
+  private $toolbarTabManager;
 
   /**
    * Primary Sections.
@@ -88,39 +88,37 @@ class ToolbarSectionsManager {
    *
    * @var \Drupal\adminic_toolbar\ToolbarPluginManager
    */
-  private $toolbarWidgetPluginManager;
+  private $toolbarPluginManager;
 
   /**
    * SectionsManager constructor.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $discoveryManager
-   *   Discovery manager.
-   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $routeManager
-   *   Route manager.
-   * @param \Drupal\adminic_toolbar\ToolbarLinksManager $linkManager
-   *   Links manager.
-   * @param \Drupal\adminic_toolbar\ToolbarTabsManager $tabManager
-   *   Tabs manager.
+   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $toolbarConfigDiscovery
+   *   Toolbar config discovery.
+   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $toolbarRouteManager
+   *   Toolbar route manager.
+   * @param \Drupal\adminic_toolbar\ToolbarLinksManager $toolbarLinksManager
+   *   Toolbar links manager.
+   * @param \Drupal\adminic_toolbar\ToolbarTabsManager $toolbarTabsManager
+   *   Toolbar tabs manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
-   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarWidgetPluginManager
+   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarPluginManager
    *   Toolbar widget plugin manager.
-   *
-   * @todo Check names for $linkManager, $tabManager, when classes are LinksManager, TabsManager.
    */
   public function __construct(
-    ToolbarConfigDiscovery $discoveryManager,
-    ToolbarRouteManager $routeManager,
-    ToolbarLinksManager $linkManager,
-    ToolbarTabsManager $tabManager,
+    ToolbarConfigDiscovery $toolbarConfigDiscovery,
+    ToolbarRouteManager $toolbarRouteManager,
+    ToolbarLinksManager $toolbarLinksManager,
+    ToolbarTabsManager $toolbarTabsManager,
     ModuleHandler $moduleHandler,
-    ToolbarPluginManager $toolbarWidgetPluginManager) {
-    $this->discoveryManager = $discoveryManager;
-    $this->linkManager = $linkManager;
-    $this->tabManager = $tabManager;
-    $this->routeManager = $routeManager;
+    ToolbarPluginManager $toolbarPluginManager) {
+    $this->toolbarConfigDiscovery = $toolbarConfigDiscovery;
+    $this->toolbarLinkManager = $toolbarLinksManager;
+    $this->toolbarTabManager = $toolbarTabsManager;
+    $this->toolbarRouteManager = $toolbarRouteManager;
     $this->moduleHandler = $moduleHandler;
-    $this->toolbarWidgetPluginManager = $toolbarWidgetPluginManager;
+    $this->toolbarPluginManager = $toolbarPluginManager;
   }
 
   /**
@@ -128,9 +126,9 @@ class ToolbarSectionsManager {
    *
    * @throws \Exception
    */
-  protected function parsePrimarySections() {
+  protected function discoveryPrimarySections() {
     $this->setActiveLinksTrail();
-    $config = $this->discoveryManager->getConfig();
+    $config = $this->toolbarConfigDiscovery->getConfig();
 
     $weight = 0;
     $configSections = [];
@@ -138,11 +136,11 @@ class ToolbarSectionsManager {
       if (isset($configFile[self::PRIMARY_SECTIONS])) {
         foreach ($configFile[self::PRIMARY_SECTIONS] as $section) {
           // If weight is empty set computed value.
-          $section[self::YML_SECTION_WEIGHT_KEY] = isset($section[self::YML_SECTION_WEIGHT_KEY]) ? $section[self::YML_SECTION_WEIGHT_KEY] : $weight;
+          $section[self::SECTION_WEIGHT] = isset($section[self::SECTION_WEIGHT]) ? $section[self::SECTION_WEIGHT] : $weight;
           // If set is empty set default set.
-          $section[self::YML_SECTION_PRESET_KEY] = isset($section[self::YML_SECTION_PRESET_KEY]) ? $section[self::YML_SECTION_PRESET_KEY] : 'default';
+          $section[self::SECTION_PRESET] = isset($section[self::SECTION_PRESET]) ? $section[self::SECTION_PRESET] : 'default';
           // TODO: get key from method.
-          $key = $section[self::YML_SECTION_ID_KEY];
+          $key = $section[self::SECTION_ID];
           $configSections[$key] = $section;
           $weight++;
         }
@@ -155,7 +153,7 @@ class ToolbarSectionsManager {
     $this->moduleHandler->alter('toolbar_config_primary_sections', $configSections);
 
     // Add tabs.
-    $this->addPrimarySections($configSections);
+    $this->createPrimarySectionsCollection($configSections);
   }
 
   /**
@@ -164,16 +162,16 @@ class ToolbarSectionsManager {
    * @param array $configSections
    *   Array of sections.
    */
-  protected function addPrimarySections(array $configSections) {
+  protected function createPrimarySectionsCollection(array $configSections) {
     foreach ($configSections as $section) {
-      if ($section[self::YML_SECTION_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
+      if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validateSection($section);
 
-        $id = $section[self::YML_SECTION_ID_KEY];
-        $title = isset($section[self::YML_SECTION_TITLE_KEY]) ? $section[self::YML_SECTION_TITLE_KEY] : '';
-        $tab_id = isset($section[self::YML_SECTION_TAB_ID_KEY]) ? $section[self::YML_SECTION_TAB_ID_KEY] : '';
-        $disabled = isset($section[self::YML_SECTION_DISABLED_KEY]) ? $section[self::YML_SECTION_DISABLED_KEY] : FALSE;
-        $type = isset($section[self::YML_SECTION_PLUGIN_ID_KEY]) ? $section[self::YML_SECTION_PLUGIN_ID_KEY] : '';
+        $id = $section[self::SECTION_ID];
+        $title = isset($section[self::SECTION_TITLE]) ? $section[self::SECTION_TITLE] : '';
+        $tab_id = isset($section[self::SECTION_TAB_ID]) ? $section[self::SECTION_TAB_ID] : '';
+        $disabled = isset($section[self::SECTION_DISABLED]) ? $section[self::SECTION_DISABLED] : FALSE;
+        $type = isset($section[self::SECTION_PLUGIN_ID]) ? $section[self::SECTION_PLUGIN_ID] : '';
         $newSection = new ToolbarSection($id, $title, $tab_id, $disabled, $type);
         $this->addPrimarySection($newSection);
       }
@@ -208,7 +206,7 @@ class ToolbarSectionsManager {
    */
   public function getPrimarySections() {
     if (empty($this->primarySections)) {
-      $this->parsePrimarySections();
+      $this->discoveryPrimarySections();
     }
 
     return $this->primarySections;
@@ -224,7 +222,7 @@ class ToolbarSectionsManager {
    *   Return renderable array or NULL.
    */
   public function getPrimarySection(ToolbarSection $section) {
-    $tabs = $this->tabManager->getTabs();
+    $tabs = $this->toolbarTabManager->getTabs();
     $sectionId = $section->getId();
 
     $sectionValidTabs = array_filter(
@@ -254,9 +252,9 @@ class ToolbarSectionsManager {
    *
    * @throws \Exception
    */
-  protected function parseSecondarySections() {
+  protected function discoverySecondarySections() {
     $this->setActiveLinksTrail();
-    $config = $this->discoveryManager->getConfig();
+    $config = $this->toolbarConfigDiscovery->getConfig();
 
     $weight = 0;
     $configSections = [];
@@ -264,11 +262,11 @@ class ToolbarSectionsManager {
       if (isset($configFile[self::SECONDARY_SECTIONS])) {
         foreach ($configFile[self::SECONDARY_SECTIONS] as $section) {
           // If weight is empty set computed value.
-          $section[self::YML_SECTION_WEIGHT_KEY] = isset($section[self::YML_SECTION_WEIGHT_KEY]) ? $section[self::YML_SECTION_WEIGHT_KEY] : $weight++;
+          $section[self::SECTION_WEIGHT] = isset($section[self::SECTION_WEIGHT]) ? $section[self::SECTION_WEIGHT] : $weight++;
           // If set is empty set default set.
-          $section[self::YML_SECTION_PRESET_KEY] = isset($section[self::YML_SECTION_PRESET_KEY]) ? $section[self::YML_SECTION_PRESET_KEY] : 'default';
+          $section[self::SECTION_PRESET] = isset($section[self::SECTION_PRESET]) ? $section[self::SECTION_PRESET] : 'default';
           // TODO: get key from method.
-          $key = $section[self::YML_SECTION_ID_KEY];
+          $key = $section[self::SECTION_ID];
           $configSections[$key] = $section;
         }
       }
@@ -280,7 +278,7 @@ class ToolbarSectionsManager {
     $this->moduleHandler->alter('toolbar_config_primary_sections', $configSections);
 
     // Add tabs.
-    $this->addSecondarySections($configSections);
+    $this->createSecondarySectionsCollection($configSections);
   }
 
   /**
@@ -289,18 +287,18 @@ class ToolbarSectionsManager {
    * @param array $configSections
    *   Array of sections.
    */
-  protected function addSecondarySections(array $configSections) {
-    $activeLink = $this->linkManager->getActiveLink();
+  protected function createSecondarySectionsCollection(array $configSections) {
+    $activeLink = $this->toolbarLinkManager->getActiveLink();
 
     foreach ($configSections as $section) {
-      if ($section[self::YML_SECTION_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
+      if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validateSection($section);
 
-        $id = $section[self::YML_SECTION_ID_KEY];
-        $title = isset($section[self::YML_SECTION_TITLE_KEY]) ? $section[self::YML_SECTION_TITLE_KEY] : '';
-        $tab_id = isset($section[self::YML_SECTION_TAB_ID_KEY]) ? $section[self::YML_SECTION_TAB_ID_KEY] : '';
-        $disabled = isset($section[self::YML_SECTION_DISABLED_KEY]) ? $section[self::YML_SECTION_DISABLED_KEY] : FALSE;
-        $type = isset($section[self::YML_SECTION_PLUGIN_ID_KEY]) ? $section[self::YML_SECTION_PLUGIN_ID_KEY] : '';
+        $id = $section[self::SECTION_ID];
+        $title = isset($section[self::SECTION_TITLE]) ? $section[self::SECTION_TITLE] : '';
+        $tab_id = isset($section[self::SECTION_TAB_ID]) ? $section[self::SECTION_TAB_ID] : '';
+        $disabled = isset($section[self::SECTION_DISABLED]) ? $section[self::SECTION_DISABLED] : FALSE;
+        $type = isset($section[self::SECTION_PLUGIN_ID]) ? $section[self::SECTION_PLUGIN_ID] : '';
         $newSection = new ToolbarSection($id, $title, $tab_id, $disabled, $type);
         $this->addSecondarySection($newSection);
 
@@ -336,7 +334,7 @@ class ToolbarSectionsManager {
    */
   public function getSecondarySections() {
     if (empty($this->secondarySections)) {
-      $this->parseSecondarySections();
+      $this->discoverySecondarySections();
     }
 
     return $this->secondarySections;
@@ -351,7 +349,7 @@ class ToolbarSectionsManager {
    * @throws \Exception
    */
   public function getSecondarySectionWrappers() {
-    $tabs = $this->tabManager->getTabs();
+    $tabs = $this->toolbarTabManager->getTabs();
     $secondaryWrappers = [];
     /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
     foreach ($tabs as $tab) {
@@ -416,11 +414,11 @@ class ToolbarSectionsManager {
   protected function getSecondarySection(ToolbarSection $section) {
     if ($section->hasType()) {
       $type = $section->getType();
-      $widget = $this->toolbarWidgetPluginManager->createInstance($type);
+      $widget = $this->toolbarPluginManager->createInstance($type);
       return $widget->getRenderArray();
     }
 
-    $links = $this->linkManager->getLinks();
+    $links = $this->toolbarLinkManager->getLinks();
     $sectionId = $section->getId();
 
     $sectionValidLinks = array_filter(
@@ -498,7 +496,7 @@ class ToolbarSectionsManager {
     $this->setActiveLinksTrailViaConfig();
 
     // If active link is still empty, select active link from routes.
-    $activeLink = $this->linkManager->getActiveLink();
+    $activeLink = $this->toolbarLinkManager->getActiveLink();
     if (empty($activeLink)) {
       $this->setActiveLinksTrailViaRoutes();
     }
@@ -512,33 +510,33 @@ class ToolbarSectionsManager {
   protected function setActiveTabsTrail() {
     // Try to get active tabs from tabs hierarchy.
     $activeSections = $this->getActiveSection();
-    $currentRouteName = $this->routeManager->getCurrentRoute();
-    $tabs = $this->tabManager->getTabs();
+    $currentRouteName = $this->toolbarRouteManager->getCurrentRoute();
+    $tabs = $this->toolbarTabManager->getTabs();
     /** @var \Drupal\adminic_toolbar\ToolbarTab $tab */
     foreach ($tabs as $key => &$tab) {
       $tabUrl = $tab->getRawUrl();
       $tabRouteName = $tabUrl->getRouteName();
       if ($activeSections && $tab->getId() == $activeSections->getTab()) {
         $tab->setActive();
-        $this->tabManager->addActiveTab($tab);
+        $this->toolbarTabManager->addActiveTab($tab);
       }
       elseif ($tabRouteName == $currentRouteName) {
         $tab->setActive();
-        $this->tabManager->addActiveTab($tab);
+        $this->toolbarTabManager->addActiveTab($tab);
       }
     }
 
     // Set active tabs from routes.
-    $activeTabs = $this->tabManager->getActiveTab();
+    $activeTabs = $this->toolbarTabManager->getActiveTab();
     if (empty($activeTabs)) {
-      $activeRoutes = $this->routeManager->getActiveRoutes();
-      $tabs = $this->tabManager->getTabs();
+      $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+      $tabs = $this->toolbarTabManager->getTabs();
       foreach ($tabs as $tab) {
         $tabUrl = $tab->getRawUrl();
         $tabRouteName = $tabUrl->getRouteName();
         if (array_key_exists($tabRouteName, $activeRoutes)) {
           $tab->setActive();
-          $this->tabManager->addActiveTab($tab);
+          $this->toolbarTabManager->addActiveTab($tab);
         }
       }
     }
@@ -553,7 +551,7 @@ class ToolbarSectionsManager {
   protected function validateSection(array $section) {
     try {
       $obj = json_encode($section);
-      if (empty($section[self::YML_SECTION_ID_KEY])) {
+      if (empty($section[self::SECTION_ID])) {
         throw new Exception('Section ID parameter missing ' . $obj);
       };
     }
@@ -570,8 +568,8 @@ class ToolbarSectionsManager {
    * @throws \Exception
    */
   protected function setActiveLinksTrailViaRoutes() {
-    $activeRoutes = $this->routeManager->getActiveRoutes();
-    $links = $this->linkManager->getLinks();
+    $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+    $links = $this->toolbarLinkManager->getLinks();
     foreach ($links as &$link) {
       /** @var \Drupal\adminic_toolbar\ToolbarLink $link */
       $url = $link->getRawUrl();
@@ -590,8 +588,8 @@ class ToolbarSectionsManager {
    * @throws \Exception
    */
   protected function setActiveLinksTrailViaConfig() {
-    $currentRouteName = $this->routeManager->getCurrentRoute();
-    $links = $this->linkManager->getLinks();
+    $currentRouteName = $this->toolbarRouteManager->getCurrentRoute();
+    $links = $this->toolbarLinkManager->getLinks();
     foreach ($links as &$link) {
       /** @var \Drupal\adminic_toolbar\ToolbarLink $link */
       $url = $link->getRawUrl();
@@ -610,7 +608,7 @@ class ToolbarSectionsManager {
    */
   protected function activateLinkByLink(ToolbarLink $link) {
     $link->setActive();
-    $this->linkManager->addActiveLink($link);
+    $this->toolbarLinkManager->addActiveLink($link);
   }
 
   /**

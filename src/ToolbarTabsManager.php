@@ -18,30 +18,30 @@ use Exception;
  */
 class ToolbarTabsManager {
 
-  const YML_TABS_KEY = 'primary_sections_tabs';
-  const YML_TAB_WEIGHT_KEY = 'weight';
-  const YML_TAB_PRESET_KEY = 'preset';
-  const YML_TABS_ID_KEY = 'id';
-  const YML_TABS_PRIMARY_SECTION_KEY = 'primary_section_id';
-  const YML_TABS_ROUTE_NAME_KEY = 'route_name';
-  const YML_TABS_ROUTE_PARAMETERS_KEY = 'route_parameters';
-  const YML_TABS_TITLE_KEY = 'title';
-  const YML_TABS_DISABLED_KEY = 'disabled';
-  const YML_TABS_BADGE_KEY = 'badge';
+  const TABS = 'primary_sections_tabs';
+  const TAB_ID = 'id';
+  const TAB_PRIMARY_SECTION = 'primary_section_id';
+  const TAB_ROUTE_NAME = 'route_name';
+  const TAB_ROUTE_PARAMETERS = 'route_parameters';
+  const TAB_TITLE = 'title';
+  const TAB_BADGE = 'badge';
+  const TAB_PRESET = 'preset';
+  const TAB_WEIGHT = 'weight';
+  const TAB_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
    */
-  private $discoveryManager;
+  private $toolbarConfigDiscovery;
 
   /**
    * Route manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarRouteManager
    */
-  private $routeManager;
+  private $toolbarRouteManager;
 
   /**
    * Tabs.
@@ -67,36 +67,36 @@ class ToolbarTabsManager {
   /**
    * TabsManager constructor.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $discoveryManager
+   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $toolbarConfigDiscovery
    *   Discovery manager.
-   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $routeManager
+   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $toolbarRouteManager
    *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
-    ToolbarConfigDiscovery $discoveryManager,
-    ToolbarRouteManager $routeManager,
+    ToolbarConfigDiscovery $toolbarConfigDiscovery,
+    ToolbarRouteManager $toolbarRouteManager,
     ModuleHandler $moduleHandler) {
-    $this->discoveryManager = $discoveryManager;
-    $this->routeManager = $routeManager;
+    $this->toolbarConfigDiscovery = $toolbarConfigDiscovery;
+    $this->toolbarRouteManager = $toolbarRouteManager;
     $this->moduleHandler = $moduleHandler;
   }
 
   /**
    * Get all defined tabs from all config files.
    */
-  protected function parseTabs() {
-    $config = $this->discoveryManager->getConfig();
+  protected function discoveryPrimarySectionsTabs() {
+    $config = $this->toolbarConfigDiscovery->getConfig();
 
     $weight = 0;
     $configTabs = [];
     foreach ($config as $configFile) {
-      if (isset($configFile[self::YML_TABS_KEY])) {
-        foreach ($configFile[self::YML_TABS_KEY] as $tab) {
-          $tab[self::YML_TAB_WEIGHT_KEY] = isset($tab[self::YML_TAB_WEIGHT_KEY]) ? $tab[self::YML_TAB_WEIGHT_KEY] : $weight++;
-          $tab[self::YML_TAB_PRESET_KEY] = isset($tab[self::YML_TAB_PRESET_KEY]) ? $tab[self::YML_TAB_PRESET_KEY] : 'default';
-          $key = $tab[self::YML_TABS_ID_KEY];
+      if (isset($configFile[self::TABS])) {
+        foreach ($configFile[self::TABS] as $tab) {
+          $tab[self::TAB_WEIGHT] = isset($tab[self::TAB_WEIGHT]) ? $tab[self::TAB_WEIGHT] : $weight++;
+          $tab[self::TAB_PRESET] = isset($tab[self::TAB_PRESET]) ? $tab[self::TAB_PRESET] : 'default';
+          $key = $tab[self::TAB_ID];
           $configTabs[$key] = $tab;
         }
       }
@@ -109,7 +109,7 @@ class ToolbarTabsManager {
     $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
 
     // Add tabs.
-    $this->addTabs($configTabs);
+    $this->createTabsCollection($configTabs);
   }
 
   /**
@@ -118,23 +118,23 @@ class ToolbarTabsManager {
    * @param array $configTabs
    *   Array of tabs.
    */
-  protected function addTabs(array $configTabs) {
+  protected function createTabsCollection(array $configTabs) {
     foreach ($configTabs as $tab) {
 
       $this->validateTab($tab);
 
-      $id = $tab[self::YML_TABS_ID_KEY];
-      $primarySectionId = $tab[self::YML_TABS_PRIMARY_SECTION_KEY];
-      $routeName = $tab[self::YML_TABS_ROUTE_NAME_KEY];
-      $routeParameters = isset($tab[self::YML_TABS_ROUTE_PARAMETERS_KEY]) ? $tab[self::YML_TABS_ROUTE_PARAMETERS_KEY] : [];
-      $isRouteValid = $this->routeManager->isRouteValid($routeName, $routeParameters);
+      $id = $tab[self::TAB_ID];
+      $primarySectionId = $tab[self::TAB_PRIMARY_SECTION];
+      $routeName = $tab[self::TAB_ROUTE_NAME];
+      $routeParameters = isset($tab[self::TAB_ROUTE_PARAMETERS]) ? $tab[self::TAB_ROUTE_PARAMETERS] : [];
+      $isRouteValid = $this->toolbarRouteManager->isRouteValid($routeName, $routeParameters);
 
-      if ($isRouteValid && $tab[self::YML_TAB_PRESET_KEY] == $this->discoveryManager->getActiveSet()) {
-        $title = isset($tab[self::YML_TABS_TITLE_KEY]) ? $tab[self::YML_TABS_TITLE_KEY] : $this->routeManager->getDefaultTitle($routeName, $routeParameters);
+      if ($isRouteValid && $tab[self::TAB_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
+        $title = isset($tab[self::TAB_TITLE]) ? $tab[self::TAB_TITLE] : $this->toolbarRouteManager->getDefaultTitle($routeName, $routeParameters);
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($routeName, $routeParameters);
-        $disabled = isset($tab[self::YML_TABS_DISABLED_KEY]) ? $tab[self::YML_TABS_DISABLED_KEY] : FALSE;
-        $badge = isset($tab[self::YML_TABS_BADGE_KEY]) ? $tab[self::YML_TABS_BADGE_KEY] : '';
+        $disabled = isset($tab[self::TAB_DISABLED]) ? $tab[self::TAB_DISABLED] : FALSE;
+        $badge = isset($tab[self::TAB_BADGE]) ? $tab[self::TAB_BADGE] : '';
         $active = FALSE;
         $this->addTab(new ToolbarTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
       }
@@ -165,13 +165,13 @@ class ToolbarTabsManager {
   protected function validateTab(array $tab) {
     try {
       $obj = json_encode($tab);
-      if (!isset($tab[self::YML_TABS_ID_KEY])) {
+      if (!isset($tab[self::TAB_ID])) {
         throw new Exception('Tab ID parameter missing ' . $obj);
       };
-      if (!isset($tab[self::YML_TABS_PRIMARY_SECTION_KEY])) {
+      if (!isset($tab[self::TAB_PRIMARY_SECTION])) {
         throw new Exception('Tab widget_id parameter missing ' . $obj);
       };
-      if (!isset($tab[self::YML_TABS_ROUTE_NAME_KEY])) {
+      if (!isset($tab[self::TAB_ROUTE_NAME])) {
         throw new Exception('Tab route parameter missing ' . $obj);
       }
     }
@@ -188,7 +188,7 @@ class ToolbarTabsManager {
    */
   public function getTabs() {
     if (empty($this->tabs)) {
-      $this->parseTabs();
+      $this->discoveryPrimarySectionsTabs();
     }
 
     return $this->tabs;
