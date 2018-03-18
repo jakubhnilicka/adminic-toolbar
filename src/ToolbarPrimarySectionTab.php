@@ -4,17 +4,17 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarTab.php.
+ * ToolbarPrimarySectionTab.phpSectionTab.php.
  */
 
 use Drupal\Core\Url;
 
 /**
- * Class ToolbarTab.
+ * Class ToolbarPrimarySectionTab.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarTab {
+class ToolbarPrimarySectionTab {
 
   /**
    * Tab ID.
@@ -197,7 +197,7 @@ class ToolbarTab {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'toolbar_section_tab',
+      '#theme' => 'toolbar_primary_section_tab',
       '#id' => $this->getId(),
       '#title' => $this->getTitle(),
       '#url' => $this->getUrl(),

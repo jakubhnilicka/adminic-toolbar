@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarLinksManager.php.
+ * ToolbarSecondarySectionLinksManagertionLinksManager.php.
  */
 
 use Drupal\Core\Extension\ModuleHandler;
@@ -12,11 +12,11 @@ use Drupal\Core\Url;
 use Exception;
 
 /**
- * Class ToolbarLinksManager.
+ * Class ToolbarSecondarySectionLinksManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarLinksManager {
+class ToolbarSecondarySectionLinksManager {
 
   const LINKS = 'secondary_sections_links';
   const LINK_SECONDARY_SECTION = 'secondary_section_id';
@@ -131,7 +131,7 @@ class ToolbarLinksManager {
         $badge = isset($link[self::LINK_BADGE]) ? $link[self::LINK_BADGE] : '';
 
         $active = FALSE;
-        $this->addLink(new ToolbarLink($widget_id, $url, $title, $active, $disabled, $badge));
+        $this->addLink(new ToolbarSecondarySectionLink($widget_id, $url, $title, $active, $disabled, $badge));
       }
     }
   }
@@ -139,10 +139,10 @@ class ToolbarLinksManager {
   /**
    * Add link.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarLink $link
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link
    *   Link.
    */
-  public function addLink(ToolbarLink $link) {
+  public function addLink(ToolbarSecondarySectionLink $link) {
     $key = $this->getLinkKey($link);
     $this->links[$key] = $link;
     // Remove link if exists and is disabled.
@@ -190,13 +190,13 @@ class ToolbarLinksManager {
   /**
    * Get link unique key from section and route.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarLink $link
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link
    *   Link.
    *
    * @return string
    *   Return formated key.
    */
-  public function getLinkKey(ToolbarLink $link) {
+  public function getLinkKey(ToolbarSecondarySectionLink $link) {
     /** @var \Drupal\Core\Url $url */
     $url = $link->getRawUrl();
     $routeName = $url->getRouteName();
@@ -210,10 +210,10 @@ class ToolbarLinksManager {
   /**
    * Add link to active links.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarLink $link
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link
    *   Link.
    */
-  public function addActiveLink(ToolbarLink $link) {
+  public function addActiveLink(ToolbarSecondarySectionLink $link) {
     $key = $this->getLinkKey($link);
     $this->activeLinks[$key] = $link;
   }
@@ -221,7 +221,7 @@ class ToolbarLinksManager {
   /**
    * Get first active link.
    *
-   * @return \Drupal\adminic_toolbar\ToolbarLink
+   * @return \Drupal\adminic_toolbar\ToolbarSecondarySectionLink
    *   Return first active link.
    */
   public function getActiveLink() {

@@ -4,17 +4,17 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarLink.php.
+ * ToolbarSecondarySectionLink.phpySectionLink.php.
  */
 
 use Drupal\Core\Url;
 
 /**
- * Class ToolbarLink.
+ * Class ToolbarSecondarySectionLink.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarLink {
+class ToolbarSecondarySectionLink {
 
   /**
    * Widget where link belongs to.
@@ -177,7 +177,7 @@ class ToolbarLink {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'toolbar_section_link',
+      '#theme' => 'toolbar_secondary_section_link',
       '#title' => $this->getTitle(),
       '#url' => $this->getUrl(),
       '#active' => $this->isActive(),
