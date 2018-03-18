@@ -70,7 +70,7 @@ class ToolbarSecondarySectionLink {
    * @param bool $active
    *   Link active state.
    * @param bool $disabled
-   *   Link disabled state
+   *   Link disabled state.
    * @param string $badge
    *   Link badge.
    */

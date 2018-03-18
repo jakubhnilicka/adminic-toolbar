@@ -115,7 +115,16 @@ class ToolbarSecondarySectionLinksManager {
    *   Links array.
    */
   protected function createLinksCollection(array $configLinks) {
-    $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+    $currentRouteName = $this->toolbarRouteManager->getCurrentRoute();
+    $activeRoutes = [];
+    array_walk($configLinks, function ($link) use ($currentRouteName, &$activeRoutes) {
+      if ($link['route_name'] == $currentRouteName) {
+        $activeRoutes[$link['route_name']] = $link;
+      }
+    });
+    if (empty($activeRoutes)) {
+      $activeRoutes = $this->toolbarRouteManager->getActiveRoutes();
+    }
 
     foreach ($configLinks as $link) {
       $this->validateLink($link);
