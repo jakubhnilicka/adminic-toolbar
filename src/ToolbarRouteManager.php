@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * RouteManager.php.
+ * ToolbarRouteManager.php.
  */
 
 use Drupal\Core\Access\AccessManager;
@@ -13,11 +13,11 @@ use Drupal\Core\Routing\RouteProvider;
 use Drupal\Core\Session\AccountProxy;
 
 /**
- * Class RouteManager.
+ * Class ToolbarRouteManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class RouteManager {
+class ToolbarRouteManager {
 
   /**
    * A Route Provider front-end for all Drupal-stored routes.

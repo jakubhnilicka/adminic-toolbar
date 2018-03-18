@@ -4,17 +4,17 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * Link.php.
+ * ToolbarLink.php.
  */
 
 use Drupal\Core\Url;
 
 /**
- * Class Link.
+ * Class ToolbarLink.
  *
  * @package Drupal\adminic_toolbar
  */
-class Link {
+class ToolbarLink {
 
   /**
    * Widget where link belongs to.

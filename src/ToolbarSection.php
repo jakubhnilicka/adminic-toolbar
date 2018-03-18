@@ -4,15 +4,15 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * Section.php.
+ * ToolbarSection.php.
  */
 
 /**
- * Class Section.
+ * Class ToolbarSection.
  *
  * @package Drupal\adminic_toolbar
  */
-class Section {
+class ToolbarSection {
 
   /**
    * Section ID.

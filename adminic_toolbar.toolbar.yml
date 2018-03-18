@@ -1,7 +1,7 @@
 presets:
 - {id: 'default', title: 'Default'}
 
-secondary_sections:
+primary_sections:
 - {id: 'default'}
 - {id: 'general', title: 'General'}
 

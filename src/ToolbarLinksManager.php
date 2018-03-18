@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * LinksManager.php.
+ * ToolbarLinksManager.php.
  */
 
 use Drupal\Core\Extension\ModuleHandler;
@@ -12,11 +12,11 @@ use Drupal\Core\Url;
 use Exception;
 
 /**
- * Class LinksManager.
+ * Class ToolbarLinksManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class LinksManager {
+class ToolbarLinksManager {
 
   const YML_LINKS_KEY = 'secondary_sections_links';
   const YML_LINKS_SECONDARY_SECTION_KEY = 'secondary_section_id';
@@ -30,14 +30,14 @@ class LinksManager {
   /**
    * Discovery manager.
    *
-   * @var \Drupal\adminic_toolbar\DiscoveryManager
+   * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
    */
   private $discoveryManager;
 
   /**
    * Route manager.
    *
-   * @var \Drupal\adminic_toolbar\RouteManager
+   * @var \Drupal\adminic_toolbar\ToolbarRouteManager
    */
   private $routeManager;
 
@@ -65,16 +65,16 @@ class LinksManager {
   /**
    * LinksManager constructor.
    *
-   * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
+   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $discoveryManager
    *   Discovery manager.
-   * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $routeManager
    *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
-    DiscoveryManager $discoveryManager,
-    RouteManager $routeManager,
+    ToolbarConfigDiscovery $discoveryManager,
+    ToolbarRouteManager $routeManager,
     ModuleHandler $moduleHandler) {
     $this->routeManager = $routeManager;
     $this->discoveryManager = $discoveryManager;
@@ -131,7 +131,7 @@ class LinksManager {
         $badge = isset($link[self::YML_LINKS_BADGE_KEY]) ? $link[self::YML_LINKS_BADGE_KEY] : '';
 
         $active = FALSE;
-        $this->addLink(new Link($widget_id, $url, $title, $active, $disabled, $badge));
+        $this->addLink(new ToolbarLink($widget_id, $url, $title, $active, $disabled, $badge));
       }
     }
   }
@@ -139,10 +139,10 @@ class LinksManager {
   /**
    * Add link.
    *
-   * @param \Drupal\adminic_toolbar\Link $link
+   * @param \Drupal\adminic_toolbar\ToolbarLink $link
    *   Link.
    */
-  public function addLink(Link $link) {
+  public function addLink(ToolbarLink $link) {
     $key = $this->getLinkKey($link);
     $this->links[$key] = $link;
     // Remove link if exists and is disabled.
@@ -190,13 +190,13 @@ class LinksManager {
   /**
    * Get link unique key from section and route.
    *
-   * @param \Drupal\adminic_toolbar\Link $link
+   * @param \Drupal\adminic_toolbar\ToolbarLink $link
    *   Link.
    *
    * @return string
    *   Return formated key.
    */
-  public function getLinkKey(Link $link) {
+  public function getLinkKey(ToolbarLink $link) {
     /** @var \Drupal\Core\Url $url */
     $url = $link->getRawUrl();
     $routeName = $url->getRouteName();
@@ -210,10 +210,10 @@ class LinksManager {
   /**
    * Add link to active links.
    *
-   * @param \Drupal\adminic_toolbar\Link $link
+   * @param \Drupal\adminic_toolbar\ToolbarLink $link
    *   Link.
    */
-  public function addActiveLink(Link $link) {
+  public function addActiveLink(ToolbarLink $link) {
     $key = $this->getLinkKey($link);
     $this->activeLinks[$key] = $link;
   }
@@ -221,7 +221,7 @@ class LinksManager {
   /**
    * Get first active link.
    *
-   * @return \Drupal\adminic_toolbar\Link
+   * @return \Drupal\adminic_toolbar\ToolbarLink
    *   Return first active link.
    */
   public function getActiveLink() {

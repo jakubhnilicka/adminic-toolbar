@@ -11,11 +11,11 @@ use Drupal\Core\Discovery\YamlDiscovery;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * Class DiscoveryManager.
+ * Class ToolbarConfigDiscovery.
  *
  * @package Drupal\adminic_toolbar
  */
-class DiscoveryManager {
+class ToolbarConfigDiscovery {
 
   /**
    * Interface for classes that manage a set of enabled modules.

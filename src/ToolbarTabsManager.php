@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * TabsManager.php.
+ * ToolbarTabsManager.php.
  */
 
 use Drupal\Core\Extension\ModuleHandler;
@@ -12,11 +12,11 @@ use Drupal\Core\Url;
 use Exception;
 
 /**
- * Class TabsManager.
+ * Class ToolbarTabsManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class TabsManager {
+class ToolbarTabsManager {
 
   const YML_TABS_KEY = 'primary_sections_tabs';
   const YML_TAB_WEIGHT_KEY = 'weight';
@@ -32,14 +32,14 @@ class TabsManager {
   /**
    * Discovery manager.
    *
-   * @var \Drupal\adminic_toolbar\DiscoveryManager
+   * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
    */
   private $discoveryManager;
 
   /**
    * Route manager.
    *
-   * @var \Drupal\adminic_toolbar\RouteManager
+   * @var \Drupal\adminic_toolbar\ToolbarRouteManager
    */
   private $routeManager;
 
@@ -67,16 +67,16 @@ class TabsManager {
   /**
    * TabsManager constructor.
    *
-   * @param \Drupal\adminic_toolbar\DiscoveryManager $discoveryManager
+   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $discoveryManager
    *   Discovery manager.
-   * @param \Drupal\adminic_toolbar\RouteManager $routeManager
+   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $routeManager
    *   Route manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
    */
   public function __construct(
-    DiscoveryManager $discoveryManager,
-    RouteManager $routeManager,
+    ToolbarConfigDiscovery $discoveryManager,
+    ToolbarRouteManager $routeManager,
     ModuleHandler $moduleHandler) {
     $this->discoveryManager = $discoveryManager;
     $this->routeManager = $routeManager;
@@ -136,7 +136,7 @@ class TabsManager {
         $disabled = isset($tab[self::YML_TABS_DISABLED_KEY]) ? $tab[self::YML_TABS_DISABLED_KEY] : FALSE;
         $badge = isset($tab[self::YML_TABS_BADGE_KEY]) ? $tab[self::YML_TABS_BADGE_KEY] : '';
         $active = FALSE;
-        $this->addTab(new Tab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
+        $this->addTab(new ToolbarTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
       }
     }
   }
@@ -144,10 +144,10 @@ class TabsManager {
   /**
    * Add tab.
    *
-   * @param \Drupal\adminic_toolbar\Tab $tab
+   * @param \Drupal\adminic_toolbar\ToolbarTab $tab
    *   Tab.
    */
-  public function addTab(Tab $tab) {
+  public function addTab(ToolbarTab $tab) {
     $key = $this->getTabKey($tab);
     $this->tabs[$key] = $tab;
     // Remove tab if exists and is disabled.
@@ -197,10 +197,10 @@ class TabsManager {
   /**
    * Add tab to active tabs.
    *
-   * @param \Drupal\adminic_toolbar\Tab $tab
+   * @param \Drupal\adminic_toolbar\ToolbarTab $tab
    *   Tab.
    */
-  public function addActiveTab(Tab $tab) {
+  public function addActiveTab(ToolbarTab $tab) {
     $key = $this->getTabKey($tab);
     $this->activeTabs[$key] = $tab;
   }
@@ -208,13 +208,13 @@ class TabsManager {
   /**
    * Get tab unique key from id.
    *
-   * @param \Drupal\adminic_toolbar\Tab $tab
+   * @param \Drupal\adminic_toolbar\ToolbarTab $tab
    *   Tab.
    *
    * @return string
    *   Return formated key.
    */
-  public function getTabKey(Tab $tab) {
+  public function getTabKey(ToolbarTab $tab) {
     return $tab->getId();
   }
 
@@ -231,7 +231,7 @@ class TabsManager {
   /**
    * Get first active tab.
    *
-   * @return \Drupal\adminic_toolbar\Tab
+   * @return \Drupal\adminic_toolbar\ToolbarTab
    *   Return first active tab.
    */
   public function getActiveTab() {
