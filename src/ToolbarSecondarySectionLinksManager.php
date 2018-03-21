@@ -87,25 +87,25 @@ class ToolbarSecondarySectionLinksManager {
   public function discoverySecondarySectionsLinks() {
     $config = $this->toolbarConfigDiscovery->getConfig();
 
-    $configLinks = [];
+    $configSecondarySectionsLinks = [];
     $weight = 0;
     foreach ($config as $configFile) {
       if (isset($configFile[self::LINKS])) {
         foreach ($configFile[self::LINKS] as $link) {
           $link[self::LINK_WEIGHT] = isset($link[self::LINK_WEIGHT]) ? $link[self::LINK_WEIGHT] : $weight++;
           $key = sprintf('%s.%s', $link[self::LINK_SECONDARY_SECTION], $link[self::LINK_ROUTE_NAME]);
-          $configLinks[$key] = $link;
+          $configSecondarySectionsLinks[$key] = $link;
         }
       }
     }
 
     // Sort links by weight.
-    uasort($configLinks, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+    uasort($configSecondarySectionsLinks, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
     // Call hook alters.
-    $this->moduleHandler->alter('toolbar_config_links', $configLinks);
+    $this->moduleHandler->alter('toolbar_secondary_sections_links', $configSecondarySectionsLinks);
 
-    $this->createLinksCollection($configLinks);
+    $this->createLinksCollection($configSecondarySectionsLinks);
   }
 
   /**

@@ -115,7 +115,7 @@ class ToolbarPrimarySectionsManager {
     $config = $this->toolbarConfigDiscovery->getConfig();
 
     $weight = 0;
-    $configSections = [];
+    $configPrimarySections = [];
     foreach ($config as $configFile) {
       if (isset($configFile[self::PRIMARY_SECTIONS])) {
         foreach ($configFile[self::PRIMARY_SECTIONS] as $section) {
@@ -125,19 +125,19 @@ class ToolbarPrimarySectionsManager {
           $section[self::SECTION_PRESET] = isset($section[self::SECTION_PRESET]) ? $section[self::SECTION_PRESET] : 'default';
           // TODO: get key from method.
           $key = $section[self::SECTION_ID];
-          $configSections[$key] = $section;
+          $configPrimarySections[$key] = $section;
           $weight++;
         }
       }
     }
     // Sort tabs by weight.
-    uasort($configSections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+    uasort($configPrimarySections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
     // Call hook alters.
-    $this->moduleHandler->alter('toolbar_config_primary_sections', $configSections);
+    $this->moduleHandler->alter('toolbar_primary_sections', $configPrimarySections);
 
     // Add tabs.
-    $this->createPrimarySectionsCollection($configSections);
+    $this->createPrimarySectionsCollection($configPrimarySections);
   }
 
   /**

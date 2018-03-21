@@ -90,26 +90,26 @@ class ToolbarPrimarySectionTabsManager {
     $config = $this->toolbarConfigDiscovery->getConfig();
 
     $weight = 0;
-    $configTabs = [];
+    $configPrimarySectionsTabs = [];
     foreach ($config as $configFile) {
       if (isset($configFile[self::TABS])) {
         foreach ($configFile[self::TABS] as $tab) {
           $tab[self::TAB_WEIGHT] = isset($tab[self::TAB_WEIGHT]) ? $tab[self::TAB_WEIGHT] : $weight++;
           $tab[self::TAB_PRESET] = isset($tab[self::TAB_PRESET]) ? $tab[self::TAB_PRESET] : 'default';
           $key = $tab[self::TAB_ID];
-          $configTabs[$key] = $tab;
+          $configPrimarySectionsTabs[$key] = $tab;
         }
       }
     }
 
     // Sort tabs by weight.
-    uasort($configTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+    uasort($configPrimarySectionsTabs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
     // Call hook alters.
-    $this->moduleHandler->alter('toolbar_config_tabs', $configTabs);
+    $this->moduleHandler->alter('toolbar_primary_sections_tabs', $configPrimarySectionsTabs);
 
     // Add tabs.
-    $this->createTabsCollection($configTabs);
+    $this->createTabsCollection($configPrimarySectionsTabs);
   }
 
   /**

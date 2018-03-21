@@ -17,7 +17,6 @@ use Exception;
  */
 class ToolbarSecondarySectionsManager {
 
-  const PRIMARY_SECTIONS = 'primary_sections';
   const SECONDARY_SECTIONS = 'secondary_sections';
   const SECTION_ID = 'id';
   const SECTION_TAB_ID = 'tab_id';
@@ -117,7 +116,7 @@ class ToolbarSecondarySectionsManager {
     $config = $this->toolbarConfigDiscovery->getConfig();
 
     $weight = 0;
-    $configSections = [];
+    $configSecondarySections = [];
     foreach ($config as $configFile) {
       if (isset($configFile[self::SECONDARY_SECTIONS])) {
         foreach ($configFile[self::SECONDARY_SECTIONS] as $section) {
@@ -127,18 +126,18 @@ class ToolbarSecondarySectionsManager {
           $section[self::SECTION_PRESET] = isset($section[self::SECTION_PRESET]) ? $section[self::SECTION_PRESET] : 'default';
           // TODO: get key from method.
           $key = $section[self::SECTION_ID];
-          $configSections[$key] = $section;
+          $configSecondarySections[$key] = $section;
         }
       }
     }
     // Sort tabs by weight.
-    uasort($configSections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
+    uasort($configSecondarySections, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
     // Call hook alters.
-    $this->moduleHandler->alter('toolbar_config_primary_sections', $configSections);
+    $this->moduleHandler->alter('toolbar_secondary_sections', $configSecondarySections);
 
     // Add tabs.
-    $this->createSecondarySectionsCollection($configSections);
+    $this->createSecondarySectionsCollection($configSecondarySections);
   }
 
   /**
