@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * RouteManager.php.
+ * ToolbarRouteManager.php.
  */
 
 use Drupal\Core\Access\AccessManager;
@@ -13,11 +13,11 @@ use Drupal\Core\Routing\RouteProvider;
 use Drupal\Core\Session\AccountProxy;
 
 /**
- * Class RouteManager.
+ * Class ToolbarRouteManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class RouteManager {
+class ToolbarRouteManager {
 
   /**
    * A Route Provider front-end for all Drupal-stored routes.
@@ -60,6 +60,7 @@ class RouteManager {
    * @var array
    */
   private $activeRoutes = [];
+  private $activeSecondarySection;
 
   /**
    * RouteManager constructor.
@@ -199,26 +200,15 @@ class RouteManager {
   }
 
   /**
-   * Get array of active routes.
-   *
-   * @return array
-   *   Return array of active routes.
-   */
-  public function getActiveRoutes() {
-    if (empty($this->activeRoutes)) {
-      $this->setActiveRoutes();
-    }
-
-    return $this->activeRoutes;
-  }
-
-  /**
    * Set active routes.
    *
+   * @todo Explain, what is Active route.
+   *
    * @return array
    *   Return array of active routes.
    */
-  public function setActiveRoutes() {
+  public function getActiveRoutesByPath() {
+    // TODO: set active route if in config by config.
     $activeRoutes = [];
     $currentRouteObject = $this->currentRouteMatch->getRouteObject();
     $allRoutes = $this->routeProvider->getAllRoutes();
@@ -232,9 +222,49 @@ class RouteManager {
       };
     }
 
-    $this->activeRoutes = $activeRoutes;
+    return $activeRoutes;
+  }
 
+  /**
+   * Set active links.
+   *
+   * @param array $activeRoutes
+   *   Active routes.
+   */
+  public function setActiveLinks(array $activeRoutes) {
+    $this->activeRoutes = $activeRoutes;
+  }
+
+  /**
+   * Get array of active routes.
+   *
+   * @todo Explain, what is Active route.
+   *
+   * @return array
+   *   Return array of active routes.
+   */
+  public function getActiveLinks() {
     return $this->activeRoutes;
+  }
+
+  /**
+   * Set active secondary section.
+   *
+   * @param array $secondarySection
+   *   Secondary section.
+   */
+  public function setActiveSecondarySection(array $secondarySection) {
+    $this->activeSecondarySection = $secondarySection;
+  }
+
+  /**
+   * Get secondary active section.
+   *
+   * @return mixed
+   *   Secondary section.
+   */
+  public function getActiveSecondarySection() {
+    return $this->activeSecondarySection;
   }
 
 }

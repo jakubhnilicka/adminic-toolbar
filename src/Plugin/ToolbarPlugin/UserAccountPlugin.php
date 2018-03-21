@@ -1,25 +1,24 @@
 <?php
 
-namespace Drupal\adminic_toolbar\Plugin\ToolbarWidget;
+namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
-use Drupal\adminic_toolbar\ToolbarWidgetPluginInterface;
+use Drupal\adminic_toolbar\ToolbarPluginInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PageInfoWidget.
+ * Class UserAccountWidget.
  *
- * @ToolbarWidgetPlugin(
- *   id = "page_info",
- *   name = @Translation("Page Info Widget"),
+ * @ToolbarPlugin(
+ *   id = "user_account",
+ *   name = @Translation("User Account Widget"),
  * )
  */
-class PageInfoWidget extends PluginBase implements ToolbarWidgetPluginInterface, ContainerFactoryPluginInterface {
+class UserAccountPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
 
   /**
    * @var \Drupal\Core\Session\AccountProxyInterface
@@ -27,22 +26,15 @@ class PageInfoWidget extends PluginBase implements ToolbarWidgetPluginInterface,
   private $currentUser;
 
   /**
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  private $currentRouteMatch;
-
-  /**
    * AppearanceSettingsWidget constructor.
    * @param $configuration
    * @param $plugin_id
    * @param $plugin_definition
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition, AccountProxyInterface $currentUser, CurrentRouteMatch $currentRouteMatch) {
+  public function __construct($configuration, $plugin_id, $plugin_definition, AccountProxyInterface $currentUser) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $currentUser;
-    $this->currentRouteMatch = $currentRouteMatch;
   }
 
   /**
@@ -62,54 +54,38 @@ class PageInfoWidget extends PluginBase implements ToolbarWidgetPluginInterface,
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $currentUser = $container->get('current_user');
-    $currentPageRoute = $container->get('current_route_match');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentUser,
-      $currentPageRoute
+      $currentUser
     );
   }
 
   public function getRenderArray() {
     $dropdownContent = [];
 
-    $routeName = $this->currentRouteMatch->getRouteName();
-    $routeParameters = $this->currentRouteMatch->getParameters();
+    $profileUrl = Url::fromRoute('user.page');
+    $dropdownContent[] = Link::fromTextAndUrl(t('Profile'), $profileUrl);
 
-    $dropdownContent[] = [
-      '#type' => 'inline_template',
-      '#template' => "<span>Route name</span>: {{ route_name }}<br/>",
-      '#context' => [
-        'route_name' => $routeName,
-      ],
-    ];
+    $editUrl = Url::fromRoute('entity.user.edit_form', ['user' => $this->currentUser->id()]);
+    $dropdownContent[] = Link::fromTextAndUrl(t('Edit'), $editUrl);
 
-    $routeParams = [];
-    $params = $routeParameters->all();
-    foreach ($params as $key => $parameter) {
-      $routeParams[] = $key;
-    }
+    $logoutUrl = Url::fromRoute('user.logout');
+    $dropdownContent[] = Link::fromTextAndUrl(t('Log out'), $logoutUrl);
 
-    if ($routeParams) {
-      $dropdownContent[] = [
-        '#type' => 'inline_template',
-        '#template' => "<span>Route parameters</span>: {{ route_parameters }}<br/>",
-        '#context' => [
-          'route_parameters' => implode(', ', $routeParams),
-        ],
-      ];
-    }
+    $name = $this->currentUser->getDisplayName();
 
     $dropdown = [
       '#theme' => 'drd',
-      '#trigger_content' => 'I',
+      '#trigger_content' => '',
       '#content' => $dropdownContent,
     ];
 
     return [
-      '#theme' => 'page_info',
+      '#theme' => 'user_account',
+      '#avatar' => NULL,
+      '#name' => $name,
       '#dropdown' => $dropdown,
     ];
   }

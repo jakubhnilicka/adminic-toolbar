@@ -4,17 +4,17 @@ namespace Drupal\adminic_toolbar\Annotation;
 
 /**
  * @file
- * ToolbarWidgetPlugin.php.
+ * ToolbarPlugin.php.
  */
 
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines a Toolbar Widget plugin item annotation object.
+ * Defines a Toolbar Plugin item annotation object.
  *
  * @Annotation
  */
-class ToolbarWidgetPlugin extends Plugin {
+class ToolbarPlugin extends Plugin {
 
   public $id;
   public $name;

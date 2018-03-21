@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\adminic_toolbar\Plugin\ToolbarWidget;
+namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
-use Drupal\adminic_toolbar\ToolbarWidgetPluginInterface;
+use Drupal\adminic_toolbar\ToolbarPluginInterface;
 use Drupal\Core\Extension\ThemeHandler;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -14,12 +14,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Appearance Settings Widget.
  *
- * @ToolbarWidgetPlugin(
+ * @ToolbarPlugin(
  *   id = "appearance_settings",
  *   name = @Translation("Appearance Settings Widget"),
  * )
  */
-class AppearanceSettingsWidget extends PluginBase implements ToolbarWidgetPluginInterface, ContainerFactoryPluginInterface {
+class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
 
   /**
    * @var \Drupal\Core\Routing\CurrentRouteMatch

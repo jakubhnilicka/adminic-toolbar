@@ -4,15 +4,15 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * Section.php.
+ * ToolbarPrimarySectionSection.php.
  */
 
 /**
- * Class Section.
+ * Class ToolbarPrimarySection.
  *
  * @package Drupal\adminic_toolbar
  */
-class Section {
+class ToolbarSecondarySection {
 
   /**
    * Section ID.
@@ -82,7 +82,7 @@ class Section {
    * Get section id.
    *
    * @return string
-   *   Retrun section id.
+   *   Return section id.
    */
   public function getId() {
     return $this->id;
@@ -92,7 +92,7 @@ class Section {
    * Get section title.
    *
    * @return string
-   *   Retrun section title.
+   *   Return section title.
    */
   public function getTitle() {
     return $this->title;
@@ -102,7 +102,7 @@ class Section {
    * Get section tab.
    *
    * @return string
-   *   Retrun section tab.
+   *   Return section tab.
    */
   public function getTab() {
     return $this->tab;
@@ -112,7 +112,7 @@ class Section {
    * Get section type.
    *
    * @return string
-   *   Retrun section type.
+   *   Return section type.
    */
   public function getType() {
     return $this->type;
@@ -132,7 +132,7 @@ class Section {
    * Get section links.
    *
    * @return array
-   *   Retrun array of links.
+   *   Return array of links.
    */
   public function getLinks() {
     return $this->links;
@@ -166,7 +166,7 @@ class Section {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'toolbar_section',
+      '#theme' => 'toolbar_secondary_section',
       '#title' => $this->getTitle(),
       '#links' => $this->getLinks(),
     ];

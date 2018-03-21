@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\adminic_toolbar\Plugin\ToolbarWidget;
+namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
-use Drupal\adminic_toolbar\ToolbarWidgetPluginInterface;
+use Drupal\adminic_toolbar\ToolbarPluginInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Url;
@@ -10,12 +10,12 @@ use Drupal\Core\Url;
 /**
  * Class Test Widget.
  *
- * @ToolbarWidgetPlugin(
+ * @ToolbarPlugin(
  *   id = "test_widget",
  *   name = @Translation("Test Widget Widget"),
  * )
  */
-class TestWidget extends PluginBase implements ToolbarWidgetPluginInterface {
+class TestPlugin extends PluginBase implements ToolbarPluginInterface {
 
   public function getRenderArray() {
     return [

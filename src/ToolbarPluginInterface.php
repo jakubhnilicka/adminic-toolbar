@@ -4,15 +4,15 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarWidgetPluginInterface.php.
+ * ToolbarPluginPluginInterface.php.
  */
 
 /**
- * Interface ToolbarWidgetPluginInterface.
+ * Interface ToolbarPluginPluginInterface.
  *
  * @package Drupal\adminic_toolbar
  */
-interface ToolbarWidgetPluginInterface {
+interface ToolbarPluginInterface {
 
   /**
    * Get render array for widget.

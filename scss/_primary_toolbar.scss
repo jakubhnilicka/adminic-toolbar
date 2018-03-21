@@ -6,12 +6,10 @@ body.adminic-toolbar-primary {
 }
 .toolbar__primary {
   position: fixed;
-  background-color: $primary-bg;
   top: 0;
   left: 0;
   width: $primary-width-compact;
   height: 100%;
-  //box-shadow: 0 0 ($unit / 2) 0 rgba(0, 0, 0, 0.25);
   z-index: 999998;
   display: flex;
   flex-direction: column;
