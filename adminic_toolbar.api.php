@@ -11,8 +11,18 @@
  * @param array $configWidgets
  *   Config widgets array.
  */
-function hook_toolbar_config_widgets_alter(array &$configWidgets) {
-  unset($configWidgets['general']);
+function hook_toolbar_primary_sections_alter(array &$configPrimarySections) {
+  unset($configPrimarySections['general']);
+}
+
+/**
+ * Alter widgets for toolbar.
+ *
+ * @param array $configWidgets
+ *   Config widgets array.
+ */
+function hook_toolbar_secondary_sections_alter(array &$configSecondarySections) {
+  unset($configSecondarySections['content.default']);
 }
 
 /**
@@ -21,8 +31,8 @@ function hook_toolbar_config_widgets_alter(array &$configWidgets) {
  * @param array $configTabs
  *   Config tabs array.
  */
-function hook_toolbar_config_tabs_alter(array &$configTabs) {
-  unset($configTabs['media']);
+function hook_toolbar_primary_sections_tabs_alter(array &$configPrimarySectionsTabs) {
+  unset($configPrimarySectionsTabs['media']);
 }
 
 /**
@@ -31,6 +41,6 @@ function hook_toolbar_config_tabs_alter(array &$configTabs) {
  * @param array $configLinks
  *   Config links array.
  */
-function hook_toolbar_config_links_alter(array &$configLinks) {
-  unset($configLinks['content.default.system.admin_content']);
+function hook_toolbar_secondary_sections_links_alter(array &$configSecondarySectionsLinks) {
+  unset($configSecondarySectionsLinks['content.default.system.admin_content']);
 }
