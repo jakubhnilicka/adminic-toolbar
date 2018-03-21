@@ -29,17 +29,34 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['toolbar_secondary'] = [
-    'variables' => [
-      'wrappers' => NULL,
-    ],
-  ];
-
   $items['toolbar_primary_header'] = [
     'variables' => [
       'title' => NULL,
       'title_link' => NULL,
       'close' => FALSE,
+    ],
+  ];
+
+  $items['toolbar_primary_section'] = [
+    'variables' => [
+      'title' => NULL,
+      'links' => NULL,
+    ],
+  ];
+
+  $items['toolbar_primary_section_tab'] = [
+    'variables' => [
+      'id' => NULL,
+      'title' => NULL,
+      'url' => NULL,
+      'active' => FALSE,
+      'badge' => NULL,
+    ],
+  ];
+
+  $items['toolbar_secondary'] = [
+    'variables' => [
+      'wrappers' => NULL,
     ],
   ];
 
@@ -60,24 +77,14 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['toolbar_section'] = [
+  $items['toolbar_secondary_section'] = [
     'variables' => [
       'title' => NULL,
       'links' => NULL,
     ],
   ];
 
-  $items['toolbar_section_tab'] = [
-    'variables' => [
-      'id' => NULL,
-      'title' => NULL,
-      'url' => NULL,
-      'active' => FALSE,
-      'badge' => NULL,
-    ],
-  ];
-
-  $items['toolbar_section_link'] = [
+  $items['toolbar_secondary_section_link'] = [
     'variables' => [
       'title' => NULL,
       'url' => NULL,

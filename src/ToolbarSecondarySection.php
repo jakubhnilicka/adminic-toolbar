@@ -4,15 +4,15 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarSection.php.
+ * ToolbarPrimarySectionSection.php.
  */
 
 /**
- * Class ToolbarSection.
+ * Class ToolbarPrimarySection.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarSection {
+class ToolbarSecondarySection {
 
   /**
    * Section ID.
@@ -166,7 +166,7 @@ class ToolbarSection {
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'toolbar_section',
+      '#theme' => 'toolbar_secondary_section',
       '#title' => $this->getTitle(),
       '#links' => $this->getLinks(),
     ];

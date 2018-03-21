@@ -4,7 +4,7 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarTabsManager.php.
+ * ToolbarPrimarySectionTabsManager.phpabsManager.php.
  */
 
 use Drupal\Core\Extension\ModuleHandler;
@@ -12,11 +12,11 @@ use Drupal\Core\Url;
 use Exception;
 
 /**
- * Class ToolbarTabsManager.
+ * Class ToolbarPrimarySectionTabsManager.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarTabsManager {
+class ToolbarPrimarySectionTabsManager {
 
   const TABS = 'primary_sections_tabs';
   const TAB_ID = 'id';
@@ -119,6 +119,38 @@ class ToolbarTabsManager {
    *   Array of tabs.
    */
   protected function createTabsCollection(array $configTabs) {
+    $activeSection = $this->toolbarRouteManager->getActiveSecondarySection();
+
+    $activeTabs = [];
+    // Set by active section.
+    if (!empty($activeSection)) {
+      array_walk($configTabs, function ($tab) use ($activeSection, &$activeTabs) {
+        if ($tab['id'] == $activeSection['tab_id']) {
+          $activeTabs[$tab['id']] = $tab;
+        }
+      });
+    }
+
+    // Set by current route.
+    if (empty($activeTabs)) {
+      $activeRoutesName = $this->toolbarRouteManager->getCurrentRoute();
+      array_walk($configTabs, function ($tab) use ($activeRoutesName, &$activeTabs) {
+        if ($tab['route_name'] == $activeRoutesName) {
+          $activeTabs[$tab['id']] = $tab;
+        }
+      });
+    }
+
+    // Set by path trail.
+    if (empty($activeTabs)) {
+      $activeRoutes = $this->toolbarRouteManager->getActiveRoutesByPath();
+      array_walk($configTabs, function ($tab) use ($activeRoutes, &$activeTabs) {
+        if (array_key_exists($tab['route_name'], $activeRoutes)) {
+          $activeTabs[$tab['id']] = $tab;
+        }
+      });
+    }
+
     foreach ($configTabs as $tab) {
 
       $this->validateTab($tab);
@@ -136,7 +168,10 @@ class ToolbarTabsManager {
         $disabled = isset($tab[self::TAB_DISABLED]) ? $tab[self::TAB_DISABLED] : FALSE;
         $badge = isset($tab[self::TAB_BADGE]) ? $tab[self::TAB_BADGE] : '';
         $active = FALSE;
-        $this->addTab(new ToolbarTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
+        if (array_key_exists($id, $activeTabs)) {
+          $active = TRUE;
+        }
+        $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
       }
     }
   }
@@ -144,10 +179,10 @@ class ToolbarTabsManager {
   /**
    * Add tab.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarTab $tab
+   * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $tab
    *   Tab.
    */
-  public function addTab(ToolbarTab $tab) {
+  public function addTab(ToolbarPrimarySectionTab $tab) {
     $key = $this->getTabKey($tab);
     $this->tabs[$key] = $tab;
     // Remove tab if exists and is disabled.
@@ -197,10 +232,10 @@ class ToolbarTabsManager {
   /**
    * Add tab to active tabs.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarTab $tab
+   * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $tab
    *   Tab.
    */
-  public function addActiveTab(ToolbarTab $tab) {
+  public function addActiveTab(ToolbarPrimarySectionTab $tab) {
     $key = $this->getTabKey($tab);
     $this->activeTabs[$key] = $tab;
   }
@@ -208,13 +243,13 @@ class ToolbarTabsManager {
   /**
    * Get tab unique key from id.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarTab $tab
+   * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $tab
    *   Tab.
    *
    * @return string
    *   Return formated key.
    */
-  public function getTabKey(ToolbarTab $tab) {
+  public function getTabKey(ToolbarPrimarySectionTab $tab) {
     return $tab->getId();
   }
 
@@ -231,7 +266,7 @@ class ToolbarTabsManager {
   /**
    * Get first active tab.
    *
-   * @return \Drupal\adminic_toolbar\ToolbarTab
+   * @return \Drupal\adminic_toolbar\ToolbarPrimarySectionTab
    *   Return first active tab.
    */
   public function getActiveTab() {

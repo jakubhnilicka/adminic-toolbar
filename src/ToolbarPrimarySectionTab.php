@@ -4,77 +4,87 @@ namespace Drupal\adminic_toolbar;
 
 /**
  * @file
- * ToolbarLink.php.
+ * ToolbarPrimarySectionTab.phpSectionTab.php.
  */
 
 use Drupal\Core\Url;
 
 /**
- * Class ToolbarLink.
+ * Class ToolbarPrimarySectionTab.
  *
  * @package Drupal\adminic_toolbar
  */
-class ToolbarLink {
+class ToolbarPrimarySectionTab {
 
   /**
-   * Widget where link belongs to.
+   * Tab ID.
+   *
+   * @var string
+   */
+  private $id;
+
+  /**
+   * Widget where tab belongs to.
    *
    * @var string
    */
   private $widget;
 
   /**
-   * URL object for link.
+   * URL object for tab.
    *
    * @var \Drupal\Core\Url
    */
   private $url;
 
   /**
-   * Link title.
+   * Tab title.
    *
    * @var string
    */
   private $title;
 
   /**
-   * Link active state.
+   * Tab active state.
    *
    * @var bool
    */
   private $active;
 
   /**
-   * Link disabled state.
+   * Tab disabled state.
    *
    * @var bool
    */
   private $disabled;
 
   /**
-   * Link badge.
+   * Tab badge.
    *
    * @var string
    */
   private $badge;
 
   /**
-   * Link constructor.
+   * Tab constructor.
    *
+   * @param string $id
+   *   Tab ID.
    * @param string $widget
-   *   Widget where link belong to.
+   *   Widget where tab belong to.
    * @param \Drupal\Core\Url $url
-   *   URL object for link.
+   *   URL object for tab.
    * @param string $title
-   *   Link title.
+   *   Tab title.
    * @param bool $active
-   *   Link active state.
+   *   Tab active state.
    * @param bool $disabled
-   *   Link disabled state
+   *   Tab disabled state.
    * @param string $badge
-   *   Link badge.
+   *   Tab badge.
    */
-  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
+  public function __construct(string $id, string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
+    $this->id = $id;
     $this->widget = $widget;
     $this->url = $url;
     $this->title = $title;
@@ -84,27 +94,37 @@ class ToolbarLink {
   }
 
   /**
-   * Get link widget.
+   * Get tab id.
    *
    * @return string
-   *   Return link widget.
+   *   Return tab id.
    */
-  public function getToolbarPlugin() {
+  public function getId() {
+    return $this->id;
+  }
+
+  /**
+   * Get tab widget.
+   *
+   * @return string
+   *   Return tab widget.
+   */
+  public function getWidget() {
     return $this->widget;
   }
 
   /**
-   * Get link title.
+   * Get tab title.
    *
    * @return string
-   *   Return link title.
+   *   Return tab title.
    */
   public function getTitle() {
     return $this->title;
   }
 
   /**
-   * Get link URL.
+   * Get tab URL.
    *
    * @return string
    *   Return link URL as string.
@@ -116,53 +136,53 @@ class ToolbarLink {
   }
 
   /**
-   * Get link URL object.
+   * Get tab URL object.
    *
    * @return \Drupal\Core\Url
-   *   Return link URL object.
+   *   Return tab URL object.
    */
   public function getRawUrl() {
     return $this->url;
   }
 
   /**
-   * Get link badge.
+   * Get tab badge.
    *
-   * @return mixed
-   *   Return link badge.
+   * @return string
+   *   Return tab badge.
    */
   public function getBadge() {
     return $this->badge;
   }
 
   /**
-   * Is link active.
+   * Is tab active.
    *
    * @return string
-   *   Return link active state.
+   *   Return tab active state.
    */
   public function isActive() {
     return $this->active;
   }
 
   /**
-   * Set link as active.
+   * Set tab as active.
    */
   public function setActive() {
     $this->active = TRUE;
   }
 
   /**
-   * Set link as inactive.
+   * Set tab as inactive.
    */
   public function setInactive() {
     $this->active = FALSE;
   }
 
   /**
-   * Is link disabled.
+   * Is tab disabled.
    *
-   * @return bool
+   * @return string
    *   If disabled return TRUE else FALSE.
    */
   public function isDisabled() {
@@ -170,14 +190,15 @@ class ToolbarLink {
   }
 
   /**
-   * Return link render array.
+   * Return tab render array.
    *
    * @return array
-   *   Return link render array.
+   *   Return tab render array.
    */
   public function getRenderArray() {
     return [
-      '#theme' => 'toolbar_section_link',
+      '#theme' => 'toolbar_primary_section_tab',
+      '#id' => $this->getId(),
       '#title' => $this->getTitle(),
       '#url' => $this->getUrl(),
       '#active' => $this->isActive(),

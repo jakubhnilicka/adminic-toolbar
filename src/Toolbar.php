@@ -42,30 +42,37 @@ class Toolbar {
   /**
    * Tabs manager.
    *
-   * @var \Drupal\adminic_toolbar\ToolbarTabsManager
+   * @var \Drupal\adminic_toolbar\ToolbarPrimarySectionTabsManager
    */
   private $tabsManager;
 
   /**
    * Links manager.
    *
-   * @var \Drupal\adminic_toolbar\ToolbarLinksManager
+   * @var \Drupal\adminic_toolbar\ToolbarSecondarySectionLinksManager
    */
   private $linksManager;
 
   /**
-   * Sections manager.
+   * Primary sections manager.
    *
-   * @var \Drupal\adminic_toolbar\ToolbarSectionsManager
+   * @var \Drupal\adminic_toolbar\ToolbarPrimarySectionsManager
    */
-  private $sectionsManager;
+  private $primarySectionsManager;
+
+  /**
+   * Secondary sections manager.
+   *
+   * @var \Drupal\adminic_toolbar\ToolbarSecondarySectionsManager
+   */
+  private $secondarySectionsManager;
 
   /**
    * Toolbar widget plugin manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarPluginManager
    */
-  private $toolbarWidgetPluginManager;
+  private $toolbarPluginManager;
 
   /**
    * Toolbar constructor.
@@ -76,30 +83,44 @@ class Toolbar {
    *   Default object for current_route_match service.
    * @param \Drupal\Core\Session\AccountProxy $currentUser
    *   A proxied implementation of AccountInterface.
-   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarWidgetPluginManager
+   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarPluginManager
    *   Toolbar widget plugin manager.
-   * @param \Drupal\adminic_toolbar\ToolbarTabsManager $tabsManager
+   * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionTabsManager $tabsManager
    *   Tabs manager.
-   * @param \Drupal\adminic_toolbar\ToolbarLinksManager $linksManager
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLinksManager $linksManager
    *   Links manager.
-   * @param \Drupal\adminic_toolbar\ToolbarSectionsManager $sectionsManager
-   *   Sections manager.
+   * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionsManager $primarySectionsManager
+   *   Primary sections manager.
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionsManager $secondarySectionsManager
+   *   Secondary sections manager.
    */
   public function __construct(
     Config $systemSite,
     CurrentRouteMatch $currentRouteMatch,
     AccountProxy $currentUser,
-    ToolbarPluginManager $toolbarWidgetPluginManager,
-    ToolbarTabsManager $tabsManager,
-    ToolbarLinksManager $linksManager,
-    ToolbarSectionsManager $sectionsManager) {
+    ToolbarPluginManager $toolbarPluginManager,
+    ToolbarPrimarySectionTabsManager $tabsManager,
+    ToolbarSecondarySectionLinksManager $linksManager,
+    ToolbarPrimarySectionsManager $primarySectionsManager,
+    ToolbarSecondarySectionsManager $secondarySectionsManager) {
+    $this->systemSite = $systemSite;
+    $this->currentRouteMatch = $currentRouteMatch;
     $this->currentUser = $currentUser;
+    $this->toolbarPluginManager = $toolbarPluginManager;
     $this->tabsManager = $tabsManager;
     $this->linksManager = $linksManager;
-    $this->sectionsManager = $sectionsManager;
-    $this->currentRouteMatch = $currentRouteMatch;
-    $this->systemSite = $systemSite;
-    $this->toolbarWidgetPluginManager = $toolbarWidgetPluginManager;
+    $this->primarySectionsManager = $primarySectionsManager;
+    $this->secondarySectionsManager = $secondarySectionsManager;
+  }
+
+  /**
+   * Generate active trail.
+   *
+   * @throws \Exception
+   */
+  protected function generateActiveTrails() {
+    $this->linksManager->getLinks();
+    $this->secondarySectionsManager->getSecondarySections();
   }
 
   /**
@@ -115,23 +136,24 @@ class Toolbar {
       return NULL;
     }
 
-    $primarySections = $this->sectionsManager->getPrimarySections();
+    $this->generateActiveTrails();
+    $primarySections = $this->primarySectionsManager->getPrimarySections();
     $widgets = [];
 
-    /** @var \Drupal\adminic_toolbar\ToolbarSection $section */
+    /** @var \Drupal\adminic_toolbar\ToolbarPrimarySection $section */
     foreach ($primarySections as $section) {
       if ($section->hasType()) {
         $type = $section->getType();
-        $widget = $this->toolbarWidgetPluginManager->createInstance($type);
+        $widget = $this->toolbarPluginManager->createInstance($type);
         $widgets[] = $widget->getRenderArray();
       }
       else {
-        $widgets[] = $this->sectionsManager->getPrimarySection($section);
+        $widgets[] = $this->primarySectionsManager->getPrimarySection($section);
       }
     }
 
     // Append user account to primary toolbar.
-    $userAccount = $this->toolbarWidgetPluginManager->createInstance('user_account')->getRenderArray();
+    $userAccount = $this->toolbarPluginManager->createInstance('user_account')->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_primary_header',
@@ -180,9 +202,9 @@ class Toolbar {
       return NULL;
     }
 
-    $secondaryWrappers = $this->sectionsManager->getSecondarySectionWrappers();
+    $secondaryWrappers = $this->secondarySectionsManager->getSecondarySectionWrappers();
 
-    /** @var \Drupal\adminic_toolbar\ToolbarTab $activeTab */
+    /** @var \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $activeTab */
     $wrappers = [];
 
     foreach ($secondaryWrappers as $key => $wrapper) {

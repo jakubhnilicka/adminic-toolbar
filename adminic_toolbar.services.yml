@@ -7,7 +7,7 @@ services:
 
   adminic_toolbar:
     class: Drupal\adminic_toolbar\Toolbar
-    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.sections_manager']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager']
 
   adminic_toolbar.discovery_manager:
     class: Drupal\adminic_toolbar\ToolbarConfigDiscovery
@@ -18,15 +18,19 @@ services:
     arguments: ['@router.route_provider', '@current_route_match', '@access_manager', '@current_user']
 
   adminic_toolbar.tabs_manager:
-    class: Drupal\adminic_toolbar\ToolbarTabsManager
+    class: Drupal\adminic_toolbar\ToolbarPrimarySectionTabsManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
 
-  adminic_toolbar.sections_manager:
-    class: Drupal\adminic_toolbar\ToolbarSectionsManager
+  adminic_toolbar.primary_sections_manager:
+    class: Drupal\adminic_toolbar\ToolbarPrimarySectionsManager
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.tabs_manager', '@module_handler', '@adminic_toolbar.widget.manager']
+
+  adminic_toolbar.secondary_sections_manager:
+    class: Drupal\adminic_toolbar\ToolbarSecondarySectionsManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.tabs_manager', '@module_handler', '@adminic_toolbar.widget.manager']
 
   adminic_toolbar.links_manager:
-    class: Drupal\adminic_toolbar\ToolbarLinksManager
+    class: Drupal\adminic_toolbar\ToolbarSecondarySectionLinksManager
     arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.route_manager', '@module_handler']
 
   adminic_toolbar.widget.manager:
