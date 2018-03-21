@@ -2,6 +2,8 @@
 
 **Alternative toolbar for Drupal 8**
 
+![Mobile screenshot](https://github.com/jakubhnilicka/adminic-toolbar/wiki/images/adminic-toolbar-banner.png)
+
 - Modern appearance.
 - It is always placed on the left side of your site.
 - Configuration and links definition in yml files.
