@@ -62,13 +62,6 @@ class ToolbarPrimarySectionsManager {
   private $primarySections = [];
 
   /**
-   * Active sections.
-   *
-   * @var array
-   */
-  private $activeSections = [];
-
-  /**
    * Class that manages modules in a Drupal installation.
    *
    * @var \Drupal\Core\Extension\ModuleHandler

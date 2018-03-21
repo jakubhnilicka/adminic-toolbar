@@ -222,15 +222,16 @@ class ToolbarRouteManager {
       };
     }
 
-    //$this->activeRoutes = $activeRoutes;
-
     return $activeRoutes;
   }
 
   /**
+   * Set active links.
+   *
    * @param array $activeRoutes
+   *   Active routes.
    */
-  function setActiveLinks(array $activeRoutes) {
+  public function setActiveLinks(array $activeRoutes) {
     $this->activeRoutes = $activeRoutes;
   }
 
@@ -246,11 +247,23 @@ class ToolbarRouteManager {
     return $this->activeRoutes;
   }
 
-  function setActiveSecondarySection(array $secondarySection) {
+  /**
+   * Set active secondary section.
+   *
+   * @param array $secondarySection
+   *   Secondary section.
+   */
+  public function setActiveSecondarySection(array $secondarySection) {
     $this->activeSecondarySection = $secondarySection;
   }
 
-  function getActiveSecondarySection() {
+  /**
+   * Get secondary active section.
+   *
+   * @return mixed
+   *   Secondary section.
+   */
+  public function getActiveSecondarySection() {
     return $this->activeSecondarySection;
   }
 

@@ -54,11 +54,18 @@ class Toolbar {
   private $linksManager;
 
   /**
-   * Sections manager.
+   * Primary sections manager.
    *
    * @var \Drupal\adminic_toolbar\ToolbarPrimarySectionsManager
    */
   private $primarySectionsManager;
+
+  /**
+   * Secondary sections manager.
+   *
+   * @var \Drupal\adminic_toolbar\ToolbarSecondarySectionsManager
+   */
+  private $secondarySectionsManager;
 
   /**
    * Toolbar widget plugin manager.
@@ -66,10 +73,6 @@ class Toolbar {
    * @var \Drupal\adminic_toolbar\ToolbarPluginManager
    */
   private $toolbarPluginManager;
-  /**
-   * @var \Drupal\adminic_toolbar\ToolbarSecondarySectionsManager
-   */
-  private $secondarySectionsManager;
 
   /**
    * Toolbar constructor.
@@ -110,10 +113,16 @@ class Toolbar {
     $this->secondarySectionsManager = $secondarySectionsManager;
   }
 
+  /**
+   * Generate active trail.
+   *
+   * @throws \Exception
+   */
   protected function generateActiveTrails() {
     $this->linksManager->getLinks();
     $this->secondarySectionsManager->getSecondarySections();
   }
+
   /**
    * Get render array for primary toolbar.
    *

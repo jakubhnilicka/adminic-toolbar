@@ -56,25 +56,11 @@ class ToolbarSecondarySectionsManager {
   private $toolbarTabManager;
 
   /**
-   * Primary Sections.
-   *
-   * @var array
-   */
-  private $primarySections = [];
-
-  /**
    * Secondary Sections.
    *
    * @var array
    */
   private $secondarySections = [];
-
-  /**
-   * Active sections.
-   *
-   * @var array
-   */
-  private $activeSections = [];
 
   /**
    * Class that manages modules in a Drupal installation.
