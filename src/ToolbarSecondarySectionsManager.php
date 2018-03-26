@@ -197,11 +197,13 @@ class ToolbarSecondarySectionsManager {
    * @throws \Exception
    */
   public function getSecondarySections() {
-    if (empty($this->secondarySections)) {
+    $secondarySections = &drupal_static(__FUNCTION__);
+    if (!$secondarySections) {
       $this->discoverySecondarySections();
+      $secondarySections = $this->secondarySections;
     }
 
-    return $this->secondarySections;
+    return $secondarySections;
   }
 
   /**

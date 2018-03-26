@@ -195,10 +195,12 @@ class ToolbarSecondarySectionLinksManager {
    * @throws \Exception
    */
   public function getLinks() {
-    if (empty($this->links)) {
+    $links = &drupal_static(__FUNCTION__);
+    if (!$links) {
       $this->discoverySecondarySectionsLinks();
+      $links = $this->links;
     }
-    return $this->links;
+    return $links;
   }
 
   /**

@@ -222,11 +222,13 @@ class ToolbarPrimarySectionTabsManager {
    *   Return array of tabs.
    */
   public function getTabs() {
-    if (empty($this->tabs)) {
+    $tabs = &drupal_static(__FUNCTION__);
+    if (!$tabs) {
       $this->discoveryPrimarySectionsTabs();
+      $tabs = $this->tabs;
     }
 
-    return $this->tabs;
+    return $tabs;
   }
 
   /**
