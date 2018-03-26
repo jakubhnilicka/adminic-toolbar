@@ -180,7 +180,6 @@ class ToolbarSecondarySectionLink {
       '#theme' => 'toolbar_secondary_section_link',
       '#title' => $this->getTitle(),
       '#url' => $this->getUrl(),
-      '#active' => $this->isActive(),
       '#badge' => $this->getBadge(),
     ];
   }

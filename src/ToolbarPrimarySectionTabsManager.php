@@ -222,22 +222,13 @@ class ToolbarPrimarySectionTabsManager {
    *   Return array of tabs.
    */
   public function getTabs() {
-    if (empty($this->tabs)) {
+    $tabs = &drupal_static(__FUNCTION__);
+    if (!$tabs) {
       $this->discoveryPrimarySectionsTabs();
+      $tabs = $this->tabs;
     }
 
-    return $this->tabs;
-  }
-
-  /**
-   * Add tab to active tabs.
-   *
-   * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $tab
-   *   Tab.
-   */
-  public function addActiveTab(ToolbarPrimarySectionTab $tab) {
-    $key = $this->getTabKey($tab);
-    $this->activeTabs[$key] = $tab;
+    return $tabs;
   }
 
   /**
@@ -254,27 +245,16 @@ class ToolbarPrimarySectionTabsManager {
   }
 
   /**
-   * Set tab as active.
-   *
-   * @param string $key
-   *   Tab key.
-   */
-  public function setActive(string $key) {
-    $this->tabs[$key]->setActive();
-  }
-
-  /**
    * Get first active tab.
    *
    * @return \Drupal\adminic_toolbar\ToolbarPrimarySectionTab
    *   Return first active tab.
    */
   public function getActiveTab() {
-    $activeTabs = $this->activeTabs;
-    if ($activeTabs) {
-      return reset($activeTabs);
+    $activeSecondarySection = $this->toolbarRouteManager->getActiveSecondarySection();
+    if ($activeSecondarySection) {
+      return $activeSecondarySection['tab_id'];
     }
-
     return NULL;
   }
 

@@ -162,6 +162,8 @@ class Toolbar {
     ];
 
     if ($widgets) {
+      $activeTab = $this->tabsManager->getActiveTab();
+      $activeLink = $this->linksManager->getActiveLinkUrl();
       return [
         '#theme' => 'toolbar_primary',
         '#header' => $header,
@@ -171,7 +173,15 @@ class Toolbar {
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [
           'keys' => ['toolbar_primary'],
-          'contexts' => ['user.permissions', 'url.path'],
+          'contexts' => ['user.permissions'],
+        ],
+        '#attached' => [
+          'drupalSettings' => [
+            'adminic_toolbar' => [
+              'active_tab' => $activeTab,
+              'active_link' => $activeLink,
+            ],
+          ],
         ],
       ];
     }
@@ -234,7 +244,7 @@ class Toolbar {
         '#wrappers' => $wrappers,
         '#cache' => [
           'keys' => ['toolbar_secondary'],
-          'contexts' => ['user.permissions', 'url.path'],
+          'contexts' => ['user.permissions'],
         ],
       ];
     }

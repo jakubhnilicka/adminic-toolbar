@@ -195,10 +195,12 @@ class ToolbarSecondarySectionLinksManager {
    * @throws \Exception
    */
   public function getLinks() {
-    if (empty($this->links)) {
+    $links = &drupal_static(__FUNCTION__);
+    if (!$links) {
       $this->discoverySecondarySectionsLinks();
+      $links = $this->links;
     }
-    return $this->links;
+    return $links;
   }
 
   /**
@@ -233,15 +235,33 @@ class ToolbarSecondarySectionLinksManager {
   }
 
   /**
-   * Get first active link.
+   * Get first active tab.
    *
-   * @return \Drupal\adminic_toolbar\ToolbarSecondarySectionLink
-   *   Return first active link.
+   * @return \Drupal\adminic_toolbar\ToolbarPrimarySectionTab
+   *   Return first active tab.
    */
   public function getActiveLink() {
-    $activeLinks = $this->activeLinks;
+    $activeLinks = $this->toolbarRouteManager->getActiveLinks();
     if ($activeLinks) {
-      return reset($activeLinks);
+      $activeLink = reset($activeLinks);
+      return $activeLink;
+    }
+    return NULL;
+  }
+
+  /**
+   * Get active link url.
+   *
+   * @return null|string
+   *   Retrun url or null.
+   */
+  public function getActiveLinkUrl() {
+    $activeLink = $this->getActiveLink();
+    if ($activeLink) {
+      $routeName = $activeLink['route_name'];
+      $routeParameters = isset($activeLink['route_parameters']) ? $activeLink['route_parameters'] : [];
+      $url = Url::fromRoute($routeName, $routeParameters);
+      return $url->toString();
     }
     return NULL;
   }

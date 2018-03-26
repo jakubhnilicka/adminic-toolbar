@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
 
   'use strict';
 
@@ -8,9 +8,22 @@
       var $body = $('body');
       var compactBreakpoint = window.matchMedia("only screen and (min-width: 60em)");
       compactBreakpoint.addListener(setBodyPadding);
-      setBodyPadding(compactBreakpoint);
 
       $('.nano').nanoScroller();
+
+
+      var activeTab = drupalSettings.adminic_toolbar.active_tab;
+      if (activeTab) {
+        $('#tab--' + activeTab).addClass('active');
+        $('#toolbar-' + activeTab).addClass('active');
+      }
+      setBodyPadding(compactBreakpoint);
+
+      var activeLink = drupalSettings.adminic_toolbar.active_link;
+      if (activeLink) {
+        $('.toolbar_links a[href="' + activeLink + '"]').addClass('active');
+      }
+
 
       $('.tab').on('click', function (e) {
         // If cmd + click go directly to the href.
@@ -88,4 +101,4 @@
     }
   };
 
-}(jQuery, Drupal));
+}(jQuery, Drupal, drupalSettings));
