@@ -163,7 +163,7 @@ class Toolbar {
 
     if ($widgets) {
       $activeTab = $this->tabsManager->getActiveTab();
-      $activeLink = $this->tabsManager->getActiveTab();
+      $activeLink = $this->linksManager->getActiveLinkUrl();
       return [
         '#theme' => 'toolbar_primary',
         '#header' => $header,
@@ -244,7 +244,7 @@ class Toolbar {
         '#wrappers' => $wrappers,
         '#cache' => [
           'keys' => ['toolbar_secondary'],
-          'contexts' => ['user.permissions', 'url.path'],
+          'contexts' => ['user.permissions'],
         ],
       ];
     }

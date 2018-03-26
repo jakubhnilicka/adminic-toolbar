@@ -19,6 +19,10 @@
       }
       setBodyPadding(compactBreakpoint);
 
+      var activeLink = drupalSettings.adminic_toolbar.active_link;
+      if (activeLink) {
+        $('.toolbar_links a[href="' + activeLink + '"]').addClass('active');
+      }
 
 
       $('.tab').on('click', function (e) {
