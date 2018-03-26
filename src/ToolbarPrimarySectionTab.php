@@ -201,7 +201,6 @@ class ToolbarPrimarySectionTab {
       '#id' => $this->getId(),
       '#title' => $this->getTitle(),
       '#url' => $this->getUrl(),
-      '#active' => $this->isActive(),
       '#badge' => $this->getBadge(),
     ];
   }
