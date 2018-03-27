@@ -164,7 +164,8 @@ class Toolbar {
     if ($widgets) {
       $activeTab = $this->tabsManager->getActiveTab();
       $activeLink = $this->linksManager->getActiveLinkUrl();
-      return [
+      $build = [];
+      $build['toolbar_primary'] = [
         '#theme' => 'toolbar_primary',
         '#header' => $header,
         '#title' => 'Drupal',
@@ -175,6 +176,10 @@ class Toolbar {
           'keys' => ['toolbar_primary'],
           'contexts' => ['user.permissions'],
         ],
+      ];
+
+      $build['drupal_settings'] = [
+        '#markup' => '',
         '#attached' => [
           'drupalSettings' => [
             'adminic_toolbar' => [
@@ -184,6 +189,8 @@ class Toolbar {
           ],
         ],
       ];
+
+      return $build;
     }
 
     return NULL;
