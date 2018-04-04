@@ -64,6 +64,7 @@ secondary_sections_links:
 - {secondary_section_id: 'content.default', route_name: 'path.admin_overview'}
 - {secondary_section_id: 'content.default', route_name: 'book.admin'}
 - {secondary_section_id: 'content.default', route_name: 'forum.overview'}
+- {secondary_section_id: 'content.default', route_name: 'entity.user.edit_form', route_parameters: {user: '1'}, title: 'userrrrr'}
 # Media Tab
 - {secondary_section_id: 'media.settings', route_name: 'blazy.settings'}
 - {secondary_section_id: 'media.settings', route_name: 'image_widget_crop.crop_widget_settings'}

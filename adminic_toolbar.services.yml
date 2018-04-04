@@ -36,3 +36,10 @@ services:
   adminic_toolbar.widget.manager:
     class: Drupal\adminic_toolbar\ToolbarPluginManager
     parent: default_plugin_manager
+
+  adminic_toolbar.cache:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: cache_factory:get
+    arguments: [adminic_toolbar]
