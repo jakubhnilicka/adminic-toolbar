@@ -154,6 +154,7 @@ class Toolbar {
 
     // Append user account to primary toolbar.
     $userAccount = $this->toolbarPluginManager->createInstance('user_account')->getRenderArray();
+    $toolbarConfiguration = $this->toolbarPluginManager->createInstance('toolbar_configuration')->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_primary_header',
@@ -170,10 +171,11 @@ class Toolbar {
         '#header' => $header,
         '#title' => 'Drupal',
         '#widgets' => $widgets,
+        '#toolbar_configuration' => $toolbarConfiguration,
         '#user_account' => $userAccount,
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [
-          'keys' => ['toolbar_primary'],
+          'keys' => ['adminic_toolbar_primary'],
           'contexts' => ['user.permissions'],
         ],
       ];
@@ -250,7 +252,7 @@ class Toolbar {
         '#theme' => 'toolbar_secondary',
         '#wrappers' => $wrappers,
         '#cache' => [
-          'keys' => ['toolbar_secondary'],
+          'keys' => ['adminic_toolbar_secondary'],
           'contexts' => ['user.permissions'],
         ],
       ];

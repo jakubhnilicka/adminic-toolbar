@@ -26,6 +26,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'header' => NULL,
       'widgets' => NULL,
       'user_account' => NULL,
+      'toolbar_configuration' => NULL,
     ],
   ];
 
