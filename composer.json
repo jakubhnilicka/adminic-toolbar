@@ -1,5 +1,5 @@
 {
-    "name": "jakubhnilicka/adminic_toolbar",
+    "name": "drupal/adminic_toolbar",
     "description": "Alternative Drupal 8 Toolbar",
     "type": "drupal-module",
     "license": "GPL-2.0+",
@@ -10,6 +10,10 @@
             "email": "ahoj@jakubhnilicka.cz"
         }
     ],
+    "support": {
+        "issues": "https://github.com/jakubhnilicka/adminic-toolbar/issues",
+        "source": "https://github.com/jakubhnilicka/adminic-toolbar"
+    },
     "minimum-stability": "dev",
     "require": {}
 }
