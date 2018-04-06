@@ -1,147 +1,146 @@
 presets:
-- {id: 'default', title: 'Default'}
+  - {id: 'default', title: 'Default'}
 
 primary_sections:
-- {id: 'default'}
-- {id: 'general', title: 'General'}
+  - {id: 'default'}
+  - {id: 'general', title: 'General'}
 
 primary_sections_tabs:
-- {id: 'content', primary_section_id: 'default', route_name: 'system.admin_content'}
-- {id: 'structure', primary_section_id: 'default', route_name: 'system.admin_structure'}
-- {id: 'users', primary_section_id: 'default', route_name: 'entity.user.collection'}
-- {id: 'blocks', primary_section_id: 'general', route_name: 'block.admin_display'}
-- {id: 'appearance', primary_section_id: 'general', route_name: 'system.themes_page'}
-- {id: 'extend', primary_section_id: 'general', route_name: 'system.modules_list'}
-- {id: 'configuration', primary_section_id: 'general', route_name: 'system.admin_config'}
-- {id: 'language', primary_section_id: 'general', route_name: 'system.admin_config_regional', title: 'Language'}
-- {id: 'reports', primary_section_id: 'general', route_name: 'system.admin_reports'}
-- {id: 'help', primary_section_id: 'general', route_name: 'help.main'}
+  - {id: 'content', primary_section_id: 'default', route_name: 'system.admin_content'}
+  - {id: 'structure', primary_section_id: 'default', route_name: 'system.admin_structure'}
+  - {id: 'users', primary_section_id: 'default', route_name: 'entity.user.collection'}
+  - {id: 'blocks', primary_section_id: 'general', route_name: 'block.admin_display'}
+  - {id: 'appearance', primary_section_id: 'general', route_name: 'system.themes_page'}
+  - {id: 'extend', primary_section_id: 'general', route_name: 'system.modules_list'}
+  - {id: 'configuration', primary_section_id: 'general', route_name: 'system.admin_config'}
+  - {id: 'language', primary_section_id: 'general', route_name: 'system.admin_config_regional', title: 'Language'}
+  - {id: 'reports', primary_section_id: 'general', route_name: 'system.admin_reports'}
+  - {id: 'help', primary_section_id: 'general', route_name: 'help.main'}
 
 secondary_sections:
-# Content Tab
-- {id: 'content.default', tab_id: 'content'}
-# Media Tab
-- {id: 'media.default', tab_id: 'media'}
-- {id: 'media.settings', tab_id: 'media', title: 'Settings'}
-# Structure Tab
-- {id: 'structure.default', tab_id: 'structure'}
-- {id: 'structure.content_authoring', tab_id: 'structure', title: 'Content authoring'}
-# People Tab
-- {id: 'users.default', tab_id: 'users'}
-- {id: 'users.configuration', tab_id: 'users', title: 'Settings'}
-# Block Layout Tab
-- {id: 'blocks.default', tab_id: 'blocks'}
-# Appearance Tab
-- {id: 'appearance.default', tab_id: 'appearance'}
-- {id: 'appearance.settings', tab_id: 'appearance', title: 'User Account', type: 'appearance_settings'}
-# Extend Tab
-- {id: 'extend.default', tab_id: 'extend', title: 'Extend'}
-# Configuration Tab
-- {id: 'configuration.people', tab_id: 'configuration', title: 'People'}
-- {id: 'configuration.system', tab_id: 'configuration', title: 'System'}
-- {id: 'configuration.user_interface', tab_id: 'configuration', title: 'User interface'}
-- {id: 'configuration.development', tab_id: 'configuration', title: 'Development'}
-- {id: 'configuration.media', tab_id: 'configuration', title: 'Media'}
-- {id: 'configuration.search_and_metadata', tab_id: 'configuration', title: 'Search and metadata'}
-- {id: 'configuration.web_services', tab_id: 'configuration', title: 'Web services'}
-- {id: 'configuration.workflow', tab_id: 'configuration', title: 'Workflow'}
-# Language
-- {id: 'language.default', tab_id: 'language'}
-- {id: 'language.languages', tab_id: 'language', title: 'Languages'}
-- {id: 'language.translation', tab_id: 'language', title: 'User interface translation'}
-# Status Report Tab
-- {id: 'reports.default', tab_id: 'reports'}
-# Help Tab
-- {id: 'help.default', tab_id: 'help'}
+  # Content Tab
+  - {id: 'content.default', tab_id: 'content'}
+  # Media Tab
+  - {id: 'media.default', tab_id: 'media'}
+  - {id: 'media.settings', tab_id: 'media', title: 'Settings'}
+  # Structure Tab
+  - {id: 'structure.default', tab_id: 'structure'}
+  - {id: 'structure.content_authoring', tab_id: 'structure', title: 'Content authoring'}
+  # People Tab
+  - {id: 'users.default', tab_id: 'users'}
+  - {id: 'users.configuration', tab_id: 'users', title: 'Settings'}
+  # Block Layout Tab
+  - {id: 'blocks.default', tab_id: 'blocks'}
+  # Appearance Tab
+  - {id: 'appearance.default', tab_id: 'appearance'}
+  - {id: 'appearance.settings', tab_id: 'appearance', title: 'User Account', type: 'appearance_settings'}
+  # Extend Tab
+  - {id: 'extend.default', tab_id: 'extend', title: 'Extend'}
+  # Configuration Tab
+  - {id: 'configuration.people', tab_id: 'configuration', title: 'People'}
+  - {id: 'configuration.system', tab_id: 'configuration', title: 'System'}
+  - {id: 'configuration.user_interface', tab_id: 'configuration', title: 'User interface'}
+  - {id: 'configuration.development', tab_id: 'configuration', title: 'Development'}
+  - {id: 'configuration.media', tab_id: 'configuration', title: 'Media'}
+  - {id: 'configuration.search_and_metadata', tab_id: 'configuration', title: 'Search and metadata'}
+  - {id: 'configuration.web_services', tab_id: 'configuration', title: 'Web services'}
+  - {id: 'configuration.workflow', tab_id: 'configuration', title: 'Workflow'}
+  # Language
+  - {id: 'language.default', tab_id: 'language'}
+  - {id: 'language.languages', tab_id: 'language', title: 'Languages'}
+  - {id: 'language.translation', tab_id: 'language', title: 'User interface translation'}
+  # Status Report Tab
+  - {id: 'reports.default', tab_id: 'reports'}
+  # Help Tab
+  - {id: 'help.default', tab_id: 'help'}
 
 secondary_sections_links:
-# Content Tab
-- {secondary_section_id: 'content.default', route_name: 'system.admin_content', title: 'Nodes'}
-- {secondary_section_id: 'content.default', route_name: 'comment.admin'}
-- {secondary_section_id: 'content.default', route_name: 'view.media.media_page_list'}
-- {secondary_section_id: 'content.default', route_name: 'entity.block_content.collection', title: 'Blocks'}
-- {secondary_section_id: 'content.default', route_name: 'view.files.page_1'}
-- {secondary_section_id: 'content.default', route_name: 'path.admin_overview'}
-- {secondary_section_id: 'content.default', route_name: 'book.admin'}
-- {secondary_section_id: 'content.default', route_name: 'forum.overview'}
-- {secondary_section_id: 'content.default', route_name: 'entity.user.edit_form', route_parameters: {user: '1'}, title: 'userrrrr'}
-# Media Tab
-- {secondary_section_id: 'media.settings', route_name: 'blazy.settings'}
-- {secondary_section_id: 'media.settings', route_name: 'image_widget_crop.crop_widget_settings'}
-- {secondary_section_id: 'media.settings', route_name: 'entity.image_style.collection'}
-- {secondary_section_id: 'media.settings', route_name: 'crop.overview_types'}
-- {secondary_section_id: 'media.settings', route_name: 'entity.slick.collection'}
-- {secondary_section_id: 'media.settings', route_name: 'entity.responsive_image_style.collection'}
-- {secondary_section_id: 'media.settings', route_name: 'system.image_toolkit_settings'}
-# Structure Tab
-- {secondary_section_id: 'structure.default', route_name: 'book.settings'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.comment_type.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.contact_form.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.node_type.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.entity_view_mode.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.entity_form_mode.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'forum.settings'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.media_bundle.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.menu.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.paragraphs_type.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'field_permissions.reports'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.taxonomy_vocabulary.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.view.collection'}
-- {secondary_section_id: 'structure.default', route_name: 'entity.block_content_type.collection', title: 'Block types'}
-# People Tab
-- {secondary_section_id: 'users.default', route_name: 'entity.user.collection'}
-- {secondary_section_id: 'users.default', route_name: 'user.admin_permissions'}
-- {secondary_section_id: 'users.default', route_name: 'entity.user_role.collection'}
-- {secondary_section_id: 'users.configuration', route_name: 'entity.user.admin_form'}
-# Block Layout Tab
-# Apearance Tab
-- {secondary_section_id: 'appearance.default', route_name: 'system.themes_page'}
-- {secondary_section_id: 'appearance.default', route_name: 'update.theme_update'}
-# Extend Tab
-- {secondary_section_id: 'extend.default', route_name: 'system.modules_list'}
-- {secondary_section_id: 'extend.default', route_name: 'update.module_install'}
-- {secondary_section_id: 'extend.default', route_name: 'update.module_update'}
-- {secondary_section_id: 'extend.default', route_name: 'system.modules_uninstall'}
-# Configuration Tab
-- {secondary_section_id: 'configuration.system', route_name: 'system.site_information_settings'}
-- {secondary_section_id: 'configuration.system', route_name: 'system.cron_settings'}
-- {secondary_section_id: 'configuration.system', route_name: 'entity.action.collection'}
-- {secondary_section_id: 'configuration.system', route_name: 'system.file_system_settings'}
-- {secondary_section_id: 'configuration.system', route_name: 'ban.admin_page'}
-- {secondary_section_id: 'structure.content_authoring', route_name: 'entity.entity_browser.collection'}
-- {secondary_section_id: 'structure.content_authoring', route_name: 'filter.admin_overview'}
-- {secondary_section_id: 'structure.content_authoring', route_name: 'entity.embed_button.collection'}
-- {secondary_section_id: 'configuration.user_interface', route_name: 'entity.shortcut_set.collection'}
-- {secondary_section_id: 'configuration.development', route_name: 'system.performance_settings'}
-- {secondary_section_id: 'configuration.development', route_name: 'system.logging_settings'}
-- {secondary_section_id: 'configuration.development', route_name: 'system.site_maintenance_mode'}
-- {secondary_section_id: 'configuration.development', route_name: 'config.sync'}
-- {secondary_section_id: 'configuration.development', route_name: 'devel.admin_settings'}
-- {secondary_section_id: 'configuration.development', route_name: 'migrate_drupal_ui.upgrade'}
-- {secondary_section_id: 'configuration.search_and_metadata', route_name: 'entity.search_page.collection'}
-- {secondary_section_id: 'configuration.web_services', route_name: 'system.rss_feeds_settings'}
-- {secondary_section_id: 'configuration.web_services', route_name: 'aggregator.admin_overview'}
-- {secondary_section_id: 'configuration.workflow', route_name: 'entity.workflow.collection'}
-# Language Tab
-- {secondary_section_id: 'language.default', route_name: 'system.regional_settings'}
-- {secondary_section_id: 'language.default', route_name: 'entity.date_format.collection'}
-- {secondary_section_id: 'language.default', route_name: 'config_translation.mapper_list'}
-- {secondary_section_id: 'language.default', route_name: 'language.content_settings_page'}
-- {secondary_section_id: 'language.languages', route_name: 'entity.configurable_language.collection'}
-- {secondary_section_id: 'language.languages', route_name: 'language.negotiation'}
-- {secondary_section_id: 'language.translation', route_name: 'locale.translate_page'}
-- {secondary_section_id: 'language.translation', route_name: 'locale.translate_import'}
-- {secondary_section_id: 'language.translation', route_name: 'locale.translate_export'}
-- {secondary_section_id: 'language.translation', route_name: 'locale.settings'}
-# Status Report Tab
-- {secondary_section_id: 'reports.default', route_name: 'system.admin_reports'}
-- {secondary_section_id: 'reports.default', route_name: 'update.status'}
-- {secondary_section_id: 'reports.default', route_name: 'dblog.overview'}
-- {secondary_section_id: 'reports.default', route_name: 'entity.field_storage_config.collection'}
-- {secondary_section_id: 'reports.default', route_name: 'system.status'}
-- {secondary_section_id: 'reports.default', route_name: 'dblog.access_denied'}
-- {secondary_section_id: 'reports.default', route_name: 'dblog.page_not_found'}
-- {secondary_section_id: 'reports.default', route_name: 'dblog.search'}
-- {secondary_section_id: 'reports.default', route_name: 'views_ui.reports_plugins'}
-- {secondary_section_id: 'reports.default', route_name: 'statistics.settings'}
-# Help Tab
+  # Content Tab
+  - {secondary_section_id: 'content.default', route_name: 'system.admin_content', title: 'Nodes'}
+  - {secondary_section_id: 'content.default', route_name: 'comment.admin'}
+  - {secondary_section_id: 'content.default', route_name: 'view.media.media_page_list'}
+  - {secondary_section_id: 'content.default', route_name: 'entity.block_content.collection', title: 'Blocks'}
+  - {secondary_section_id: 'content.default', route_name: 'view.files.page_1'}
+  - {secondary_section_id: 'content.default', route_name: 'path.admin_overview'}
+  - {secondary_section_id: 'content.default', route_name: 'book.admin'}
+  - {secondary_section_id: 'content.default', route_name: 'forum.overview'}
+  # Media Tab
+  - {secondary_section_id: 'media.settings', route_name: 'blazy.settings'}
+  - {secondary_section_id: 'media.settings', route_name: 'image_widget_crop.crop_widget_settings'}
+  - {secondary_section_id: 'media.settings', route_name: 'entity.image_style.collection'}
+  - {secondary_section_id: 'media.settings', route_name: 'crop.overview_types'}
+  - {secondary_section_id: 'media.settings', route_name: 'entity.slick.collection'}
+  - {secondary_section_id: 'media.settings', route_name: 'entity.responsive_image_style.collection'}
+  - {secondary_section_id: 'media.settings', route_name: 'system.image_toolkit_settings'}
+  # Structure Tab
+  - {secondary_section_id: 'structure.default', route_name: 'book.settings'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.comment_type.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.contact_form.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.node_type.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.entity_view_mode.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.entity_form_mode.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'forum.settings'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.media_bundle.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.menu.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.paragraphs_type.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'field_permissions.reports'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.taxonomy_vocabulary.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.view.collection'}
+  - {secondary_section_id: 'structure.default', route_name: 'entity.block_content_type.collection', title: 'Block types'}
+  # People Tab
+  - {secondary_section_id: 'users.default', route_name: 'entity.user.collection'}
+  - {secondary_section_id: 'users.default', route_name: 'user.admin_permissions'}
+  - {secondary_section_id: 'users.default', route_name: 'entity.user_role.collection'}
+  - {secondary_section_id: 'users.configuration', route_name: 'entity.user.admin_form'}
+  # Block Layout Tab
+  # Apearance Tab
+  - {secondary_section_id: 'appearance.default', route_name: 'system.themes_page'}
+  - {secondary_section_id: 'appearance.default', route_name: 'update.theme_update'}
+  # Extend Tab
+  - {secondary_section_id: 'extend.default', route_name: 'system.modules_list'}
+  - {secondary_section_id: 'extend.default', route_name: 'update.module_install'}
+  - {secondary_section_id: 'extend.default', route_name: 'update.module_update'}
+  - {secondary_section_id: 'extend.default', route_name: 'system.modules_uninstall'}
+  # Configuration Tab
+  - {secondary_section_id: 'configuration.system', route_name: 'system.site_information_settings'}
+  - {secondary_section_id: 'configuration.system', route_name: 'system.cron_settings'}
+  - {secondary_section_id: 'configuration.system', route_name: 'entity.action.collection'}
+  - {secondary_section_id: 'configuration.system', route_name: 'system.file_system_settings'}
+  - {secondary_section_id: 'configuration.system', route_name: 'ban.admin_page'}
+  - {secondary_section_id: 'structure.content_authoring', route_name: 'entity.entity_browser.collection'}
+  - {secondary_section_id: 'structure.content_authoring', route_name: 'filter.admin_overview'}
+  - {secondary_section_id: 'structure.content_authoring', route_name: 'entity.embed_button.collection'}
+  - {secondary_section_id: 'configuration.user_interface', route_name: 'entity.shortcut_set.collection'}
+  - {secondary_section_id: 'configuration.development', route_name: 'system.performance_settings'}
+  - {secondary_section_id: 'configuration.development', route_name: 'system.logging_settings'}
+  - {secondary_section_id: 'configuration.development', route_name: 'system.site_maintenance_mode'}
+  - {secondary_section_id: 'configuration.development', route_name: 'config.sync'}
+  - {secondary_section_id: 'configuration.development', route_name: 'devel.admin_settings'}
+  - {secondary_section_id: 'configuration.development', route_name: 'migrate_drupal_ui.upgrade'}
+  - {secondary_section_id: 'configuration.search_and_metadata', route_name: 'entity.search_page.collection'}
+  - {secondary_section_id: 'configuration.web_services', route_name: 'system.rss_feeds_settings'}
+  - {secondary_section_id: 'configuration.web_services', route_name: 'aggregator.admin_overview'}
+  - {secondary_section_id: 'configuration.workflow', route_name: 'entity.workflow.collection'}
+  # Language Tab
+  - {secondary_section_id: 'language.default', route_name: 'system.regional_settings'}
+  - {secondary_section_id: 'language.default', route_name: 'entity.date_format.collection'}
+  - {secondary_section_id: 'language.default', route_name: 'config_translation.mapper_list'}
+  - {secondary_section_id: 'language.default', route_name: 'language.content_settings_page'}
+  - {secondary_section_id: 'language.languages', route_name: 'entity.configurable_language.collection'}
+  - {secondary_section_id: 'language.languages', route_name: 'language.negotiation'}
+  - {secondary_section_id: 'language.translation', route_name: 'locale.translate_page'}
+  - {secondary_section_id: 'language.translation', route_name: 'locale.translate_import'}
+  - {secondary_section_id: 'language.translation', route_name: 'locale.translate_export'}
+  - {secondary_section_id: 'language.translation', route_name: 'locale.settings'}
+  # Status Report Tab
+  - {secondary_section_id: 'reports.default', route_name: 'system.admin_reports'}
+  - {secondary_section_id: 'reports.default', route_name: 'update.status'}
+  - {secondary_section_id: 'reports.default', route_name: 'dblog.overview'}
+  - {secondary_section_id: 'reports.default', route_name: 'entity.field_storage_config.collection'}
+  - {secondary_section_id: 'reports.default', route_name: 'system.status'}
+  - {secondary_section_id: 'reports.default', route_name: 'dblog.access_denied'}
+  - {secondary_section_id: 'reports.default', route_name: 'dblog.page_not_found'}
+  - {secondary_section_id: 'reports.default', route_name: 'dblog.search'}
+  - {secondary_section_id: 'reports.default', route_name: 'views_ui.reports_plugins'}
+  - {secondary_section_id: 'reports.default', route_name: 'statistics.settings'}
+  # Help Tab
