@@ -1,6 +1,0 @@
-primary_sections:
- - {id: 'page_info', weight: 99, plugin_id: 'page_info', disabled: true}
-
-secondary_sections_links:
- - {secondary_section_id: 'content.default', route_name: 'node.add_page', title: 'Add node', weight: 10}
- - {secondary_section_id: 'content.default', route_name: 'node.add', route_parameters: {node_type: 'page'}, title: 'Add page', weight: 11}
