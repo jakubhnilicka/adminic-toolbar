@@ -105,7 +105,7 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
 
     $dropdown = [
       '#theme' => 'drd',
-      '#trigger_content' => '',
+      '#trigger_content' => '&nbsp;',
       '#content' => $dropdownContent,
     ];
 
