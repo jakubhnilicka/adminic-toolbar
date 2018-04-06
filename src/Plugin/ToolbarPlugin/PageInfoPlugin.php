@@ -3,12 +3,9 @@
 namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
 use Drupal\adminic_toolbar\ToolbarPluginInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,26 +19,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
 
   /**
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  private $currentUser;
-
-  /**
+   * Current route.
+   *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
   private $currentRouteMatch;
 
   /**
-   * AppearanceSettingsWidget constructor.
-   * @param $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   * PageInfoPlugin constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   Current route.
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition, AccountProxyInterface $currentUser, CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentUser = $currentUser;
     $this->currentRouteMatch = $currentRouteMatch;
   }
 
@@ -59,19 +56,23 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
    *
    * @return static
    *   Returns an instance of this plugin.
+   *
+   * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+   * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $currentUser = $container->get('current_user');
     $currentPageRoute = $container->get('current_route_match');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentUser,
       $currentPageRoute
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getRenderArray() {
     $dropdownContent = [];
 
@@ -80,7 +81,7 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
 
     $dropdownContent[] = [
       '#type' => 'inline_template',
-      '#template' => "<span>Route name</span>: {{ route_name }}<br/>",
+      '#template' => '<span>Route name</span>: {{ route_name }}<br/>',
       '#context' => [
         'route_name' => $routeName,
       ],
@@ -95,7 +96,7 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
     if ($routeParams) {
       $dropdownContent[] = [
         '#type' => 'inline_template',
-        '#template' => "<span>Route parameters</span>: {{ route_parameters }}<br/>",
+        '#template' => '<span>Route parameters</span>: {{ route_parameters }}<br/>',
         '#context' => [
           'route_parameters' => implode(', ', $routeParams),
         ],
@@ -104,7 +105,7 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
 
     $dropdown = [
       '#theme' => 'drd',
-      '#trigger_content' => 'I',
+      '#trigger_content' => '&nbsp;',
       '#content' => $dropdownContent,
     ];
 

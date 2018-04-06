@@ -3,12 +3,9 @@
 namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
 use Drupal\adminic_toolbar\ToolbarPluginInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,26 +19,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
 
   /**
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  private $currentUser;
-
-  /**
+   * A configuration array containing information about the plugin instance.
+   *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
   private $currentRouteMatch;
 
   /**
-   * AppearanceSettingsWidget constructor.
-   * @param $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
-   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   * ToolbarConfigurationPlugin constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   Current route.
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition, AccountProxyInterface $currentUser, CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentUser = $currentUser;
     $this->currentRouteMatch = $currentRouteMatch;
   }
 
@@ -59,19 +56,23 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *
    * @return static
    *   Returns an instance of this plugin.
+   *
+   * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+   * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $currentUser = $container->get('current_user');
     $currentPageRoute = $container->get('current_route_match');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentUser,
       $currentPageRoute
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getRenderArray() {
     $dropdownContent = [];
 
@@ -85,15 +86,15 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
 
     $output[] = "secondary_section_id: 'CHANGE_SECONDARY_SECTION_ID'";
     $output[] = "route_name: '" . $routeName . "'";
-    $routeParamsOutput = array_map(function($parameter) {
+    $routeParamsOutput = array_map(function ($parameter) {
       return $parameter . ': CHANGE_THIS';
     }, $routeParams);
-    $output[] = "route_parameters: {" . implode(', ', $routeParamsOutput) . '}';
-    $output = '- {' . implode(', ' , $output) . '}';
+    $output[] = 'route_parameters: {' . implode(', ', $routeParamsOutput) . '}';
+    $output = '- {' . implode(', ', $output) . '}';
 
     $dropdownContent[] = [
       '#type' => 'inline_template',
-      '#template' => "<span>Link</span>: {{ link }}<br/>",
+      '#template' => '<span>Link</span>: {{ link }}<br/>',
       '#context' => [
         'link' => $output,
       ],
@@ -101,7 +102,7 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
 
     $dropdown = [
       '#theme' => 'drd',
-      '#trigger_content' => 'I',
+      '#trigger_content' => '',
       '#content' => $dropdownContent,
     ];
 
