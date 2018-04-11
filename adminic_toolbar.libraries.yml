@@ -3,18 +3,37 @@ adminic_toolbar:
   css:
     component:
       css/adminic_toolbar.css: {}
-      css/adminic_toolbar_theme_default.css: {}
   js:
     js/adminic-toolbar.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
 
+adminic_toolbar.theme.default:
+  version: VERSION
+  name: 'Default'
+  css:
+    component:
+      css/adminic_toolbar_theme_default.css: {}
+
+adminic_toolbar.theme.light:
+  version: VERSION
+  name: 'Light'
+  css:
+    component:
+      css/adminic_toolbar_theme_light.css: {}
+
 user_account:
   version: VERSION
   css:
     component:
       css/user_account.css: {}
+
+adminic_toolbar.configuration_form:
+  version: VERSION
+  css:
+    component:
+      css/adminic_toolbar_configuration_form.css: {}
 
 page_info:
   version: VERSION

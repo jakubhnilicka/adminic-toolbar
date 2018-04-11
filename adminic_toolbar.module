@@ -108,6 +108,12 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['toolbar_configuration'] = [
+    'variables' => [
+      'content' => NULL,
+    ],
+  ];
+
   $items['drd'] = [
     'variables' => [
       'trigger_content' => NULL,
@@ -204,10 +210,10 @@ function adminic_toolbar_form_user_form_alter(&$form, FormStateInterface $form_s
  */
 function _adminic_toolbar_user_form_submit(array $form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
+  /** @var \Drupal\user\PrivateTempStore $tempstore */
+  $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
 
   if (isset($values['use_adminic_toolbar'])) {
-    /** @var \Drupal\user\PrivateTempStore $tempstore */
-    $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
     $tempstore->set('use_adminic_toolbar', $values['use_adminic_toolbar']);
   }
 }

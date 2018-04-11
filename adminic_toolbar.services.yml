@@ -5,9 +5,15 @@ services:
     arguments:
       - system.site
 
+  adminic_toolbar.configuration:
+    class: Drupal\Core\Config\ImmutableConfig
+    factory: config.factory:get
+    arguments:
+      - adminic_toolbar.configuration
+
   adminic_toolbar:
     class: Drupal\adminic_toolbar\Toolbar
-    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager', '@adminic_toolbar.configuration']
 
   adminic_toolbar.discovery_manager:
     class: Drupal\adminic_toolbar\ToolbarConfigDiscovery
@@ -36,6 +42,10 @@ services:
   adminic_toolbar.widget.manager:
     class: Drupal\adminic_toolbar\ToolbarPluginManager
     parent: default_plugin_manager
+
+  adminic_toolbar.toolbar_theme_discovery:
+    class: Drupal\adminic_toolbar\ToolbarThemeDiscovery
+    arguments: ['@module_handler']
 
   adminic_toolbar.cache:
     class: Drupal\Core\Cache\CacheBackendInterface

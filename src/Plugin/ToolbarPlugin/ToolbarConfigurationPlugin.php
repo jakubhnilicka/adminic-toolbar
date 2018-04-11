@@ -6,6 +6,8 @@ use Drupal\adminic_toolbar\ToolbarPluginInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -26,6 +28,13 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
   private $currentRouteMatch;
 
   /**
+   * Current user.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  private $currentUser;
+
+  /**
    * ToolbarConfigurationPlugin constructor.
    *
    * @param array $configuration
@@ -36,10 +45,13 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   Current route.
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   Current user.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch, AccountInterface $currentUser) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentRouteMatch = $currentRouteMatch;
+    $this->currentUser = $currentUser;
   }
 
   /**
@@ -62,11 +74,13 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $currentPageRoute = $container->get('current_route_match');
+    $currentUser = $container->get('current_user');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentPageRoute
+      $currentPageRoute,
+      $currentUser
     );
   }
 
@@ -74,6 +88,10 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    * {@inheritdoc}
    */
   public function getRenderArray() {
+    if (!$this->currentUser->hasPermission('xxcan configure adminic toolbar')) {
+      return NULL;
+    }
+
     $dropdownContent = [];
 
     $routeName = $this->currentRouteMatch->getRouteName();
@@ -100,15 +118,27 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
       ],
     ];
 
-    $dropdown = [
+    $content = [];
+    $content[] = [
       '#theme' => 'drd',
       '#trigger_content' => '',
       '#content' => $dropdownContent,
     ];
 
+    $content[] = [
+      '#type' => 'link',
+      '#title' => t('Configure'),
+      '#url' => Url::fromRoute('adminic_toolbar_configuration.form'),
+      '#attributes' => [
+        'class' => [
+          'toolbar-configuration',
+        ],
+      ],
+    ];
+
     return [
-      '#theme' => 'page_info',
-      '#dropdown' => $dropdown,
+      '#theme' => 'toolbar_configuration',
+      '#content' => $content,
       '#cache' => ['max-age' => 0],
     ];
   }

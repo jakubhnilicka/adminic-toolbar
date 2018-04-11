@@ -74,6 +74,8 @@ class Toolbar {
    */
   private $toolbarPluginManager;
 
+  private $toolbarConfiguration;
+
   /**
    * Toolbar constructor.
    *
@@ -93,6 +95,8 @@ class Toolbar {
    *   Primary sections manager.
    * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionsManager $secondarySectionsManager
    *   Secondary sections manager.
+   * @param \Drupal\Core\Config\Config $toolbarConfiguration
+   *   Toolbar Configuration.
    */
   public function __construct(
     Config $systemSite,
@@ -102,7 +106,8 @@ class Toolbar {
     ToolbarPrimarySectionTabsManager $tabsManager,
     ToolbarSecondarySectionLinksManager $linksManager,
     ToolbarPrimarySectionsManager $primarySectionsManager,
-    ToolbarSecondarySectionsManager $secondarySectionsManager) {
+    ToolbarSecondarySectionsManager $secondarySectionsManager,
+    Config $toolbarConfiguration) {
     $this->systemSite = $systemSite;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->currentUser = $currentUser;
@@ -111,6 +116,7 @@ class Toolbar {
     $this->linksManager = $linksManager;
     $this->primarySectionsManager = $primarySectionsManager;
     $this->secondarySectionsManager = $secondarySectionsManager;
+    $this->toolbarConfiguration = $toolbarConfiguration;
   }
 
   /**
@@ -132,6 +138,11 @@ class Toolbar {
    * @throws \Exception
    */
   public function getPrimaryToolbar() {
+    $activeTheme = \Drupal::theme()->getActiveTheme();
+    $activeThemeName = $activeTheme->getName();
+    $adminic_toolbar_theme = $this->toolbarConfiguration->get('adminic_toolbar_theme');
+    $theme = $adminic_toolbar_theme[$activeThemeName] ?: 'adminic_toolbar/adminic_toolbar.theme.default';
+
     if (!$this->userCanAccessToolbar()) {
       return NULL;
     }
@@ -177,6 +188,11 @@ class Toolbar {
         '#cache' => [
           'keys' => ['adminic_toolbar_primary'],
           'contexts' => ['user.permissions'],
+        ],
+        '#attached' => [
+          'library' => [
+            $theme,
+          ],
         ],
       ];
 
