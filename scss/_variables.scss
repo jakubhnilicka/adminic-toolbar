@@ -1,25 +1,25 @@
 $unit: 8px;
 $compact-breakpoint: 60em;
-$transition_ease: cubic-bezier(.43,.22,.46,.9);
+$transition_ease: cubic-bezier(.43, .22, .46, .9);
 
 // Primary Toolbar background color.
-$primary-bg: #19212e;
+$primary-bg: #063a6b;
 
 // Primary Toolbar header background color.
-$primary-header-bg: #2056c9;
+$primary-header-bg: #063a6b;
 // Primary Toolbar header text color.
 $primary-header-color: #fff;
 
 // Primary Toolbar text color.
-$primary-color: #919bad;
-// Primary Toolbar link color.
+$primary-color: #fff;
+// Primary Toolbar link color.y
 $primary-link: $primary-color;
 $primary-link-bg: null;
 // Primary Toolbar link hover color.
-$primary-link-hover: #2056c9;
+$primary-link-hover: #fff;
 $primary-link-hover-bg: darken($primary-bg, 4%);
 // Primary Toolbar link active color.
-$primary-link-active: #39d3d6;
+$primary-link-active: #9adaff;
 $primary-link-active-bg: null;
 
 // Primary Toolbar divider color.
@@ -31,24 +31,25 @@ $primary-scroll-bg: darken($primary-bg, 8%);
 $primary-scroll: $primary-link-hover;
 
 // Secondary Toolbar background color.
-$secondary-bg: #f2f3f4;
+$secondary-bg: #0677bf;
 // Secondary Toolbar header background color.
 $secondary-header-bg: $secondary-bg;
 // Secondary Toolbar header text color.
-$secondary-header-color: #919bad;
+$secondary-header-color: #063a6b;
 
 // Secondary Toolbar text color.
-$secondary-color: darken(#919bad, 16%);
+$secondary-color: #fff;
 // Secondary Toolbar link color.
 $secondary-link: $secondary-color;
 $secondary-link-bg: null;
 // Secondary Toolbar link hover color.
-$secondary-link-hover: #2056c9;
+$secondary-link-hover: #fff;
 $secondary-link-hover-bg: darken($secondary-bg, 4%);
 // Secondary Toolbar link active color.
-$secondary-link-active: #2056c9;
+$secondary-link-active: #9adaff;
 $secondary-link-active-bg: null;
-
+// Secondary setion title color.
+$secondary-section-title-color: darken($secondary-bg, 40%);
 // Secondary Toolbar divider color.
 $secondary-divider: darken($secondary-bg, 4%);
 
@@ -57,12 +58,13 @@ $secondary-scroll-bg: darken($secondary-bg, 4%);
 // Secondary Toolbar scroll drag background color.
 $secondary-scroll: darken($secondary-bg, 16%);
 
-
 $primary-width-compact: $unit * 6;
 $primary-width-normal: $unit * 20;
 
 $secondary-width-compact: $unit * 24;
 $secondary-width-normal: $unit * 28;
+
+$icons-file: "../images/icons-default.svg";
 
 @mixin bg-color($color) {
   @if $color {

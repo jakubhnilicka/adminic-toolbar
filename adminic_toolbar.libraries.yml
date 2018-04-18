@@ -8,26 +8,13 @@ adminic_toolbar:
   dependencies:
     - core/jquery
     - core/jquery.once
+    - core/drupal.dialog
 
-adminic_toolbar.theme.default:
-  version: VERSION
-  name: 'Default'
-  css:
-    component:
-      css/adminic_toolbar_theme_default.css: {}
-
-adminic_toolbar.theme.light:
-  version: VERSION
-  name: 'Light'
-  css:
-    component:
-      css/adminic_toolbar_theme_light.css: {}
-
-user_account:
+adminic_toolbar.user_account:
   version: VERSION
   css:
     component:
-      css/user_account.css: {}
+      css/adminic_toolbar_user_account.css: {}
 
 adminic_toolbar.configuration_form:
   version: VERSION
@@ -35,11 +22,11 @@ adminic_toolbar.configuration_form:
     component:
       css/adminic_toolbar_configuration_form.css: {}
 
-page_info:
+adminic_toolbar.toolbar_configuration:
   version: VERSION
   css:
     component:
-      css/page_info.css: {}
+      css/adminic_toolbar_configuration.css: {}
 
 drd:
   version: VERSION
@@ -61,3 +48,17 @@ nanoscroller:
     js/nanoscroller.js: {}
   dependencies:
     - core/jquery
+
+adminic_toolbar.theme.default:
+  version: VERSION
+  name: 'Default'
+  css:
+    component:
+      css/adminic_toolbar_theme_default.css: {preprocess: false}
+
+adminic_toolbar.theme.light:
+  version: VERSION
+  name: 'Light'
+  css:
+    component:
+      css/adminic_toolbar_theme_light.css: {preprocess: false}

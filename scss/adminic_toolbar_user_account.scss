@@ -1,0 +1,55 @@
+@import "variables";
+
+.toolbar__user_account .drd {
+  width: 100%;
+}
+
+.toolbar__user_account .drdt {
+  border: none;
+  display: flex;
+  padding: ($unit * 1.5) ($unit * 1.5);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  height: auto;
+}
+
+.toolbar__user_account .drdt .ico {
+  border-radius: 50%;
+  margin: -1px;
+}
+
+.toolbar__user_account .drdt span {
+  text-decoration: none;
+  line-height: $unit * 3;
+  font-size: 12px;
+  margin-left: $unit * 2;
+  display: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: $unit * 11;
+}
+
+.toolbar__user_account .drd.open .drdt {
+  border: none;
+}
+
+.toolbar__user_account .drdc {
+  bottom: $unit * 6;
+  left: $unit * 1.5;
+}
+
+@media only screen and (min-width: $compact-breakpoint) {
+  body:not(.adminic-toolbar-compact) {
+    .toolbar__user_account .drdt {
+      padding: ($unit * 1.5) ($unit * 2);
+    }
+    .toolbar__user_account .drdt span {
+      display: block;
+    }
+    .toolbar__user_account .drdc {
+      left: $unit * 2;
+    }
+  }
+}

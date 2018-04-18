@@ -79,21 +79,4 @@ class ToolbarThemeDiscovery {
     return $themes;
   }
 
-  /**
-   * Get activated theme.
-   *
-   * @return string
-   *   Return activated theme.
-   */
-  public function getActiveThemeKey() {
-    return 'adminic_toolbar.theme.light';
-  }
-
-  /**
-   * Get active theme.
-   */
-  public function getActiveTheme() {
-    return $this->themes[$this->getActiveThemeKey()];
-  }
-
 }

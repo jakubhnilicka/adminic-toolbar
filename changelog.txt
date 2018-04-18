@@ -1,0 +1,12 @@
+Adminic Toolbar 8.x-1.0-alpha2, 2018-4-18
+------------------------
+- Fixed missing box-sizing on page-info div
+- Added readme.md
+- Fixed white screen of death bug on Drupal 8.5.1
+- Introduced themes for adminic toolbar
+- Added first version of configurator for adding links
+- Introduced compact mode
+
+Adminic Toolbar 8.x-1.0-alpha1, 2018-4-4
+------------------------
+- First initial release

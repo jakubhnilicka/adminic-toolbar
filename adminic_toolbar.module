@@ -94,16 +94,10 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['user_account'] = [
+  $items['toolbar_user_account'] = [
     'variables' => [
       'avatar' => NULL,
       'name' => NULL,
-      'dropdown' => NULL,
-    ],
-  ];
-
-  $items['page_info'] = [
-    'variables' => [
       'dropdown' => NULL,
     ],
   ];
@@ -130,6 +124,8 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
  * Add adminic toolbar to the top of the page automatically.
  *
  * {@inheritdoc}
+ *
+ * @throws \Exception
  */
 function adminic_toolbar_page_top(array &$page_top) {
   /** @var \Drupal\user\PrivateTempStore $tempstore */
@@ -145,24 +141,27 @@ function adminic_toolbar_page_top(array &$page_top) {
 
     $toolbarSecondary = $adminic_toolbar->getSecondaryToolbar();
     $page_top['adminic_toolbar_secondary'] = $toolbarSecondary;
-
-    // $toolbarTop = $adminic_toolbar->getTopToolbar();
-    // $page_top['adminic_toolbar_top'] = $toolbarTop;
   }
 }
 
 /**
- * @param array $variables
- *   Array of variables.
+ * Implements hook_preprocess_html().
+ *
+ * @inheritdoc
  */
 function adminic_toolbar_preprocess_html(array &$variables) {
   // Remove default toolbar.
-  if (isset($variables['page_top']['toolbar']) && isset($variables['page_top']['adminic_toolbar_primary'])) {
+  if (isset($variables['page_top']['toolbar'], $variables['page_top']['adminic_toolbar_primary'])) {
     unset($variables['page_top']['toolbar']);
   }
   // Add classes to body if Adminic Primary Toolbar is enabled.
   if (isset($variables['page_top']['adminic_toolbar_primary'])) {
     $variables['attributes']['class'][] = 'adminic-toolbar-primary';
+    $configuration = \Drupal::service('adminic_toolbar.configuration');
+    $compact_mode = (bool) $configuration->get('compact_mode') ?: FALSE;
+    if ($compact_mode === TRUE) {
+      $variables['attributes']['class'][] = 'adminic-toolbar-compact';
+    }
   }
   // Add classes to body if Adminic Top Toolbar is enabled.
   if (isset($variables['page_top']['adminic_toolbar_top'])) {

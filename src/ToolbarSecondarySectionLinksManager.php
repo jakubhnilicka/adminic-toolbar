@@ -10,6 +10,7 @@ namespace Drupal\adminic_toolbar;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
 use Exception;
+use RuntimeException;
 
 /**
  * Class ToolbarSecondarySectionLinksManager.
@@ -18,14 +19,14 @@ use Exception;
  */
 class ToolbarSecondarySectionLinksManager {
 
-  const LINKS = 'secondary_sections_links';
-  const LINK_SECONDARY_SECTION = 'secondary_section_id';
-  const LINK_ROUTE_NAME = 'route_name';
-  const LINK_ROUTE_PARAMETERS = 'route_parameters';
-  const LINK_TITLE = 'title';
-  const LINK_BADGE = 'badge';
-  const LINK_WEIGHT = 'weight';
-  const LINK_DISABLED = 'disabled';
+  private const LINKS = 'secondary_sections_links';
+  private const LINK_SECONDARY_SECTION = 'secondary_section_id';
+  private const LINK_ROUTE_NAME = 'route_name';
+  private const LINK_ROUTE_PARAMETERS = 'route_parameters';
+  private const LINK_TITLE = 'title';
+  private const LINK_BADGE = 'badge';
+  private const LINK_WEIGHT = 'weight';
+  private const LINK_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
@@ -83,6 +84,9 @@ class ToolbarSecondarySectionLinksManager {
 
   /**
    * Get all defined links from all config files.
+   *
+   * @throws \UnexpectedValueException
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   public function discoverySecondarySectionsLinks() {
     $config = $this->toolbarConfigDiscovery->getConfig();
@@ -91,8 +95,10 @@ class ToolbarSecondarySectionLinksManager {
     $weight = 0;
     foreach ($config as $configFile) {
       if (isset($configFile[self::LINKS])) {
-        foreach ($configFile[self::LINKS] as $link) {
-          $link[self::LINK_WEIGHT] = isset($link[self::LINK_WEIGHT]) ? $link[self::LINK_WEIGHT] : $weight++;
+        /** @var array $configFileLinks */
+        $configFileLinks = $configFile[self::LINKS];
+        foreach ($configFileLinks as $link) {
+          $link[self::LINK_WEIGHT] = $link[self::LINK_WEIGHT] ?? $weight++;
           $key = sprintf('%s.%s', $link[self::LINK_SECONDARY_SECTION], $link[self::LINK_ROUTE_NAME]);
           $configSecondarySectionsLinks[$key] = $link;
         }
@@ -113,12 +119,14 @@ class ToolbarSecondarySectionLinksManager {
    *
    * @param array $configLinks
    *   Links array.
+   *
+   * @throws \UnexpectedValueException
    */
   protected function createLinksCollection(array $configLinks) {
     $currentRouteName = $this->toolbarRouteManager->getCurrentRoute();
     $activeRoutes = [];
     array_walk($configLinks, function ($link) use ($currentRouteName, &$activeRoutes) {
-      if ($link['route_name'] == $currentRouteName) {
+      if ($link['route_name'] === $currentRouteName) {
         $activeRoutes[$link['route_name']] = $link;
       }
     });
@@ -132,15 +140,15 @@ class ToolbarSecondarySectionLinksManager {
 
       $widget_id = $link[self::LINK_SECONDARY_SECTION];
       $route = $link[self::LINK_ROUTE_NAME];
-      $route_params = isset($link[self::LINK_ROUTE_PARAMETERS]) ? $link[self::LINK_ROUTE_PARAMETERS] : [];
+      $route_params = $link[self::LINK_ROUTE_PARAMETERS] ?? [];
       $isValid = $this->toolbarRouteManager->isRouteValid($route, $route_params);
 
       if ($isValid) {
-        $title = isset($link[self::LINK_TITLE]) ? $link[self::LINK_TITLE] : $this->toolbarRouteManager->getDefaultTitle($route, $route_params);
+        $title = $link[self::LINK_TITLE] ?? $this->toolbarRouteManager->getDefaultTitle($route, $route_params);
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($route, $route_params);
-        $disabled = isset($link[self::LINK_DISABLED]) ? $link[self::LINK_DISABLED] : FALSE;
-        $badge = isset($link[self::LINK_BADGE]) ? $link[self::LINK_BADGE] : '';
+        $disabled = $link[self::LINK_DISABLED] ?? FALSE;
+        $badge = $link[self::LINK_BADGE] ?? '';
         $active = FALSE;
         if (array_key_exists($route, $activeRoutes)) {
           $active = TRUE;
@@ -155,6 +163,8 @@ class ToolbarSecondarySectionLinksManager {
    *
    * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link
    *   Link.
+   *
+   * @throws \UnexpectedValueException
    */
   public function addLink(ToolbarSecondarySectionLink $link) {
     $key = $this->getLinkKey($link);
@@ -175,10 +185,10 @@ class ToolbarSecondarySectionLinksManager {
     try {
       $obj = json_encode($link);
       if (!isset($link[self::LINK_SECONDARY_SECTION])) {
-        throw new Exception('Link widget_id parameter missing ' . $obj);
-      };
+        throw new RuntimeException('Link widget_id parameter missing ' . $obj);
+      }
       if (!isset($link[self::LINK_ROUTE_NAME])) {
-        throw new Exception('Link route parameter missing ' . $obj);
+        throw new RuntimeException('Link route parameter missing ' . $obj);
       }
     }
     catch (Exception $e) {
@@ -211,6 +221,8 @@ class ToolbarSecondarySectionLinksManager {
    *
    * @return string
    *   Return formated key.
+   *
+   * @throws \UnexpectedValueException
    */
   public function getLinkKey(ToolbarSecondarySectionLink $link) {
     /** @var \Drupal\Core\Url $url */
@@ -228,6 +240,8 @@ class ToolbarSecondarySectionLinksManager {
    *
    * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link
    *   Link.
+   *
+   * @throws \UnexpectedValueException
    */
   public function addActiveLink(ToolbarSecondarySectionLink $link) {
     $key = $this->getLinkKey($link);
@@ -243,8 +257,7 @@ class ToolbarSecondarySectionLinksManager {
   public function getActiveLink() {
     $activeLinks = $this->toolbarRouteManager->getActiveLinks();
     if ($activeLinks) {
-      $activeLink = reset($activeLinks);
-      return $activeLink;
+      return reset($activeLinks);
     }
     return NULL;
   }
@@ -259,7 +272,7 @@ class ToolbarSecondarySectionLinksManager {
     $activeLink = $this->getActiveLink();
     if ($activeLink) {
       $routeName = $activeLink['route_name'];
-      $routeParameters = isset($activeLink['route_parameters']) ? $activeLink['route_parameters'] : [];
+      $routeParameters = $activeLink['route_parameters'] ?? [];
       $url = Url::fromRoute($routeName, $routeParameters);
       return $url->toString();
     }

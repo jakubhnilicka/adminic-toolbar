@@ -46,6 +46,8 @@ class ToolbarConfigDiscovery {
    *
    * @return array
    *   Configuration parsed from yaml files.
+   *
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   protected function loadConfig() {
     $discovery = new YamlDiscovery('toolbar', $this->moduleHandler->getModuleDirectories());
@@ -54,7 +56,7 @@ class ToolbarConfigDiscovery {
     // Add computed weight to every config file.
     foreach ($configs as $key => $config) {
       // Allways load adminic toolbar before others.
-      if ($key == 'adminic_toolbar') {
+      if ($key === 'adminic_toolbar') {
         $configs[$key]['weight'] = -99;
       }
       // If weight is not specified set it as 0.
@@ -74,6 +76,8 @@ class ToolbarConfigDiscovery {
    *
    * @return array
    *   Return config array.
+   *
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   public function getConfig() {
     if (empty($this->config)) {

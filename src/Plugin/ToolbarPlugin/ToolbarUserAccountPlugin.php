@@ -3,30 +3,32 @@
 namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
 use Drupal\adminic_toolbar\ToolbarPluginInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class PageInfoWidget.
+ * Class ToolbarUserAccountPlugin.
  *
  * @ToolbarPlugin(
- *   id = "page_info",
- *   name = @Translation("Page Info Widget"),
+ *   id = "toobar_user_account",
+ *   name = @Translation("User Account Widget"),
  * )
  */
-class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
+class ToolbarUserAccountPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
 
   /**
-   * Current route.
+   * Current user.
    *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
-  private $currentRouteMatch;
+  private $currentUser;
 
   /**
-   * PageInfoPlugin constructor.
+   * ToolbarUserAccountPlugin constructor.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -34,12 +36,12 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
-   *   Current route.
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   *   Current user.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, AccountProxyInterface $currentUser) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentRouteMatch = $currentRouteMatch;
+    $this->currentUser = $currentUser;
   }
 
   /**
@@ -61,12 +63,12 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
    * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $currentPageRoute = $container->get('current_route_match');
+    $currentUser = $container->get('current_user');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentPageRoute
+      $currentUser
     );
   }
 
@@ -76,42 +78,27 @@ class PageInfoPlugin extends PluginBase implements ToolbarPluginInterface, Conta
   public function getRenderArray() {
     $dropdownContent = [];
 
-    $routeName = $this->currentRouteMatch->getRouteName();
-    $routeParameters = $this->currentRouteMatch->getParameters();
+    $profileUrl = Url::fromRoute('user.page');
+    $dropdownContent[] = Link::fromTextAndUrl(t('Profile'), $profileUrl);
 
-    $dropdownContent[] = [
-      '#type' => 'inline_template',
-      '#template' => '<span>Route name</span>: {{ route_name }}<br/>',
-      '#context' => [
-        'route_name' => $routeName,
-      ],
-    ];
+    $editUrl = Url::fromRoute('entity.user.edit_form', ['user' => $this->currentUser->id()]);
+    $dropdownContent[] = Link::fromTextAndUrl(t('Edit'), $editUrl);
 
-    $routeParams = [];
-    $params = $routeParameters->all();
-    foreach ($params as $key => $parameter) {
-      $routeParams[] = $key;
-    }
+    $logoutUrl = Url::fromRoute('user.logout');
+    $dropdownContent[] = Link::fromTextAndUrl(t('Log out'), $logoutUrl);
 
-    if ($routeParams) {
-      $dropdownContent[] = [
-        '#type' => 'inline_template',
-        '#template' => '<span>Route parameters</span>: {{ route_parameters }}<br/>',
-        '#context' => [
-          'route_parameters' => implode(', ', $routeParams),
-        ],
-      ];
-    }
+    $name = $this->currentUser->getDisplayName();
 
     $dropdown = [
       '#theme' => 'drd',
-      '#trigger_content' => '&nbsp;',
+      '#trigger_content' => '<i class="ico ico--user"></i>' . '<span>' . $name . '</span>',
       '#content' => $dropdownContent,
     ];
 
     return [
-      '#theme' => 'page_info',
+      '#theme' => 'toolbar_user_account',
       '#dropdown' => $dropdown,
+      '#cache' => ['max-age' => 0],
     ];
   }
 

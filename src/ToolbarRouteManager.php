@@ -133,6 +133,7 @@ class ToolbarRouteManager {
       return FALSE;
     }
 
+    /** @var array $requiredParameters */
     $requiredParameters = $this->getRoutes()[$routeName]['parameters'];
     foreach ($requiredParameters as $parameter) {
       if (!array_key_exists($parameter, $routeParams)) {
@@ -213,13 +214,17 @@ class ToolbarRouteManager {
     $currentRouteObject = $this->currentRouteMatch->getRouteObject();
     $allRoutes = $this->routeProvider->getAllRoutes();
 
+    if (!$currentRouteObject) {
+      return $activeRoutes;
+    }
+
     $currentPath = $currentRouteObject->getPath();
 
     foreach ($allRoutes as $route_name => $route) {
       $path = $route->getPath();
       if (strpos($currentPath, $path) === 0) {
         $activeRoutes[$route_name] = $route;
-      };
+      }
     }
 
     return $activeRoutes;

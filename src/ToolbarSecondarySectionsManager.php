@@ -9,6 +9,7 @@ namespace Drupal\adminic_toolbar;
 
 use Drupal\Core\Extension\ModuleHandler;
 use Exception;
+use RuntimeException;
 
 /**
  * Class ToolbarSecondayrSectionsManager.
@@ -17,14 +18,14 @@ use Exception;
  */
 class ToolbarSecondarySectionsManager {
 
-  const SECONDARY_SECTIONS = 'secondary_sections';
-  const SECTION_ID = 'id';
-  const SECTION_TAB_ID = 'tab_id';
-  const SECTION_PLUGIN_ID = 'plugin_id';
-  const SECTION_TITLE = 'title';
-  const SECTION_PRESET = 'preset';
-  const SECTION_WEIGHT = 'weight';
-  const SECTION_DISABLED = 'disabled';
+  private const SECONDARY_SECTIONS = 'secondary_sections';
+  private const SECTION_ID = 'id';
+  private const SECTION_TAB_ID = 'tab_id';
+  private const SECTION_PLUGIN_ID = 'plugin_id';
+  private const SECTION_TITLE = 'title';
+  private const SECTION_PRESET = 'preset';
+  private const SECTION_WEIGHT = 'weight';
+  private const SECTION_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
@@ -119,11 +120,13 @@ class ToolbarSecondarySectionsManager {
     $configSecondarySections = [];
     foreach ($config as $configFile) {
       if (isset($configFile[self::SECONDARY_SECTIONS])) {
-        foreach ($configFile[self::SECONDARY_SECTIONS] as $section) {
+        /** @var array $configFileSection */
+        $configFileSection = $configFile[self::SECONDARY_SECTIONS];
+        foreach ($configFileSection as $section) {
           // If weight is empty set computed value.
-          $section[self::SECTION_WEIGHT] = isset($section[self::SECTION_WEIGHT]) ? $section[self::SECTION_WEIGHT] : $weight++;
+          $section[self::SECTION_WEIGHT] = $section[self::SECTION_WEIGHT] ?? $weight++;
           // If set is empty set default set.
-          $section[self::SECTION_PRESET] = isset($section[self::SECTION_PRESET]) ? $section[self::SECTION_PRESET] : 'default';
+          $section[self::SECTION_PRESET] = $section[self::SECTION_PRESET] ?? 'default';
           // TODO: get key from method.
           $key = $section[self::SECTION_ID];
           $configSecondarySections[$key] = $section;
@@ -155,18 +158,18 @@ class ToolbarSecondarySectionsManager {
     }
 
     foreach ($configSections as $section) {
-      if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
+      if ($section[self::SECTION_PRESET] === $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validateSecondarySectionInput($section);
 
         $id = $section[self::SECTION_ID];
-        $title = isset($section[self::SECTION_TITLE]) ? $section[self::SECTION_TITLE] : '';
-        $tab_id = isset($section[self::SECTION_TAB_ID]) ? $section[self::SECTION_TAB_ID] : '';
-        $disabled = isset($section[self::SECTION_DISABLED]) ? $section[self::SECTION_DISABLED] : FALSE;
-        $type = isset($section[self::SECTION_PLUGIN_ID]) ? $section[self::SECTION_PLUGIN_ID] : '';
-        $newSection = new ToolbarPrimarySection($id, $title, $tab_id, $disabled, $type);
+        $title = $section[self::SECTION_TITLE] ?? '';
+        $tab_id = $section[self::SECTION_TAB_ID] ?? '';
+        $disabled = $section[self::SECTION_DISABLED] ?? FALSE;
+        $type = $section[self::SECTION_PLUGIN_ID] ?? '';
+        $newSection = new ToolbarSecondarySection($id, $title, $tab_id, $disabled, $type);
         $this->addSecondarySection($newSection);
 
-        if ($activeSecondarySection != NULL && $id == $activeSecondarySection) {
+        if ($activeSecondarySection !== NULL && $id === $activeSecondarySection) {
           $this->toolbarRouteManager->setActiveSecondarySection($section);
         }
       }
@@ -176,10 +179,10 @@ class ToolbarSecondarySectionsManager {
   /**
    * Add section.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarPrimarySection $section
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySection $section
    *   Section.
    */
-  public function addSecondarySection(ToolbarPrimarySection $section) {
+  public function addSecondarySection(ToolbarSecondarySection $section) {
     $key = $this->getSectionKey($section);
     $this->secondarySections[$key] = $section;
     // Remove section if exists but is disabled.
@@ -250,13 +253,12 @@ class ToolbarSecondarySectionsManager {
       $sections, function ($section) use ($tab) {
         /** @var \Drupal\adminic_toolbar\ToolbarPrimarySection $section */
         $sectionTab = $section->getTab();
-        return !empty($sectionTab) && $sectionTab == $tab->getId();
+        return !empty($sectionTab) && $sectionTab === $tab->getId();
       }
     );
 
     if (!empty($secondarySections)) {
-      $renderedSections = $this->getRenderedSections($secondarySections);
-      return $renderedSections;
+      return $this->getRenderedSections($secondarySections);
     }
 
     return NULL;
@@ -265,7 +267,7 @@ class ToolbarSecondarySectionsManager {
   /**
    * Get renderable array for secondary section.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarPrimarySection $section
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySection $section
    *   Section.
    *
    * @return array|null
@@ -273,11 +275,11 @@ class ToolbarSecondarySectionsManager {
    *
    * @throws \Exception
    */
-  protected function getSecondarySection(ToolbarPrimarySection $section) {
+  protected function getSecondarySection(ToolbarSecondarySection $section) {
     if ($section->hasType()) {
       $type = $section->getType();
-      $widget = $this->toolbarPluginManager->createInstance($type);
-      return $widget->getRenderArray();
+      $plugin = $this->toolbarPluginManager->createInstance($type);
+      return $plugin->getRenderArray();
     }
 
     $links = $this->toolbarLinkManager->getLinks();
@@ -286,7 +288,7 @@ class ToolbarSecondarySectionsManager {
     $sectionValidLinks = array_filter(
       $links, function ($link) use ($sectionId) {
         /** @var \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link */
-        return $link->getToolbarPlugin() == $sectionId;
+        return $link->getToolbarPlugin() === $sectionId;
       }
     );
 
@@ -311,13 +313,13 @@ class ToolbarSecondarySectionsManager {
   /**
    * Get section key.
    *
-   * @param \Drupal\adminic_toolbar\ToolbarPrimarySection $section
+   * @param \Drupal\adminic_toolbar\ToolbarSecondarySection $section
    *   Section.
    *
    * @return string
    *   Return section key.
    */
-  protected function getSectionKey(ToolbarPrimarySection $section) {
+  protected function getSectionKey(ToolbarSecondarySection $section) {
     return $section->getId();
   }
 
@@ -331,8 +333,8 @@ class ToolbarSecondarySectionsManager {
     try {
       $obj = json_encode($section);
       if (empty($section[self::SECTION_ID])) {
-        throw new Exception('Section ID parameter missing ' . $obj);
-      };
+        throw new RuntimeException('Section ID parameter missing ' . $obj);
+      }
     }
     catch (Exception $e) {
       print $e->getMessage();

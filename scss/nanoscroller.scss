@@ -4,6 +4,7 @@
   height: 100%;
   overflow: hidden;
 }
+
 .nano > .nano-content {
   position: absolute;
   overflow: scroll;
@@ -13,15 +14,19 @@
   bottom: 0;
   left: 0;
 }
+
 .nano > .nano-content:focus {
   outline: thin dotted;
 }
+
 .nano > .nano-content::-webkit-scrollbar {
   display: none;
 }
+
 .has-scrollbar > .nano-content::-webkit-scrollbar {
   display: block;
 }
+
 .nano > .nano-pane {
   background: rgba(0, 0, 0, .25);
   position: absolute;
@@ -35,12 +40,14 @@
   transition: .2s;
   z-index: 1;
 }
+
 .nano > .nano-pane > .nano-slider {
   background: #2056c9;
   position: relative;
   margin: 0;
   border-radius: 0;
 }
+
 .nano-pane.active,
 .nano-pane.flashed,
 .nano:hover > .nano-pane {

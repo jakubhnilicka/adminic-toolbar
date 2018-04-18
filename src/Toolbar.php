@@ -138,14 +138,14 @@ class Toolbar {
    * @throws \Exception
    */
   public function getPrimaryToolbar() {
+    if (!$this->userCanAccessToolbar()) {
+      return NULL;
+    }
+
     $activeTheme = \Drupal::theme()->getActiveTheme();
     $activeThemeName = $activeTheme->getName();
     $adminic_toolbar_theme = $this->toolbarConfiguration->get('adminic_toolbar_theme');
     $theme = $adminic_toolbar_theme[$activeThemeName] ?: 'adminic_toolbar/adminic_toolbar.theme.default';
-
-    if (!$this->userCanAccessToolbar()) {
-      return NULL;
-    }
 
     $this->generateActiveTrails();
     $primarySections = $this->primarySectionsManager->getPrimarySections();
@@ -164,13 +164,13 @@ class Toolbar {
     }
 
     // Append user account to primary toolbar.
-    $userAccount = $this->toolbarPluginManager->createInstance('user_account')->getRenderArray();
+    $userAccount = $this->toolbarPluginManager->createInstance('toobar_user_account')->getRenderArray();
     $toolbarConfiguration = $this->toolbarPluginManager->createInstance('toolbar_configuration')->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_primary_header',
       '#title' => t('Drupal'),
-      '#title_link' => '<front>',
+      '#title_link' => '/',
     ];
 
     if ($widgets) {
@@ -196,6 +196,14 @@ class Toolbar {
         ],
       ];
 
+      $routeName = $this->currentRouteMatch->getRouteName();
+      $routeParameters = $this->currentRouteMatch->getParameters();
+      $routeParams = [];
+      $params = $routeParameters->all();
+      foreach ($params as $key => $parameter) {
+        $routeParams[] = $key;
+      }
+
       $build['drupal_settings'] = [
         '#markup' => '',
         '#attached' => [
@@ -203,6 +211,8 @@ class Toolbar {
             'adminic_toolbar' => [
               'active_tab' => $activeTab,
               'active_link' => $activeLink,
+              'route_name' => $routeName,
+              'route_parameters' => $routeParams,
             ],
           ],
         ],
@@ -221,7 +231,8 @@ class Toolbar {
    *   Retrun true if user can access toolbar or false.
    */
   protected function userCanAccessToolbar() {
-    return $this->currentUser->hasPermission('can use adminic toolbar');
+    $userHasPermissions = $this->currentUser->hasPermission('can use adminic toolbar');
+    return $userHasPermissions;
   }
 
   /**

@@ -79,14 +79,18 @@ class ToolbarConfigurationForm extends FormBase {
 
   /**
    * {@inheritdoc}
+   *
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $selectedTheme = $this->configuration->get('adminic_toolbar_theme');
+    $compactMode = $this->configuration->get('compact_mode');
     $availableThemes = $this->themeDiscovery->getThemes();
 
     $form['adminic_toolbar_theme'] = [
       '#type' => 'details',
       '#title' => t('Theme'),
+      '#description' => t('Select toolbar themes.'),
       '#open' => TRUE,
       '#weight' => 99,
       '#attributes' => [
@@ -104,11 +108,29 @@ class ToolbarConfigurationForm extends FormBase {
           '#type' => 'select',
           '#default_value' => $selectedTheme[$name] ?: 'adminic_toolbar/adminic_toolbar.theme.default',
           '#options' => $availableThemes,
-          '#description' => $this->t('Select theme for toolbar'),
           '#title' => $theme->info['name'],
         ];
       }
     }
+
+    $form['adminic_toolbar_settings'] = [
+      '#type' => 'details',
+      '#title' => t('Settings'),
+      '#open' => TRUE,
+      '#weight' => 99,
+      '#attributes' => [
+        'class' => [
+          'adminic-toolbar-settings',
+          'clearfix',
+        ],
+      ],
+    ];
+
+    $form['adminic_toolbar_settings']['compact_mode'] = array(
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use compact mode'),
+      '#default_value' => $compactMode ?: FALSE,
+    );
 
     $form['actions']['#type'] = 'actions';
 
@@ -138,6 +160,9 @@ class ToolbarConfigurationForm extends FormBase {
       }
     }
     $this->configuration->set('adminic_toolbar_theme', $themeConfiguration)->save();
+
+    $compactMode = $values['compact_mode'];
+    $this->configuration->set('compact_mode', $compactMode)->save();
   }
 
 }

@@ -5,7 +5,7 @@ namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 use Drupal\adminic_toolbar\ToolbarPluginInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,13 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
-
-  /**
-   * A configuration array containing information about the plugin instance.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  private $currentRouteMatch;
 
   /**
    * Current user.
@@ -43,14 +36,11 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
-   *   Current route.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   Current user.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch, AccountInterface $currentUser) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, AccountInterface $currentUser) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentRouteMatch = $currentRouteMatch;
     $this->currentUser = $currentUser;
   }
 
@@ -73,13 +63,11 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $currentPageRoute = $container->get('current_route_match');
     $currentUser = $container->get('current_user');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentPageRoute,
       $currentUser
     );
   }
@@ -88,46 +76,26 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    * {@inheritdoc}
    */
   public function getRenderArray() {
-    if (!$this->currentUser->hasPermission('xxcan configure adminic toolbar')) {
+    if (!$this->currentUser->hasPermission('can configure adminic toolbar')) {
       return NULL;
     }
 
-    $dropdownContent = [];
-
-    $routeName = $this->currentRouteMatch->getRouteName();
-    $routeParameters = $this->currentRouteMatch->getParameters();
-    $routeParams = [];
-    $params = $routeParameters->all();
-    foreach ($params as $key => $parameter) {
-      $routeParams[] = $key;
-    }
-
-    $output[] = "secondary_section_id: 'CHANGE_SECONDARY_SECTION_ID'";
-    $output[] = "route_name: '" . $routeName . "'";
-    $routeParamsOutput = array_map(function ($parameter) {
-      return $parameter . ': CHANGE_THIS';
-    }, $routeParams);
-    $output[] = 'route_parameters: {' . implode(', ', $routeParamsOutput) . '}';
-    $output = '- {' . implode(', ', $output) . '}';
-
-    $dropdownContent[] = [
-      '#type' => 'inline_template',
-      '#template' => '<span>Link</span>: {{ link }}<br/>',
-      '#context' => [
-        'link' => $output,
-      ],
-    ];
-
     $content = [];
+
     $content[] = [
-      '#theme' => 'drd',
-      '#trigger_content' => '',
-      '#content' => $dropdownContent,
+      '#type' => 'link',
+      '#title' => Markup::create('<i class="ico ico--info"></i>'),
+      '#url' => Url::fromRoute('adminic_toolbar_configuration.form'),
+      '#attributes' => [
+        'class' => [
+          'toolbar-info',
+        ],
+      ],
     ];
 
     $content[] = [
       '#type' => 'link',
-      '#title' => t('Configure'),
+      '#title' => Markup::create('<i class="ico ico--configuration"></i>'),
       '#url' => Url::fromRoute('adminic_toolbar_configuration.form'),
       '#attributes' => [
         'class' => [
