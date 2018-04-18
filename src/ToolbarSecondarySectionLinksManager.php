@@ -19,14 +19,14 @@ use RuntimeException;
  */
 class ToolbarSecondarySectionLinksManager {
 
-  private const LINKS = 'secondary_sections_links';
-  private const LINK_SECONDARY_SECTION = 'secondary_section_id';
-  private const LINK_ROUTE_NAME = 'route_name';
-  private const LINK_ROUTE_PARAMETERS = 'route_parameters';
-  private const LINK_TITLE = 'title';
-  private const LINK_BADGE = 'badge';
-  private const LINK_WEIGHT = 'weight';
-  private const LINK_DISABLED = 'disabled';
+  const LINKS = 'secondary_sections_links';
+  const LINK_SECONDARY_SECTION = 'secondary_section_id';
+  const LINK_ROUTE_NAME = 'route_name';
+  const LINK_ROUTE_PARAMETERS = 'route_parameters';
+  const LINK_TITLE = 'title';
+  const LINK_BADGE = 'badge';
+  const LINK_WEIGHT = 'weight';
+  const LINK_DISABLED = 'disabled';
 
   /**
    * Discovery manager.

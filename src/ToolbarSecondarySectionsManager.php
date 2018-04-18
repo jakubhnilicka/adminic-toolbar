@@ -18,14 +18,14 @@ use RuntimeException;
  */
 class ToolbarSecondarySectionsManager {
 
-  private const SECONDARY_SECTIONS = 'secondary_sections';
-  private const SECTION_ID = 'id';
-  private const SECTION_TAB_ID = 'tab_id';
-  private const SECTION_PLUGIN_ID = 'plugin_id';
-  private const SECTION_TITLE = 'title';
-  private const SECTION_PRESET = 'preset';
-  private const SECTION_WEIGHT = 'weight';
-  private const SECTION_DISABLED = 'disabled';
+  const SECONDARY_SECTIONS = 'secondary_sections';
+  const SECTION_ID = 'id';
+  const SECTION_TAB_ID = 'tab_id';
+  const SECTION_PLUGIN_ID = 'plugin_id';
+  const SECTION_TITLE = 'title';
+  const SECTION_PRESET = 'preset';
+  const SECTION_WEIGHT = 'weight';
+  const SECTION_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
