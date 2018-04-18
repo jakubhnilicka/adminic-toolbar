@@ -1,13 +1,17 @@
 @import "variables";
+
 body.adminic-toolbar-top {
   margin-top: $unit * 6;
 }
+
 body.adminic-toolbar-primary .toolbar__top {
   left: $primary-width-compact;
 }
+
 body.adminic-toolbar-secondary .toolbar__top {
   left: $primary-width-compact + $secondary-width-compact;
 }
+
 .toolbar__top {
   height: $unit * 2;
   line-height: $unit * 2;
@@ -19,6 +23,7 @@ body.adminic-toolbar-secondary .toolbar__top {
   left: 0;
   z-index: 999997;
 }
+
 .toolbar__top .site-title {
   margin: 0 ($unit * 2) 0 0;
   line-height: $unit * 2;
@@ -26,6 +31,7 @@ body.adminic-toolbar-secondary .toolbar__top {
   display: inline-block;
   font-size: 14px;
 }
+
 @media only screen and (min-width: $compact-breakpoint) {
   body.adminic-toolbar-primary .toolbar__top {
     left: $primary-width-normal;

@@ -4,13 +4,14 @@
 body.adminic-toolbar-primary {
   margin-left: $primary-width-compact;
 }
+
 .toolbar__primary {
   position: fixed;
   top: 0;
   left: 0;
   width: $primary-width-compact;
   height: 100%;
-  z-index: 999998;
+  z-index: 1001;
   display: flex;
   flex-direction: column;
 }
@@ -19,6 +20,7 @@ body.adminic-toolbar-primary {
   border-bottom: none;
   text-decoration: none;
 }
+
 .toolbar__primary a:hover,
 .toolbar__primary a:active,
 .toolbar__primary a:focus {
@@ -26,16 +28,18 @@ body.adminic-toolbar-primary {
   text-decoration: none;
   color: inherit;
 }
+
 @media only screen and (min-width: $compact-breakpoint) {
-  body.adminic-toolbar-primary {
+  body.adminic-toolbar-primary:not(.adminic-toolbar-compact) {
     margin-left: $primary-width-normal;
   }
+  body:not(.adminic-toolbar-compact) {
+    .toolbar__primary {
+      width: $primary-width-normal;
+    }
 
-  .toolbar__primary {
-    width: $primary-width-normal;
-  }
-
-  .toolbar__primary .toolbar__section__navigation li a {
-    visibility: visible;
+    .toolbar__primary .toolbar__section__navigation li a {
+      visibility: visible;
+    }
   }
 }

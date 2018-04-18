@@ -74,6 +74,8 @@ class Toolbar {
    */
   private $toolbarPluginManager;
 
+  private $toolbarConfiguration;
+
   /**
    * Toolbar constructor.
    *
@@ -93,6 +95,8 @@ class Toolbar {
    *   Primary sections manager.
    * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionsManager $secondarySectionsManager
    *   Secondary sections manager.
+   * @param \Drupal\Core\Config\Config $toolbarConfiguration
+   *   Toolbar Configuration.
    */
   public function __construct(
     Config $systemSite,
@@ -102,7 +106,8 @@ class Toolbar {
     ToolbarPrimarySectionTabsManager $tabsManager,
     ToolbarSecondarySectionLinksManager $linksManager,
     ToolbarPrimarySectionsManager $primarySectionsManager,
-    ToolbarSecondarySectionsManager $secondarySectionsManager) {
+    ToolbarSecondarySectionsManager $secondarySectionsManager,
+    Config $toolbarConfiguration) {
     $this->systemSite = $systemSite;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->currentUser = $currentUser;
@@ -111,6 +116,7 @@ class Toolbar {
     $this->linksManager = $linksManager;
     $this->primarySectionsManager = $primarySectionsManager;
     $this->secondarySectionsManager = $secondarySectionsManager;
+    $this->toolbarConfiguration = $toolbarConfiguration;
   }
 
   /**
@@ -136,6 +142,11 @@ class Toolbar {
       return NULL;
     }
 
+    $activeTheme = \Drupal::theme()->getActiveTheme();
+    $activeThemeName = $activeTheme->getName();
+    $adminic_toolbar_theme = $this->toolbarConfiguration->get('adminic_toolbar_theme');
+    $theme = $adminic_toolbar_theme[$activeThemeName] ?: 'adminic_toolbar/adminic_toolbar.theme.default';
+
     $this->generateActiveTrails();
     $primarySections = $this->primarySectionsManager->getPrimarySections();
     $widgets = [];
@@ -153,13 +164,13 @@ class Toolbar {
     }
 
     // Append user account to primary toolbar.
-    $userAccount = $this->toolbarPluginManager->createInstance('user_account')->getRenderArray();
+    $userAccount = $this->toolbarPluginManager->createInstance('toobar_user_account')->getRenderArray();
     $toolbarConfiguration = $this->toolbarPluginManager->createInstance('toolbar_configuration')->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_primary_header',
       '#title' => t('Drupal'),
-      '#title_link' => '<front>',
+      '#title_link' => '/',
     ];
 
     if ($widgets) {
@@ -178,7 +189,20 @@ class Toolbar {
           'keys' => ['adminic_toolbar_primary'],
           'contexts' => ['user.permissions'],
         ],
+        '#attached' => [
+          'library' => [
+            $theme,
+          ],
+        ],
       ];
+
+      $routeName = $this->currentRouteMatch->getRouteName();
+      $routeParameters = $this->currentRouteMatch->getParameters();
+      $routeParams = [];
+      $params = $routeParameters->all();
+      foreach ($params as $key => $parameter) {
+        $routeParams[] = $key;
+      }
 
       $build['drupal_settings'] = [
         '#markup' => '',
@@ -187,6 +211,8 @@ class Toolbar {
             'adminic_toolbar' => [
               'active_tab' => $activeTab,
               'active_link' => $activeLink,
+              'route_name' => $routeName,
+              'route_parameters' => $routeParams,
             ],
           ],
         ],
@@ -205,7 +231,8 @@ class Toolbar {
    *   Retrun true if user can access toolbar or false.
    */
   protected function userCanAccessToolbar() {
-    return $this->currentUser->hasPermission('can use adminic toolbar');
+    $userHasPermissions = $this->currentUser->hasPermission('can use adminic toolbar');
+    return $userHasPermissions;
   }
 
   /**

@@ -214,7 +214,23 @@ You can write your custom toolbar plugin. User account block in primary toolbar 
           ];
         }
       }
-      
+# Toolbar Themes
+
+You can attach different toolbar themes to different drupal themes in toolbar settings. You can create for example your own company theme for toolbar as described bellow.
+
+## Create custom toolbar theme
+
+You can create your own theme for toolbar by creating css file for it and attach library in your theme and module which begins with 'adminic_toolbar.theme'. Youn need to specify name for your theme in library specification. This library is automatically parsed as toolbar library and you can select it in toolbar settings. As base for your css file you can use adminic_toolbar_theme_light.scss file from module. You need to setup correct path for variables and adminic_toolbar_theme sass partials.
+
+**Example**
+
+    adminic_toolbar.theme.light:
+      version: VERSION
+      name: 'Light'
+      css:
+        component:
+          css/adminic_toolbar_theme_light.css: {preprocess: false}
+
 # API
 
 Loaded configuration can be subsequently changed by hooks.

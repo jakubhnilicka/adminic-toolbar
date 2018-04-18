@@ -33,7 +33,7 @@ secondary_sections:
   - {id: 'blocks.default', tab_id: 'blocks'}
   # Appearance Tab
   - {id: 'appearance.default', tab_id: 'appearance'}
-  - {id: 'appearance.settings', tab_id: 'appearance', title: 'User Account', type: 'appearance_settings'}
+  - {id: 'appearance.settings', tab_id: 'appearance', title: 'Appearance settings', plugin_id: 'appearance_settings'}
   # Extend Tab
   - {id: 'extend.default', tab_id: 'extend', title: 'Extend'}
   # Configuration Tab
@@ -88,6 +88,7 @@ secondary_sections_links:
   - {secondary_section_id: 'structure.default', route_name: 'entity.view.collection'}
   - {secondary_section_id: 'structure.default', route_name: 'entity.block_content_type.collection', title: 'Block types'}
   # People Tab
+  - {secondary_section_id: 'users.default', route_name: 'user.admin_create'}
   - {secondary_section_id: 'users.default', route_name: 'entity.user.collection'}
   - {secondary_section_id: 'users.default', route_name: 'user.admin_permissions'}
   - {secondary_section_id: 'users.default', route_name: 'entity.user_role.collection'}
@@ -95,6 +96,7 @@ secondary_sections_links:
   # Block Layout Tab
   # Apearance Tab
   - {secondary_section_id: 'appearance.default', route_name: 'system.themes_page'}
+  - {secondary_section_id: 'appearance.default', route_name: 'update.theme_update'}
   - {secondary_section_id: 'appearance.default', route_name: 'update.theme_update'}
   # Extend Tab
   - {secondary_section_id: 'extend.default', route_name: 'system.modules_list'}

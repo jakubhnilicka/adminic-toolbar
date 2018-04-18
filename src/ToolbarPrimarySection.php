@@ -33,7 +33,7 @@ class ToolbarPrimarySection {
    *
    * @var array
    */
-  private $links = NULL;
+  private $links;
 
   /**
    * Tab where section belongs to.

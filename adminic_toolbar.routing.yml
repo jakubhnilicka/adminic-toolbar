@@ -1,0 +1,7 @@
+adminic_toolbar_configuration.form:
+ path: '/admin/config/user-interface/adminic-toolbar'
+ defaults:
+   _title: 'Adminic Toolbar Configuration'
+   _form: '\Drupal\adminic_toolbar\Form\ToolbarConfigurationForm'
+ requirements:
+   _permission: 'access content'

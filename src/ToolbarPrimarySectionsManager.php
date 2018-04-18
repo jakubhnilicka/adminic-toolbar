@@ -9,6 +9,7 @@ namespace Drupal\adminic_toolbar;
 
 use Drupal\Core\Extension\ModuleHandler;
 use Exception;
+use RuntimeException;
 
 /**
  * Class ToolbarPrimarySectionsManager.
@@ -17,14 +18,14 @@ use Exception;
  */
 class ToolbarPrimarySectionsManager {
 
-  const PRIMARY_SECTIONS = 'primary_sections';
-  const SECTION_ID = 'id';
-  const SECTION_TAB_ID = 'tab_id';
-  const SECTION_PLUGIN_ID = 'plugin_id';
-  const SECTION_TITLE = 'title';
-  const SECTION_PRESET = 'preset';
-  const SECTION_WEIGHT = 'weight';
-  const SECTION_DISABLED = 'disabled';
+  private const PRIMARY_SECTIONS = 'primary_sections';
+  private const SECTION_ID = 'id';
+  private const SECTION_TAB_ID = 'tab_id';
+  private const SECTION_PLUGIN_ID = 'plugin_id';
+  private const SECTION_TITLE = 'title';
+  private const SECTION_PRESET = 'preset';
+  private const SECTION_WEIGHT = 'weight';
+  private const SECTION_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
@@ -32,20 +33,6 @@ class ToolbarPrimarySectionsManager {
    * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
    */
   private $toolbarConfigDiscovery;
-
-  /**
-   * Route manager.
-   *
-   * @var \Drupal\adminic_toolbar\ToolbarRouteManager
-   */
-  private $toolbarRouteManager;
-
-  /**
-   * Links manager.
-   *
-   * @var \Drupal\adminic_toolbar\ToolbarSecondarySectionLinksManager
-   */
-  private $toolbarLinkManager;
 
   /**
    * Tabs manager.
@@ -69,41 +56,22 @@ class ToolbarPrimarySectionsManager {
   private $moduleHandler;
 
   /**
-   * Toolbar widget plugin manager.
-   *
-   * @var \Drupal\adminic_toolbar\ToolbarPluginManager
-   */
-  private $toolbarPluginManager;
-
-  /**
    * SectionsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $toolbarConfigDiscovery
    *   Toolbar config discovery.
-   * @param \Drupal\adminic_toolbar\ToolbarRouteManager $toolbarRouteManager
-   *   Toolbar route manager.
-   * @param \Drupal\adminic_toolbar\ToolbarSecondarySectionLinksManager $toolbarLinksManager
-   *   Toolbar links manager.
    * @param \Drupal\adminic_toolbar\ToolbarPrimarySectionTabsManager $toolbarTabsManager
    *   Toolbar tabs manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
-   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarPluginManager
-   *   Toolbar widget plugin manager.
    */
   public function __construct(
     ToolbarConfigDiscovery $toolbarConfigDiscovery,
-    ToolbarRouteManager $toolbarRouteManager,
-    ToolbarSecondarySectionLinksManager $toolbarLinksManager,
     ToolbarPrimarySectionTabsManager $toolbarTabsManager,
-    ModuleHandler $moduleHandler,
-    ToolbarPluginManager $toolbarPluginManager) {
+    ModuleHandler $moduleHandler) {
     $this->toolbarConfigDiscovery = $toolbarConfigDiscovery;
-    $this->toolbarLinkManager = $toolbarLinksManager;
     $this->toolbarTabManager = $toolbarTabsManager;
-    $this->toolbarRouteManager = $toolbarRouteManager;
     $this->moduleHandler = $moduleHandler;
-    $this->toolbarPluginManager = $toolbarPluginManager;
   }
 
   /**
@@ -118,11 +86,13 @@ class ToolbarPrimarySectionsManager {
     $configPrimarySections = [];
     foreach ($config as $configFile) {
       if (isset($configFile[self::PRIMARY_SECTIONS])) {
-        foreach ($configFile[self::PRIMARY_SECTIONS] as $section) {
+        /** @var array $configFileSections */
+        $configFileSections = $configFile[self::PRIMARY_SECTIONS];
+        foreach ($configFileSections as $section) {
           // If weight is empty set computed value.
-          $section[self::SECTION_WEIGHT] = isset($section[self::SECTION_WEIGHT]) ? $section[self::SECTION_WEIGHT] : $weight;
+          $section[self::SECTION_WEIGHT] = $section[self::SECTION_WEIGHT] ?? $weight;
           // If set is empty set default set.
-          $section[self::SECTION_PRESET] = isset($section[self::SECTION_PRESET]) ? $section[self::SECTION_PRESET] : 'default';
+          $section[self::SECTION_PRESET] = $section[self::SECTION_PRESET] ?? 'default';
           // TODO: get key from method.
           $key = $section[self::SECTION_ID];
           $configPrimarySections[$key] = $section;
@@ -148,14 +118,16 @@ class ToolbarPrimarySectionsManager {
    */
   protected function createPrimarySectionsCollection(array $configSections) {
     foreach ($configSections as $section) {
-      if ($section[self::SECTION_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
+      /** @var array $sectionPreset */
+      $sectionPreset = $section[self::SECTION_PRESET];
+      if ($sectionPreset === $this->toolbarConfigDiscovery->getActiveSet()) {
         $this->validatePrimarySectionInput($section);
 
         $id = $section[self::SECTION_ID];
-        $title = isset($section[self::SECTION_TITLE]) ? $section[self::SECTION_TITLE] : '';
-        $tab_id = isset($section[self::SECTION_TAB_ID]) ? $section[self::SECTION_TAB_ID] : '';
-        $disabled = isset($section[self::SECTION_DISABLED]) ? $section[self::SECTION_DISABLED] : FALSE;
-        $type = isset($section[self::SECTION_PLUGIN_ID]) ? $section[self::SECTION_PLUGIN_ID] : '';
+        $title = $section[self::SECTION_TITLE] ?? '';
+        $tab_id = $section[self::SECTION_TAB_ID] ?? '';
+        $disabled = $section[self::SECTION_DISABLED] ?? FALSE;
+        $type = $section[self::SECTION_PLUGIN_ID] ?? '';
         $newSection = new ToolbarPrimarySection($id, $title, $tab_id, $disabled, $type);
         $this->addPrimarySection($newSection);
       }
@@ -201,6 +173,8 @@ class ToolbarPrimarySectionsManager {
    *
    * @return array|null
    *   Return renderable array or NULL.
+   *
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   public function getPrimarySection(ToolbarPrimarySection $section) {
     $tabs = $this->toolbarTabManager->getTabs();
@@ -209,7 +183,7 @@ class ToolbarPrimarySectionsManager {
     $sectionValidTabs = array_filter(
       $tabs, function ($tab) use ($sectionId) {
         /** @var \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $tab */
-        return $tab->getWidget() == $sectionId;
+        return $tab->getWidget() === $sectionId;
       }
     );
 
@@ -250,8 +224,8 @@ class ToolbarPrimarySectionsManager {
     try {
       $obj = json_encode($section);
       if (empty($section[self::SECTION_ID])) {
-        throw new Exception('Section ID parameter missing ' . $obj);
-      };
+        throw new RuntimeException('Section ID parameter missing ' . $obj);
+      }
     }
     catch (Exception $e) {
       print $e->getMessage();
