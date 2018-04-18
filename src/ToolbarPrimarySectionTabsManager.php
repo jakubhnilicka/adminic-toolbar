@@ -19,16 +19,16 @@ use RuntimeException;
  */
 class ToolbarPrimarySectionTabsManager {
 
-  private const TABS = 'primary_sections_tabs';
-  private const TAB_ID = 'id';
-  private const TAB_PRIMARY_SECTION = 'primary_section_id';
-  private const TAB_ROUTE_NAME = 'route_name';
-  private const TAB_ROUTE_PARAMETERS = 'route_parameters';
-  private const TAB_TITLE = 'title';
-  private const TAB_BADGE = 'badge';
-  private const TAB_PRESET = 'preset';
-  private const TAB_WEIGHT = 'weight';
-  private const TAB_DISABLED = 'disabled';
+  const TABS = 'primary_sections_tabs';
+  const TAB_ID = 'id';
+  const TAB_PRIMARY_SECTION = 'primary_section_id';
+  const TAB_ROUTE_NAME = 'route_name';
+  const TAB_ROUTE_PARAMETERS = 'route_parameters';
+  const TAB_TITLE = 'title';
+  const TAB_BADGE = 'badge';
+  const TAB_PRESET = 'preset';
+  const TAB_WEIGHT = 'weight';
+  const TAB_DISABLED = 'disabled';
 
   /**
    * Discovery manager.

@@ -1,3 +1,7 @@
+Adminic Toolbar 8.x-1.0-alpha3, 2018-4-18
+------------------------
+- Fixed White screen of death ToolbarPrimarySectionTabsManager.php
+
 Adminic Toolbar 8.x-1.0-alpha2, 2018-4-18
 ------------------------
 - Fixed missing box-sizing on page-info div
