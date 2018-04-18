@@ -10,6 +10,7 @@ namespace Drupal\adminic_toolbar;
 use Drupal\Core\Extension\ModuleHandler;
 use Drupal\Core\Url;
 use Exception;
+use RuntimeException;
 
 /**
  * Class ToolbarPrimarySectionTabsManager.
@@ -18,16 +19,16 @@ use Exception;
  */
 class ToolbarPrimarySectionTabsManager {
 
-  const TABS = 'primary_sections_tabs';
-  const TAB_ID = 'id';
-  const TAB_PRIMARY_SECTION = 'primary_section_id';
-  const TAB_ROUTE_NAME = 'route_name';
-  const TAB_ROUTE_PARAMETERS = 'route_parameters';
-  const TAB_TITLE = 'title';
-  const TAB_BADGE = 'badge';
-  const TAB_PRESET = 'preset';
-  const TAB_WEIGHT = 'weight';
-  const TAB_DISABLED = 'disabled';
+  private const TABS = 'primary_sections_tabs';
+  private const TAB_ID = 'id';
+  private const TAB_PRIMARY_SECTION = 'primary_section_id';
+  private const TAB_ROUTE_NAME = 'route_name';
+  private const TAB_ROUTE_PARAMETERS = 'route_parameters';
+  private const TAB_TITLE = 'title';
+  private const TAB_BADGE = 'badge';
+  private const TAB_PRESET = 'preset';
+  private const TAB_WEIGHT = 'weight';
+  private const TAB_DISABLED = 'disabled';
 
   /**
    * Discovery manager.
@@ -49,13 +50,6 @@ class ToolbarPrimarySectionTabsManager {
    * @var array
    */
   private $tabs = [];
-
-  /**
-   * Active tabs.
-   *
-   * @var array
-   */
-  private $activeTabs = [];
 
   /**
    * Class that manages modules in a Drupal installation.
@@ -85,6 +79,8 @@ class ToolbarPrimarySectionTabsManager {
 
   /**
    * Get all defined tabs from all config files.
+   *
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   protected function discoveryPrimarySectionsTabs() {
     $config = $this->toolbarConfigDiscovery->getConfig();
@@ -93,9 +89,11 @@ class ToolbarPrimarySectionTabsManager {
     $configPrimarySectionsTabs = [];
     foreach ($config as $configFile) {
       if (isset($configFile[self::TABS])) {
-        foreach ($configFile[self::TABS] as $tab) {
-          $tab[self::TAB_WEIGHT] = isset($tab[self::TAB_WEIGHT]) ? $tab[self::TAB_WEIGHT] : $weight++;
-          $tab[self::TAB_PRESET] = isset($tab[self::TAB_PRESET]) ? $tab[self::TAB_PRESET] : 'default';
+        /** @var array $configFileTabs */
+        $configFileTabs = $configFile[self::TABS];
+        foreach ($configFileTabs as $tab) {
+          $tab[self::TAB_WEIGHT] = $tab[self::TAB_WEIGHT] ?? $weight++;
+          $tab[self::TAB_PRESET] = $tab[self::TAB_PRESET] ?? 'default';
           $key = $tab[self::TAB_ID];
           $configPrimarySectionsTabs[$key] = $tab;
         }
@@ -125,7 +123,7 @@ class ToolbarPrimarySectionTabsManager {
     // Set by active section.
     if (!empty($activeSection)) {
       array_walk($configTabs, function ($tab) use ($activeSection, &$activeTabs) {
-        if ($tab['id'] == $activeSection['tab_id']) {
+        if ($tab['id'] === $activeSection['tab_id']) {
           $activeTabs[$tab['id']] = $tab;
         }
       });
@@ -135,7 +133,7 @@ class ToolbarPrimarySectionTabsManager {
     if (empty($activeTabs)) {
       $activeRoutesName = $this->toolbarRouteManager->getCurrentRoute();
       array_walk($configTabs, function ($tab) use ($activeRoutesName, &$activeTabs) {
-        if ($tab['route_name'] == $activeRoutesName) {
+        if ($tab['route_name'] === $activeRoutesName) {
           $activeTabs[$tab['id']] = $tab;
         }
       });
@@ -158,15 +156,15 @@ class ToolbarPrimarySectionTabsManager {
       $id = $tab[self::TAB_ID];
       $primarySectionId = $tab[self::TAB_PRIMARY_SECTION];
       $routeName = $tab[self::TAB_ROUTE_NAME];
-      $routeParameters = isset($tab[self::TAB_ROUTE_PARAMETERS]) ? $tab[self::TAB_ROUTE_PARAMETERS] : [];
+      $routeParameters = $tab[self::TAB_ROUTE_PARAMETERS] ?? [];
       $isRouteValid = $this->toolbarRouteManager->isRouteValid($routeName, $routeParameters);
 
-      if ($isRouteValid && $tab[self::TAB_PRESET] == $this->toolbarConfigDiscovery->getActiveSet()) {
-        $title = isset($tab[self::TAB_TITLE]) ? $tab[self::TAB_TITLE] : $this->toolbarRouteManager->getDefaultTitle($routeName, $routeParameters);
+      if ($isRouteValid && $tab[self::TAB_PRESET] === $this->toolbarConfigDiscovery->getActiveSet()) {
+        $title = $tab[self::TAB_TITLE] ?? $this->toolbarRouteManager->getDefaultTitle($routeName, $routeParameters);
         $title = empty($title) ? '' : $title;
         $url = Url::fromRoute($routeName, $routeParameters);
-        $disabled = isset($tab[self::TAB_DISABLED]) ? $tab[self::TAB_DISABLED] : FALSE;
-        $badge = isset($tab[self::TAB_BADGE]) ? $tab[self::TAB_BADGE] : '';
+        $disabled = $tab[self::TAB_DISABLED] ?? FALSE;
+        $badge = $tab[self::TAB_BADGE] ?? '';
         $active = FALSE;
         if (array_key_exists($id, $activeTabs)) {
           $active = TRUE;
@@ -201,13 +199,13 @@ class ToolbarPrimarySectionTabsManager {
     try {
       $obj = json_encode($tab);
       if (!isset($tab[self::TAB_ID])) {
-        throw new Exception('Tab ID parameter missing ' . $obj);
-      };
+        throw new RuntimeException('Tab ID parameter missing ' . $obj);
+      }
       if (!isset($tab[self::TAB_PRIMARY_SECTION])) {
-        throw new Exception('Tab widget_id parameter missing ' . $obj);
-      };
+        throw new RuntimeException('Tab widget_id parameter missing ' . $obj);
+      }
       if (!isset($tab[self::TAB_ROUTE_NAME])) {
-        throw new Exception('Tab route parameter missing ' . $obj);
+        throw new RuntimeException('Tab route parameter missing ' . $obj);
       }
     }
     catch (Exception $e) {
@@ -220,6 +218,8 @@ class ToolbarPrimarySectionTabsManager {
    *
    * @return array
    *   Return array of tabs.
+   *
+   * @throws \Drupal\Component\Discovery\DiscoveryException
    */
   public function getTabs() {
     $tabs = &drupal_static(__FUNCTION__);

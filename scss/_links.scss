@@ -8,7 +8,6 @@
 .toolbar_links__header {
   line-height: ($unit * 2);
   padding: $unit ($unit * 2);
-  color: #676e7a;
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
@@ -39,6 +38,7 @@
 .toolbar__primary .toolbar_links__header {
   display: none;
 }
+
 .toolbar__primary .toolbar_links nav a span:not(.badge) {
   display: none;
 }
@@ -61,19 +61,25 @@
 .toolbar__secondary .toolbar_links nav a {
   padding: $unit ($unit * 1.5) $unit ($unit * 6);
 }
+
 .toolbar_links:last-child {
   border-bottom: none;
 }
 
 @media only screen and (min-width: $compact-breakpoint) {
-  .toolbar_links nav a {
+  body:not(.adminic-toolbar-compact) {
+    .toolbar__primary .toolbar_links nav a {
+      padding: ($unit / 2) ($unit * 2);
+    }
+    .toolbar__primary .toolbar_links nav a span {
+      display: block;
+    }
+    .toolbar__primary .toolbar_links nav a span:not(.badge) {
+      display: block;
+    }
+  }
+  .toolbar__secondary .toolbar_links nav a {
     padding: ($unit / 2) ($unit * 2);
-  }
-  .toolbar__primary .toolbar_links nav a span {
-    display: block;
-  }
-  .toolbar__primary .toolbar_links nav a span:not(.badge) {
-    display: block;
   }
   .toolbar__secondary .toolbar_links nav a {
     padding: $unit ($unit * 2) $unit ($unit * 6);

@@ -22,23 +22,34 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterface, ContainerFactoryPluginInterface {
 
   /**
+   * Current route match.
+   *
    * @var \Drupal\Core\Routing\CurrentRouteMatch
    */
   private $currentRouteMatch;
+
   /**
+   * Theme handler.
+   *
    * @var \Drupal\Core\Extension\ThemeHandler
    */
   private $themeHandler;
 
   /**
    * AppearanceSettingsWidget constructor.
-   * @param $configuration
-   * @param $plugin_id
-   * @param $plugin_definition
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
+   *   Current route match.
    * @param \Drupal\Core\Extension\ThemeHandler $themeHandler
+   *   Theme handler.
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch, ThemeHandler $themeHandler) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, CurrentRouteMatch $currentRouteMatch, ThemeHandler $themeHandler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentRouteMatch = $currentRouteMatch;
     $this->themeHandler = $themeHandler;
@@ -58,6 +69,9 @@ class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterf
    *
    * @return static
    *   Returns an instance of this plugin.
+   *
+   * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+   * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $currentRouteMatch = $container->get('current_route_match');
@@ -71,6 +85,9 @@ class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterf
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getRenderArray() {
     /** @var \Drupal\Core\Routing\CurrentRouteMatch $currentRoute */
     $currentRouteName = $this->currentRouteMatch->getRouteName();
@@ -80,7 +97,7 @@ class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterf
     $links = [];
 
     $globalSettingsUrl = Url::fromRoute('system.theme_settings');
-    if ($currentRouteName == 'system.theme_settings') {
+    if ($currentRouteName === 'system.theme_settings') {
       $globalSettingsUrl->setOption('attributes', ['class' => ['active']]);
     }
 
@@ -88,9 +105,9 @@ class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterf
 
     foreach ($themes as $name => $theme) {
       $info = $theme->info;
-      if (!isset($info['hidden']) || $info['hidden'] == FALSE) {
+      if (!isset($info['hidden']) || $info['hidden'] === FALSE) {
         $url = Url::fromRoute('system.theme_settings_theme', ['theme' => $name]);
-        if ($currentRouteName == 'system.theme_settings_theme' && $currentRouteParameterTheme == $name) {
+        if ($currentRouteName === 'system.theme_settings_theme' && $currentRouteParameterTheme === $name) {
           $url->setOption('attributes', ['class' => ['active']]);
         }
         $links[] = Link::fromTextAndUrl($info['name'], $url);
@@ -98,9 +115,10 @@ class AppearanceSettingsPlugin extends PluginBase implements ToolbarPluginInterf
     }
 
     return [
-      '#theme' => 'toolbar_section',
+      '#theme' => 'toolbar_secondary_section',
       '#title' => t('Settings'),
       '#links' => $links,
     ];
   }
+
 }

@@ -1,3 +1,6 @@
 'can use adminic toolbar':
   title: 'Can use Adminic Toolbar'
   description: 'User can use Adminic Toolbar.'
+'can configure adminic toolbar':
+  title: 'Can configure Adminic Toolbar'
+  description: 'User can configure Adminic Toolbar.'

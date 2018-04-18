@@ -11,6 +11,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Traversable;
+use Drupal\adminic_toolbar\Annotation\ToolbarPlugin;
 
 /**
  * Class ToolbarPluginManager.
@@ -34,8 +35,8 @@ class ToolbarPluginManager extends DefaultPluginManager {
       'Plugin/ToolbarPlugin',
       $namespaces,
       $module_handler,
-      'Drupal\adminic_toolbar\ToolbarPluginInterface',
-      'Drupal\adminic_toolbar\Annotation\ToolbarPlugin'
+      ToolbarPluginInterface::class,
+      ToolbarPlugin::class
     );
 
     $this->alterInfo('toolbar_plugin_info');

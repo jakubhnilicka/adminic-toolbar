@@ -98,6 +98,37 @@
           $body.removeClass('adminic-toolbar-secondary');
         }
       }
+      $('.toolbar-info').on('click', function(e) {
+        e.preventDefault();
+        var output = [];
+        var routeName = drupalSettings.adminic_toolbar.route_name;
+        var routeParameters = drupalSettings.adminic_toolbar.route_parameters;
+
+        output.push("secondary_section_id: 'CHANGE'");
+        output.push("route_name: '" +  routeName + '"');
+        if (routeParameters.length > 0) {
+          var routeParametersFormated = routeParameters.map(outputRouteParameters);
+          output.push("route_parameters: {" + routeParametersFormated.join(', ') + "}");
+        }
+
+        var dialogOutput = '- {' + output.join(', ') + '}';
+
+        var $myRouteConfiguration = $('<div><p id="link_definition_info">Paste this definition in your *.toolbyar.yml file onto "secondary_sections_links"</p><div id="link_definition">' +  dialogOutput + '</div></div>');
+        Drupal.dialog($myRouteConfiguration, {
+          buttons: [{
+            title: Drupal.t('Links output'),
+            text: Drupal.t('Close'),
+            click: function() {
+              $(this).dialog('close');
+            }
+          }]
+        }).showModal();
+
+        function outputRouteParameters(parameter, index) {
+          return parameter + ": 'CHANGE'";
+        }
+      })
+
     }
   };
 

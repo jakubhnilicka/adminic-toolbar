@@ -1,0 +1,32 @@
+@import "variables";
+
+.toolbar__configuration {
+  padding: ($unit * 1.5) ($unit * 1.5);
+  position: relative;
+  display: none;
+}
+
+.toolbar__configuration .toolbar-info,
+.toolbar__configuration .toolbar-configuration {
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  color: #919bad;
+  display: inline-block;
+}
+
+.toolbar__configuration .toolbar-info .ico,
+.toolbar__configuration .toolbar-configuration .ico {
+  margin: -1px;
+}
+
+@media only screen and (min-width: $compact-breakpoint) {
+  .toolbar__configuration {
+    display: block;
+  }
+  body:not(.adminic-toolbar-compact) .toolbar__configuration {
+    padding: ($unit * 1.5) ($unit * 2);
+  }
+}
