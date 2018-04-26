@@ -56,7 +56,7 @@ class ToolbarConfigDiscovery {
     $this->initExtend($configs);
     // Add computed weight to every config file.
     foreach ($configs as $key => $config) {
-      $canLoadConfig = $this->canLoadConfig($key, $config);
+      $canLoadConfig = $this->canLoadConfig($key);
       list($provider, $preset) = explode('.', $key);
 
       if ($canLoadConfig !== TRUE) {
@@ -122,6 +122,11 @@ class ToolbarConfigDiscovery {
   }
 
   /**
+   * Check if config can be loaded.
+   *
+   * Only configs which have active preset key
+   * or extended source are loaded.
+   *
    * @param string $key
    *   Configuration key.
    * @param $config
@@ -130,7 +135,7 @@ class ToolbarConfigDiscovery {
    * @return bool
    *   True if can load config or false.
    */
-  protected function canLoadConfig(string $key, array $config) {
+  protected function canLoadConfig(string $key) {
     list($provider, $preset) = explode('.', $key);
 
     // If config preset is active.
