@@ -1,5 +1,5 @@
-presets:
-  - {id: 'default', title: 'Default'}
+preset:
+  title: 'Default'
 
 primary_sections:
   - {id: 'default'}
