@@ -3,6 +3,7 @@
 namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
 use Drupal\adminic_toolbar\ToolbarPluginInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Render\Markup;
@@ -76,24 +77,92 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    * {@inheritdoc}
    */
   public function getRenderArray() {
-    if (!$this->currentUser->hasPermission('can configure adminic toolbar')) {
+    $content = [];
+
+    $content[] = $this->getWizardrLink();
+    $content[] = $this->getToolbarSettingsLink();
+    $content[] = $this->getDeveloperLinks();
+
+    if ($content) {
+      return [
+        '#theme' => 'toolbar_configuration',
+        '#content' => $content,
+        '#cache' => ['max-age' => 0],
+      ];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get links for developers.
+   *
+   * @return array
+   *   Return dropdown render array.
+   */
+  protected function getDeveloperLinks() {
+    if (!$this->currentUser->hasPermission('administer site configuration')) {
       return NULL;
     }
 
     $content = [];
 
+    // Cache.
     $content[] = [
-      '#type' => 'link',
-      '#title' => Markup::create('<i class="ico ico--info"></i>'),
-      '#url' => Url::fromRoute('adminic_toolbar_configuration.form'),
-      '#attributes' => [
-        'class' => [
-          'toolbar-info',
-        ],
-      ],
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Cache'),
     ];
+    $content[] = Link::fromTextAndUrl(t('All'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'all']));
+    $content[] = Link::fromTextAndUrl(t('CSS and Javascript'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'css-js']));
+    $content[] = Link::fromTextAndUrl(t('Plugins'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'plugins']));
+    $content[] = Link::fromTextAndUrl(t('Render'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'render']));
+    $content[] = Link::fromTextAndUrl(t('Routing and links'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'routing']));
+    $content[] = Link::fromTextAndUrl(t('Static'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'static']));
+    $content[] = Link::fromTextAndUrl(t('Views'), Url::fromRoute('adminic_toolbar_configuration.cache', ['cache' => 'views']));
 
+    // Cron.
     $content[] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Cron'),
+    ];
+    $cronUrl = Url::fromRoute('adminic_toolbar_configuration.cron');
+    $content[] = Link::fromTextAndUrl(t('Run cron'), $cronUrl);
+
+    // Updates.
+    $content[] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => $this->t('Updates'),
+    ];
+    $cronUrl = Url::fromRoute('adminic_toolbar_configuration.update');
+    $content[] = Link::fromTextAndUrl(t('Run database updates'), $cronUrl);
+
+    if ($content) {
+      return [
+        '#theme' => 'drd',
+        '#trigger_content' => '<i class="ico ico--refresh"></i>',
+        '#content' => $content,
+      ];
+    }
+
+    return NULL;
+
+  }
+
+  /**
+   * Get toolbar settings link.
+   *
+   * @return array
+   *   Return link render array.
+   */
+  private function getToolbarSettingsLink() {
+    if (!$this->currentUser->hasPermission('can configure adminic toolbar')) {
+      return NULL;
+    }
+
+    return [
       '#type' => 'link',
       '#title' => Markup::create('<i class="ico ico--configuration"></i>'),
       '#url' => Url::fromRoute('adminic_toolbar_configuration.form'),
@@ -103,11 +172,28 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
         ],
       ],
     ];
+  }
+
+  /**
+   * Get toolbar wizardr link.
+   *
+   * @return array
+   *   Return link render array.
+   */
+  private function getWizardrLink() {
+    if (!$this->currentUser->hasPermission('can configure adminic toolbar')) {
+      return NULL;
+    }
 
     return [
-      '#theme' => 'toolbar_configuration',
-      '#content' => $content,
-      '#cache' => ['max-age' => 0],
+      '#type' => 'link',
+      '#title' => Markup::create('<i class="ico ico--info"></i>'),
+      '#url' => Url::fromRoute('adminic_toolbar_configuration.form'),
+      '#attributes' => [
+        'class' => [
+          'toolbar-info',
+        ],
+      ],
     ];
   }
 
