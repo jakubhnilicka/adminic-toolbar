@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="432px" viewBox="0 0 48 432" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="48px" height="456px" viewBox="0 0 48 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
     <title>icons-light</title>
     <desc>Created with Sketch.</desc>
@@ -177,6 +177,16 @@
             <g id="close-active" transform="translate(30.000000, 414.000000)" stroke="#0677BF" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M0.5,0.5 L12.0108644,12.0108644" id="Line-Copy-2"></path>
                 <path d="M11.5,0.5 L0,12" id="Line-Copy-3"></path>
+            </g>
+            <g id="refresh-active" transform="translate(29.000000, 438.000000)" stroke="#0677BF" stroke-linecap="round" stroke-linejoin="round">
+                <polyline id="Shape" points="14 0.636363636 14 4.45454545 10.1818182 4.45454545"></polyline>
+                <polyline id="Shape" points="0 10.8181818 0 7 3.81818182 7"></polyline>
+                <path d="M1.59727273,3.81818182 C2.25328831,1.96433469 3.81453365,0.576684338 5.73254609,0.142709805 C7.65055854,-0.291264728 9.65709872,0.289129103 11.0472727,1.68 L14,4.45454545 M0,7 L2.95272727,9.77454545 C4.34290128,11.1654164 6.34944146,11.7458102 8.26745391,11.3118356 C10.1854663,10.8778611 11.7467117,9.49021077 12.4027273,7.63636364" id="Shape"></path>
+            </g>
+            <g id="refresh" transform="translate(5.000000, 438.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+                <polyline id="Shape" points="14 0.636363636 14 4.45454545 10.1818182 4.45454545"></polyline>
+                <polyline id="Shape" points="0 10.8181818 0 7 3.81818182 7"></polyline>
+                <path d="M1.59727273,3.81818182 C2.25328831,1.96433469 3.81453365,0.576684338 5.73254609,0.142709805 C7.65055854,-0.291264728 9.65709872,0.289129103 11.0472727,1.68 L14,4.45454545 M0,7 L2.95272727,9.77454545 C4.34290128,11.1654164 6.34944146,11.7458102 8.26745391,11.3118356 C10.1854663,10.8778611 11.7467117,9.49021077 12.4027273,7.63636364" id="Shape"></path>
             </g>
         </g>
     </g>

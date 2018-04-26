@@ -5,3 +5,33 @@ adminic_toolbar_configuration.form:
    _form: '\Drupal\adminic_toolbar\Form\ToolbarConfigurationForm'
  requirements:
    _permission: 'access content'
+
+adminic_toolbar_configuration.cache:
+  path: '/admin/config/system/clear-cache/{cache}'
+  defaults:
+    _controller: '\Drupal\adminic_toolbar\Controller\ToolbarDeveloperLinks::cache'
+    _title: 'Clear caches'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
+adminic_toolbar_configuration.cron:
+  path: '/admin/config/system/run-cron'
+  defaults:
+    _controller: '\Drupal\adminic_toolbar\Controller\ToolbarDeveloperLinks::cron'
+    _title: 'Run cron'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
+adminic_toolbar_configuration.update:
+  path: '/admin/config/system/run-updates'
+  defaults:
+    _controller: '\Drupal\adminic_toolbar\Controller\ToolbarDeveloperLinks::update'
+    _title: 'Run cron'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
