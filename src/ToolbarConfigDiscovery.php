@@ -29,6 +29,8 @@ class ToolbarConfigDiscovery {
    */
   private $config = [];
 
+  private $extend = [];
+
   /**
    * DiscoveryManager constructor.
    *
@@ -51,12 +53,14 @@ class ToolbarConfigDiscovery {
     $discovery = new ToolbarYamlDiscovery('toolbar', $this->moduleHandler->getModuleDirectories());
     $configs = $discovery->findAll();
 
+    $this->initExtend($configs);
     // Add computed weight to every config file.
     foreach ($configs as $key => $config) {
       $canLoadConfig = $this->canLoadConfig($key, $config);
       list($provider, $preset) = explode('.', $key);
 
       if ($canLoadConfig !== TRUE) {
+        unset($configs[$key]);
         continue;
       }
       // Allways load adminic toolbar before others.
@@ -73,6 +77,22 @@ class ToolbarConfigDiscovery {
     uasort($configs, 'Drupal\Component\Utility\SortArray::sortByWeightElement');
 
     return $configs;
+  }
+
+  /**
+   * Initialize extended keys.
+   *
+   * @param array $configs
+   *   Configurations.
+   */
+  protected function initExtend(array $configs) {
+    foreach ($configs as $key => $config) {
+      list($provider, $preset) = explode('.', $key);
+      // If config preset is active.
+      if (isset($config['preset']['extend']) && $preset === $this->getActiveSet()) {
+        $this->extend[] = $config['preset']['extend'];
+      }
+    }
   }
 
   /**
@@ -98,7 +118,6 @@ class ToolbarConfigDiscovery {
    *   Return set machine name.
    */
   public function getActiveSet() {
-    // TODO: Allow working with sets.
     return 'default';
   }
 
@@ -111,8 +130,7 @@ class ToolbarConfigDiscovery {
    * @return bool
    *   True if can load config or false.
    */
-  protected function canLoadConfig($key, $config) {
-    $canLoad = FALSE;
+  protected function canLoadConfig(string $key, array $config) {
     list($provider, $preset) = explode('.', $key);
 
     // If config preset is active.
@@ -120,8 +138,8 @@ class ToolbarConfigDiscovery {
       return TRUE;
     }
 
-    // If config contains preset and it extends active preset.
-    if (isset($config['preset']['extends']) && $config['preset']['extends'] === $this->getActiveSet()) {
+    // If config preset is in extend source.
+    if (in_array($preset, $this->extend)) {
       return TRUE;
     }
 

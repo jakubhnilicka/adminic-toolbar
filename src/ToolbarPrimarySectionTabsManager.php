@@ -159,18 +159,16 @@ class ToolbarPrimarySectionTabsManager {
       $routeParameters = $tab[self::TAB_ROUTE_PARAMETERS] ?? [];
       $isRouteValid = $this->toolbarRouteManager->isRouteValid($routeName, $routeParameters);
 
-      if ($isRouteValid && $tab[self::TAB_PRESET] === $this->toolbarConfigDiscovery->getActiveSet()) {
-        $title = $tab[self::TAB_TITLE] ?? $this->toolbarRouteManager->getDefaultTitle($routeName, $routeParameters);
-        $title = empty($title) ? '' : $title;
-        $url = Url::fromRoute($routeName, $routeParameters);
-        $disabled = $tab[self::TAB_DISABLED] ?? FALSE;
-        $badge = $tab[self::TAB_BADGE] ?? '';
-        $active = FALSE;
-        if (array_key_exists($id, $activeTabs)) {
-          $active = TRUE;
-        }
-        $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
+      $title = $tab[self::TAB_TITLE] ?? $this->toolbarRouteManager->getDefaultTitle($routeName, $routeParameters);
+      $title = empty($title) ? '' : $title;
+      $url = Url::fromRoute($routeName, $routeParameters);
+      $disabled = $tab[self::TAB_DISABLED] ?? FALSE;
+      $badge = $tab[self::TAB_BADGE] ?? '';
+      $active = FALSE;
+      if (array_key_exists($id, $activeTabs)) {
+        $active = TRUE;
       }
+      $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
     }
   }
 

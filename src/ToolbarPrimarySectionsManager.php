@@ -91,8 +91,6 @@ class ToolbarPrimarySectionsManager {
         foreach ($configFileSections as $section) {
           // If weight is empty set computed value.
           $section[self::SECTION_WEIGHT] = $section[self::SECTION_WEIGHT] ?? $weight;
-          // If set is empty set default set.
-          $section[self::SECTION_PRESET] = $section[self::SECTION_PRESET] ?? 'default';
           // TODO: get key from method.
           $key = $section[self::SECTION_ID];
           $configPrimarySections[$key] = $section;
@@ -118,19 +116,15 @@ class ToolbarPrimarySectionsManager {
    */
   protected function createPrimarySectionsCollection(array $configSections) {
     foreach ($configSections as $section) {
-      /** @var array $sectionPreset */
-      $sectionPreset = $section[self::SECTION_PRESET];
-      if ($sectionPreset === $this->toolbarConfigDiscovery->getActiveSet()) {
-        $this->validatePrimarySectionInput($section);
+      $this->validatePrimarySectionInput($section);
 
-        $id = $section[self::SECTION_ID];
-        $title = $section[self::SECTION_TITLE] ?? '';
-        $tab_id = $section[self::SECTION_TAB_ID] ?? '';
-        $disabled = $section[self::SECTION_DISABLED] ?? FALSE;
-        $type = $section[self::SECTION_PLUGIN_ID] ?? '';
-        $newSection = new ToolbarPrimarySection($id, $title, $tab_id, $disabled, $type);
-        $this->addPrimarySection($newSection);
-      }
+      $id = $section[self::SECTION_ID];
+      $title = $section[self::SECTION_TITLE] ?? '';
+      $tab_id = $section[self::SECTION_TAB_ID] ?? '';
+      $disabled = $section[self::SECTION_DISABLED] ?? FALSE;
+      $type = $section[self::SECTION_PLUGIN_ID] ?? '';
+      $newSection = new ToolbarPrimarySection($id, $title, $tab_id, $disabled, $type);
+      $this->addPrimarySection($newSection);
     }
   }
 

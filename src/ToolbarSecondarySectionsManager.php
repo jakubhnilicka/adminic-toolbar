@@ -158,20 +158,18 @@ class ToolbarSecondarySectionsManager {
     }
 
     foreach ($configSections as $section) {
-      if ($section[self::SECTION_PRESET] === $this->toolbarConfigDiscovery->getActiveSet()) {
-        $this->validateSecondarySectionInput($section);
+      $this->validateSecondarySectionInput($section);
 
-        $id = $section[self::SECTION_ID];
-        $title = $section[self::SECTION_TITLE] ?? '';
-        $tab_id = $section[self::SECTION_TAB_ID] ?? '';
-        $disabled = $section[self::SECTION_DISABLED] ?? FALSE;
-        $type = $section[self::SECTION_PLUGIN_ID] ?? '';
-        $newSection = new ToolbarSecondarySection($id, $title, $tab_id, $disabled, $type);
-        $this->addSecondarySection($newSection);
+      $id = $section[self::SECTION_ID];
+      $title = $section[self::SECTION_TITLE] ?? '';
+      $tab_id = $section[self::SECTION_TAB_ID] ?? '';
+      $disabled = $section[self::SECTION_DISABLED] ?? FALSE;
+      $type = $section[self::SECTION_PLUGIN_ID] ?? '';
+      $newSection = new ToolbarSecondarySection($id, $title, $tab_id, $disabled, $type);
+      $this->addSecondarySection($newSection);
 
-        if ($activeSecondarySection !== NULL && $id === $activeSecondarySection) {
-          $this->toolbarRouteManager->setActiveSecondarySection($section);
-        }
+      if ($activeSecondarySection !== NULL && $id === $activeSecondarySection) {
+        $this->toolbarRouteManager->setActiveSecondarySection($section);
       }
     }
   }
