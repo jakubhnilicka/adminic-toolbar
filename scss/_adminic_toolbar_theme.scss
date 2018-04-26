@@ -120,6 +120,14 @@
   color: $primary-color;
 }
 
+.drdt {
+  border: 1px solid $primary-divider;
+  color: $primary-divider;
+}
+.drdt:hover {
+  background-color: $primary-divider;
+}
+
 .user_account__links {
   .drdt {
     border: 1px solid $primary-divider;
@@ -128,6 +136,7 @@
   .drdc a {
     color: $primary-link;
   }
+
   .drdc a:active,
   .drdc a:focus,
   .drdc a:hover {
@@ -175,9 +184,7 @@
   color: $primary-link-active;
 }
 
-.toolbar__user_account .drdc {
-  border: 1px solid $primary-divider;
-}
+
 
 /* icons */
 .ico,

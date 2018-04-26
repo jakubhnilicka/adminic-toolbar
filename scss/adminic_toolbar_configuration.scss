@@ -17,6 +17,13 @@
   display: inline-block;
 }
 
+.toolbar__configuration .drdt {
+  padding: 0;
+  .ico {
+    margin-right: 0;
+  }
+}
+
 .toolbar__configuration .toolbar-info .ico,
 .toolbar__configuration .toolbar-configuration .ico {
   margin: -1px;
