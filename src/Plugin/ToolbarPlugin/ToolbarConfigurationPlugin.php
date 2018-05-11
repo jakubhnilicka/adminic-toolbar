@@ -2,7 +2,9 @@
 
 namespace Drupal\adminic_toolbar\Plugin\ToolbarPlugin;
 
+use Drupal\adminic_toolbar\ToolbarConfigDiscovery;
 use Drupal\adminic_toolbar\ToolbarPluginInterface;
+use Drupal\Core\Config\Config;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
@@ -29,6 +31,13 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
   private $currentUser;
 
   /**
+   * Toolbar configuration.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  private $toolbarConfiguration;
+
+  /**
    * ToolbarConfigurationPlugin constructor.
    *
    * @param array $configuration
@@ -39,10 +48,13 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *   The plugin implementation definition.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   Current user.
+   * @param \Drupal\Core\Config\Config $toolbarConfiguration
+   *   Toolbar configuration.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, AccountInterface $currentUser) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, AccountInterface $currentUser, Config $toolbarConfiguration) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->currentUser = $currentUser;
+    $this->toolbarConfiguration = $toolbarConfiguration;
   }
 
   /**
@@ -65,11 +77,13 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $currentUser = $container->get('current_user');
+    $toolbarConfiguration = $container->get('config.factory')->getEditable('adminic_toolbar.configuration');
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $currentUser
+      $currentUser,
+      $toolbarConfiguration
     );
   }
 
@@ -82,6 +96,7 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
     $content[] = $this->getWizardrLink();
     $content[] = $this->getToolbarSettingsLink();
     $content[] = $this->getDeveloperLinks();
+    $content[] = $this->getPresetsLinks();
 
     if ($content) {
       return [
@@ -195,6 +210,57 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
         ],
       ],
     ];
+  }
+
+  /**
+   * Get links for developers.
+   *
+   * @return array
+   *   Return dropdown render array.
+   */
+  protected function getPresetsLinks() {
+    $roles = $this->currentUser->getRoles();
+    $presetsConfiguration = $this->toolbarConfiguration->get('adminic_toolbar_presets');
+    $availablePresets = $this->configuration['presets'];
+    $filteredPresets = array_filter($presetsConfiguration, function ($presetKey) use ($roles){
+      return in_array($presetKey, $roles);
+    }, ARRAY_FILTER_USE_KEY);
+
+    $content = [];
+    $availablePresetsForUser = [];
+
+    foreach ($filteredPresets as $preset) {
+      $presets = array_filter($preset, function ($item) {
+        return $item;
+      });
+      $availablePresetsForUser[] = $presets;
+    }
+    $availablePresetsForUser = array_merge(...$availablePresetsForUser);
+    $activePreset = $this->configuration['active_preset'];
+    foreach ($availablePresetsForUser as $presetIndex => $preset) {
+      $presetTitle = $availablePresets[$presetIndex];
+      if ($activePreset === $presetIndex) {
+        $content[] = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#value' => t('%presetTitle% (active)', ['%presetTitle%' => $presetTitle]),
+        ];
+      }
+      else {
+        $content[] = Link::fromTextAndUrl($presetTitle, Url::fromRoute('adminic_toolbar_configuration.use_preset', ['preset' => $presetIndex]));
+      }
+    }
+
+    if ($content) {
+      return [
+        '#theme' => 'drd',
+        '#trigger_content' => '<i class="ico ico--preset"></i>',
+        '#content' => $content,
+      ];
+    }
+
+    return NULL;
+
   }
 
 }

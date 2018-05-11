@@ -35,3 +35,13 @@ adminic_toolbar_configuration.update:
     _admin_route: TRUE
   requirements:
     _permission: 'administer site configuration'
+
+adminic_toolbar_configuration.use_preset:
+  path: '/admin/config/user-interface/adminic-toolbar/{preset}'
+  defaults:
+    _controller: '\Drupal\adminic_toolbar\Controller\ToolbarUserConfig::usePreset'
+    _title: 'Use toolbar preset'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'

@@ -13,11 +13,11 @@ services:
 
   adminic_toolbar:
     class: Drupal\adminic_toolbar\Toolbar
-    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager', '@adminic_toolbar.configuration']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager', '@adminic_toolbar.configuration', '@adminic_toolbar.discovery_manager']
 
   adminic_toolbar.discovery_manager:
     class: Drupal\adminic_toolbar\ToolbarConfigDiscovery
-    arguments: ['@module_handler']
+    arguments: ['@module_handler', '@user.private_tempstore']
 
   adminic_toolbar.route_manager:
     class: Drupal\adminic_toolbar\ToolbarRouteManager

@@ -7,6 +7,7 @@ namespace Drupal\adminic_toolbar;
  * DiscoveryManager.php.
  */
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\user\PrivateTempStoreFactory;
 
 /**
  * Class ToolbarConfigDiscovery.
@@ -29,16 +30,38 @@ class ToolbarConfigDiscovery {
    */
   private $config = [];
 
+  /**
+   * Extend array.
+   *
+   * @var array
+   */
   private $extend = [];
+
+  /**
+   * Presets array.
+   *
+   * @var array
+   */
+  private $presets = [];
+
+  /**
+   * Private temp store.
+   *
+   * @var \Drupal\user\PrivateTempStoreFactory
+   */
+  private $privateTempStore;
 
   /**
    * DiscoveryManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Interface for classes that manage a set of enabled modules.
+   * @param \Drupal\user\PrivateTempStoreFactory $privateTempStore
+   *   Private temp store.
    */
-  public function __construct(ModuleHandlerInterface $moduleHandler) {
+  public function __construct(ModuleHandlerInterface $moduleHandler, PrivateTempStoreFactory $privateTempStore) {
     $this->moduleHandler = $moduleHandler;
+    $this->privateTempStore = $privateTempStore;
   }
 
   /**
@@ -58,6 +81,12 @@ class ToolbarConfigDiscovery {
     foreach ($configs as $key => $config) {
       $canLoadConfig = $this->canLoadConfig($key);
       list($provider, $preset) = explode('.', $key);
+
+      if (empty($this->presets[$preset])) {
+        $presetTitle = $config['preset']['title'] ?? $preset;
+        // Save preset to list of presets.
+        $this->presets[$preset] = $presetTitle;
+      }
 
       if ($canLoadConfig !== TRUE) {
         unset($configs[$key]);
@@ -89,7 +118,7 @@ class ToolbarConfigDiscovery {
     foreach ($configs as $key => $config) {
       list($provider, $preset) = explode('.', $key);
       // If config preset is active.
-      if (isset($config['preset']['extend']) && $preset === $this->getActiveSet()) {
+      if (isset($config['preset']['extend']) && $preset === $this->getActivePreset()) {
         $this->extend[] = $config['preset']['extend'];
       }
     }
@@ -117,8 +146,25 @@ class ToolbarConfigDiscovery {
    * @return string
    *   Return set machine name.
    */
-  public function getActiveSet() {
-    return 'default';
+  public function getActivePreset() {
+    $tempStore = $this->privateTempStore->get('adminic_toolbar');
+    $preset = $tempStore->get('adminic_toolbar_preset');
+
+    return $preset ?? 'default';
+  }
+
+  /**
+   * Get available presets.
+   *
+   * @return array
+   *   Return array of available presets.
+   */
+  public function getAvailablePresets() {
+    if (empty($this->config)) {
+      $this->config = $this->loadConfig();
+    }
+
+    return $this->presets;
   }
 
   /**
@@ -139,7 +185,7 @@ class ToolbarConfigDiscovery {
     list($provider, $preset) = explode('.', $key);
 
     // If config preset is active.
-    if ($preset === $this->getActiveSet()) {
+    if ($preset === $this->getActivePreset()) {
       return TRUE;
     }
 

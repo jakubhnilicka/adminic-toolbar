@@ -74,6 +74,18 @@ class Toolbar {
    */
   private $toolbarPluginManager;
 
+  /**
+   * Toolbar configuration.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  private $toolbarConfigDiscovery;
+
+  /**
+   * Toolbar config discovery.
+   *
+   * @var \Drupal\adminic_toolbar\ToolbarConfigDiscovery
+   */
   private $toolbarConfiguration;
 
   /**
@@ -97,6 +109,8 @@ class Toolbar {
    *   Secondary sections manager.
    * @param \Drupal\Core\Config\Config $toolbarConfiguration
    *   Toolbar Configuration.
+   * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $toolbarConfigDiscovery
+   *   Toolbar config discovery.
    */
   public function __construct(
     Config $systemSite,
@@ -107,7 +121,8 @@ class Toolbar {
     ToolbarSecondarySectionLinksManager $linksManager,
     ToolbarPrimarySectionsManager $primarySectionsManager,
     ToolbarSecondarySectionsManager $secondarySectionsManager,
-    Config $toolbarConfiguration) {
+    Config $toolbarConfiguration,
+    ToolbarConfigDiscovery $toolbarConfigDiscovery) {
     $this->systemSite = $systemSite;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->currentUser = $currentUser;
@@ -117,6 +132,7 @@ class Toolbar {
     $this->primarySectionsManager = $primarySectionsManager;
     $this->secondarySectionsManager = $secondarySectionsManager;
     $this->toolbarConfiguration = $toolbarConfiguration;
+    $this->toolbarConfigDiscovery = $toolbarConfigDiscovery;
   }
 
   /**
@@ -146,7 +162,8 @@ class Toolbar {
     $activeThemeName = $activeTheme->getName();
     $adminic_toolbar_theme = $this->toolbarConfiguration->get('adminic_toolbar_theme');
     $theme = $adminic_toolbar_theme[$activeThemeName] ?: 'adminic_toolbar/adminic_toolbar.theme.default';
-
+    $presets = $this->toolbarConfigDiscovery->getAvailablePresets();
+    $activePreset = $this->toolbarConfigDiscovery->getActivePreset();
     $this->generateActiveTrails();
     $primarySections = $this->primarySectionsManager->getPrimarySections();
     $widgets = [];
@@ -165,7 +182,7 @@ class Toolbar {
 
     // Append user account to primary toolbar.
     $userAccount = $this->toolbarPluginManager->createInstance('toobar_user_account')->getRenderArray();
-    $toolbarConfiguration = $this->toolbarPluginManager->createInstance('toolbar_configuration')->getRenderArray();
+    $toolbarConfiguration = $this->toolbarPluginManager->createInstance('toolbar_configuration', ['presets' => $presets, 'active_preset' => $activePreset])->getRenderArray();
 
     $header = [
       '#theme' => 'toolbar_primary_header',
@@ -176,6 +193,7 @@ class Toolbar {
     if ($widgets) {
       $activeTab = $this->tabsManager->getActiveTab();
       $activeLink = $this->linksManager->getActiveLinkUrl();
+
       $build = [];
       $build['toolbar_primary'] = [
         '#theme' => 'toolbar_primary',
@@ -186,8 +204,9 @@ class Toolbar {
         '#user_account' => $userAccount,
         '#access' => $this->userCanAccessToolbar(),
         '#cache' => [
-          'keys' => ['adminic_toolbar_primary'],
+          'keys' => ['adminic_toolbar_primary', $activePreset],
           'contexts' => ['user.permissions'],
+          'tags' => ['adminic_toolbar', $activePreset],
         ],
         '#attached' => [
           'library' => [
@@ -213,6 +232,7 @@ class Toolbar {
               'active_link' => $activeLink,
               'route_name' => $routeName,
               'route_parameters' => $routeParams,
+              'active_preset' => $activePreset,
             ],
           ],
         ],
@@ -275,12 +295,14 @@ class Toolbar {
     }
 
     if (!empty($wrappers)) {
+      $activePreset = $this->toolbarConfigDiscovery->getActivePreset();
       return [
         '#theme' => 'toolbar_secondary',
         '#wrappers' => $wrappers,
         '#cache' => [
-          'keys' => ['adminic_toolbar_secondary'],
+          'keys' => ['adminic_toolbar_secondary', $activePreset],
           'contexts' => ['user.permissions'],
+          'tags' => ['adminic_toolbar', $activePreset],
         ],
       ];
     }

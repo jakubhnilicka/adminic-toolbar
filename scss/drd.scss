@@ -35,7 +35,16 @@
   display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 4px 0
+  margin: 4px 0;
+}
+.drdc span {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 4px 0;
+}
+.drdc a.active {
+  font-weight: bold;
 }
 
 .drd.open .drdt {
