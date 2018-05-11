@@ -79,7 +79,6 @@ class ToolbarConfigDiscovery {
     $this->initExtend($configs);
     // Add computed weight to every config file.
     foreach ($configs as $key => $config) {
-      $canLoadConfig = $this->canLoadConfig($key);
       list($provider, $preset) = explode('.', $key);
 
       if (empty($this->presets[$preset])) {
@@ -88,9 +87,18 @@ class ToolbarConfigDiscovery {
         $this->presets[$preset] = $presetTitle;
       }
 
+      $canLoadConfig = $this->canLoadConfig($key);
+
       if ($canLoadConfig !== TRUE) {
         unset($configs[$key]);
         continue;
+      }
+      if (isset($config['preset']['menu'])) {
+        $presetMenu = $config['preset']['menu'];
+        // Get configuration for menu.
+        $toolbarConfigFromMenu = \Drupal::service('adminic_toolbar.toolbar_config_from_menu');
+        $configFromMenu = $toolbarConfigFromMenu->getConfig($presetMenu);
+        $configs[$key] = array_merge($config, $configFromMenu);
       }
       // Allways load adminic toolbar before others.
       if ($provider === 'adminic_toolbar') {

@@ -47,6 +47,9 @@ services:
     class: Drupal\adminic_toolbar\ToolbarThemeDiscovery
     arguments: ['@module_handler']
 
+  adminic_toolbar.toolbar_config_from_menu:
+    class: Drupal\adminic_toolbar\ToolbarConfigFromMenu
+
   adminic_toolbar.cache:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
