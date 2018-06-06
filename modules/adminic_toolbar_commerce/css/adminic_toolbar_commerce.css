@@ -1,3 +1,4 @@
-#tab--commerce .ico {
+#tab--commerce .ico,
+#tab--commerceadmin-commerce .ico {
   background-position-y: -312px;
 }

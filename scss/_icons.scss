@@ -28,15 +28,18 @@
   }
 }
 
-#tab--content .ico {
+#tab--content .ico,
+#tab--systemadmin-content .ico {
   background-position-y: -24px;
 }
 
-#tab--structure .ico {
+#tab--structure .ico,
+#tab--systemadmin-structure .ico {
   background-position-y: -48px;
 }
 
-#tab--users .ico {
+#tab--users .ico,
+#tab--entityusercollection .ico {
   background-position-y: -72px;
 }
 
@@ -44,15 +47,18 @@
   background-position-y: -96px;
 }
 
-#tab--appearance .ico {
+#tab--appearance .ico,
+#tab--systemthemes-page .ico {
   background-position-y: -120px;
 }
 
-#tab--extend .ico {
+#tab--extend .ico,
+#tab--systemmodules-list .ico {
   background-position-y: -144px;
 }
 
 #tab--configuration .ico,
+#tab--systemadmin-config .ico,
 .ico--configuration {
   background-position-y: -168px;
 }
@@ -61,11 +67,13 @@
   background-position-y: -288px;
 }
 
-#tab--reports .ico {
+#tab--reports .ico,
+#tab--systemadmin-reports .ico {
   background-position-y: -192px;
 }
 
-#tab--help .ico {
+#tab--help .ico,
+#tab--helpmain .ico {
   background-position-y: -216px;
 }
 
