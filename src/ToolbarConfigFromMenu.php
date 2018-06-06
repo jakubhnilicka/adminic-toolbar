@@ -76,7 +76,8 @@ class ToolbarConfigFromMenu {
 
       // Secondary sections.
       $secondarySections = $primarySectionTab->subtree;
-      $defaultSubsectionId = $tabId . '.default';
+      $defaultCounter = 0;
+      $defaultSubsectionId = $tabId . '.default.' . $defaultCounter;
 
       // Create default secondary section.
       $this->secondarySections[$defaultSubsectionId] = [
@@ -84,11 +85,21 @@ class ToolbarConfigFromMenu {
         'tab_id' => $tabId,
       ];
 
+      // Add tablink as first child to default secondary section.
+      $this->secondarySectionsLinks[] = [
+        'secondary_section_id' => $defaultSubsectionId,
+        'route_name' => $tabRouteName,
+        'route_parameters' => $tabRouteParameters,
+        'weight' => -99999,
+      ];
+
+      $newSection = FALSE;
       foreach ($secondarySections as $secondarySection) {
         /** @var \Drupal\Core\Menu\MenuLinkDefault $subsection */
         $subsection = $secondarySection->link;
         $subsectionHasChildren = $secondarySection->hasChildren;
         // If link have subtree create secondary section.
+        // It will be new section
         if ($subsectionHasChildren == TRUE) {
           $subsectionId = $subsection->getRouteName();
           $subsectionTitle = $subsection->getTitle();
@@ -97,17 +108,22 @@ class ToolbarConfigFromMenu {
             'tab_id' => $tabId,
             'title' => $subsectionTitle,
           ];
+          $defaultCounter++;
+          $newSection = TRUE;
+        }
+        // Else if it is after new section.
+        elseif ($newSection == TRUE) {
+          $newSection = FALSE;
+          $defaultCounter++;
+          $defaultSubsectionId = $tabId . '.default.' . $defaultCounter;
+          // Create default secondary section.
+          $this->secondarySections[$defaultSubsectionId] = [
+            'id' => $defaultSubsectionId,
+            'tab_id' => $tabId,
+          ];
         }
 
         // Secondary section links.
-        // Add tab link at the top of default section.
-        $this->secondarySectionsLinks[] = [
-          'secondary_section_id' => $defaultSubsectionId,
-          'route_name' => $tabRouteName,
-          'route_parameters' => $tabRouteParameters,
-          'weight' => -99999,
-        ];
-
         if ($subsectionHasChildren == FALSE) {
           $this->secondarySectionsLinks[] = [
             'secondary_section_id' => $defaultSubsectionId,
