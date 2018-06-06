@@ -49,6 +49,7 @@ services:
 
   adminic_toolbar.toolbar_config_from_menu:
     class: Drupal\adminic_toolbar\ToolbarConfigFromMenu
+    arguments: ['@menu.link_tree']
 
   adminic_toolbar.cache:
     class: Drupal\Core\Cache\CacheBackendInterface
