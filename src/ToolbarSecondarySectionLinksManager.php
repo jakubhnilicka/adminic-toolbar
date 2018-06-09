@@ -25,6 +25,7 @@ class ToolbarSecondarySectionLinksManager {
   const LINK_ROUTE_PARAMETERS = 'route_parameters';
   const LINK_TITLE = 'title';
   const LINK_BADGE = 'badge';
+  const LINK_LEVEL = 'level';
   const LINK_WEIGHT = 'weight';
   const LINK_DISABLED = 'disabled';
 
@@ -149,11 +150,12 @@ class ToolbarSecondarySectionLinksManager {
         $url = Url::fromRoute($route, $route_params);
         $disabled = $link[self::LINK_DISABLED] ?? FALSE;
         $badge = $link[self::LINK_BADGE] ?? '';
+        $level = $link[self::LINK_LEVEL] ?? 1;
         $active = FALSE;
         if (array_key_exists($route, $activeRoutes)) {
           $active = TRUE;
         }
-        $this->addLink(new ToolbarSecondarySectionLink($widget_id, $url, $title, $active, $disabled, $badge));
+        $this->addLink(new ToolbarSecondarySectionLink($widget_id, $url, $title, $active, $disabled, $badge, $level));
       }
     }
   }

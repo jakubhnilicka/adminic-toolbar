@@ -133,19 +133,12 @@ class ToolbarConfigFromMenu {
         }
 
         $secondarySectionsLinks = $secondarySection->subtree;
-
         foreach ($secondarySectionsLinks as $secondarySectionsLink) {
-          /** @var \Drupal\Core\Menu\MenuLinkDefault $link */
-          $link = $secondarySectionsLink->link;
-
-          $linkRouteName = $link->getRouteName();
-          $linkRouteParameters = $link->getRouteParameters();
-
-          $this->secondarySectionsLinks[] = [
-            'secondary_section_id' => $subsectionId,
-            'route_name' => $linkRouteName,
-            'route_parameters' => $linkRouteParameters,
-          ];
+          $this->generateLinks($secondarySectionsLink, $subsectionId);
+          $subLinks = $secondarySectionsLink->subtree;
+          foreach ($subLinks as $subLink) {
+            $this->generateSublinks($subLink, $subsectionId);
+          }
         }
       }
     }
@@ -153,7 +146,7 @@ class ToolbarConfigFromMenu {
 
   protected function getMenuTree($menuName) {
     $parameters = new MenuTreeParameters();
-    $parameters->setMaxDepth(4);
+    $parameters->setMaxDepth(5);
     $tree = $this->menuLinkTree->load($menuName, $parameters);
 
     $manipulators = array(
@@ -181,6 +174,43 @@ class ToolbarConfigFromMenu {
 
   protected function getSecondarySectionsLinks() {
     return $this->secondarySectionsLinks;
+  }
+
+  /**
+   * @param $subLink
+   * @param $subsectionId
+   */
+  protected function generateSublinks($subLink, $subsectionId): void {
+    /** @var \Drupal\Core\Menu\MenuLinkDefault $link2 */
+    $link2 = $subLink->link;
+
+    $linkRouteName2 = $link2->getRouteName();
+    $linkRouteParameters2 = $link2->getRouteParameters();
+
+    $this->secondarySectionsLinks[] = [
+      'secondary_section_id' => $subsectionId,
+      'route_name' => $linkRouteName2,
+      'route_parameters' => $linkRouteParameters2,
+      'level' => 2,
+    ];
+  }
+
+  /**
+   * @param $secondarySectionsLink
+   * @param $subsectionId
+   */
+  protected function generateLinks($secondarySectionsLink, $subsectionId): void {
+    /** @var \Drupal\Core\Menu\MenuLinkDefault $link */
+    $link = $secondarySectionsLink->link;
+
+    $linkRouteName = $link->getRouteName();
+    $linkRouteParameters = $link->getRouteParameters();
+
+    $this->secondarySectionsLinks[] = [
+      'secondary_section_id' => $subsectionId,
+      'route_name' => $linkRouteName,
+      'route_parameters' => $linkRouteParameters,
+    ];
   }
 
 }

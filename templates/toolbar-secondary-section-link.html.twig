@@ -1,6 +1,7 @@
 {% set attributes = create_attribute() %}
 {% set classes = [
   active ? 'active',
+  level != 1 ? 'l-' ~ level,
 ] %}
 <a {{ attributes.addClass(classes) }} href="{{ url }}">
   {{ title }}

@@ -57,7 +57,7 @@ secondary_sections:
 secondary_sections_links:
   # Content Tab
   - {secondary_section_id: 'content.default', route_name: 'system.admin_content', title: 'Nodes'}
-  - {secondary_section_id: 'content.default', route_name: 'comment.admin'}
+  - {secondary_section_id: 'content.default', route_name: 'comment.admin', level: 2}
   - {secondary_section_id: 'content.default', route_name: 'view.media.media_page_list'}
   - {secondary_section_id: 'content.default', route_name: 'entity.block_content.collection', title: 'Blocks'}
   - {secondary_section_id: 'content.default', route_name: 'view.files.page_1'}

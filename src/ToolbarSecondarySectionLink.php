@@ -57,6 +57,10 @@ class ToolbarSecondarySectionLink {
    * @var string
    */
   private $badge;
+  /**
+   * @var int
+   */
+  private $level;
 
   /**
    * Link constructor.
@@ -73,14 +77,17 @@ class ToolbarSecondarySectionLink {
    *   Link disabled state.
    * @param string $badge
    *   Link badge.
+   * @param int $level
+   *   Link level.
    */
-  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
+  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge, int $level) {
     $this->widget = $widget;
     $this->url = $url;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
     $this->badge = $badge;
+    $this->level = $level;
   }
 
   /**
@@ -136,6 +143,16 @@ class ToolbarSecondarySectionLink {
   }
 
   /**
+   * Get link level.
+   *
+   * @return mixed
+   *   Return link level.
+   */
+  public function getLevel() {
+    return $this->level;
+  }
+
+  /**
    * Is link active.
    *
    * @return string
@@ -181,6 +198,7 @@ class ToolbarSecondarySectionLink {
       '#title' => $this->getTitle(),
       '#url' => $this->getUrl(),
       '#badge' => $this->getBadge(),
+      '#level' => $this->getLevel(),
     ];
   }
 

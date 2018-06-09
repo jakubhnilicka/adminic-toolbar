@@ -91,6 +91,7 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
       'url' => NULL,
       'active' => FALSE,
       'badge' => NULL,
+      'level' => 1,
     ],
   ];
 
