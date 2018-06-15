@@ -133,9 +133,13 @@ class ToolbarConfigurationForm extends FormBase {
     $themes = $this->themeHandler->listInfo();
     foreach ($themes as $name => $theme) {
       if (!isset($theme->info['hidden'])) {
+        $defaultTheme = 'adminic_toolbar/adminic_toolbar.theme.default';
+        if (isset($selectedTheme[$name])) {
+          $defaultTheme = $selectedTheme[$name];
+        }
         $form['adminic_toolbar_theme'][$name] = [
           '#type' => 'select',
-          '#default_value' => $selectedTheme[$name] ?: 'adminic_toolbar/adminic_toolbar.theme.default',
+          '#default_value' => $defaultTheme,
           '#options' => $availableThemes,
           '#title' => $theme->info['name'],
         ];

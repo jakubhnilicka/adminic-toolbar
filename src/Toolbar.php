@@ -158,10 +158,13 @@ class Toolbar {
       return NULL;
     }
 
+    $theme = 'adminic_toolbar/adminic_toolbar.theme.default';
     $activeTheme = \Drupal::theme()->getActiveTheme();
     $activeThemeName = $activeTheme->getName();
     $adminic_toolbar_theme = $this->toolbarConfiguration->get('adminic_toolbar_theme');
-    $theme = $adminic_toolbar_theme[$activeThemeName] ?: 'adminic_toolbar/adminic_toolbar.theme.default';
+    if (isset($adminic_toolbar_theme[$activeThemeName])) {
+      $theme = $adminic_toolbar_theme[$activeThemeName];
+    }
     $presets = $this->toolbarConfigDiscovery->getAvailablePresets();
     $activePreset = $this->toolbarConfigDiscovery->getActivePreset();
     $this->generateActiveTrails();
