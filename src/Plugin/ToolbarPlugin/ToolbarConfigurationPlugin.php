@@ -221,10 +221,17 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
   protected function getPresetsLinks() {
     $roles = $this->currentUser->getRoles();
     $presetsConfiguration = $this->toolbarConfiguration->get('adminic_toolbar_presets');
+
+    if (!$presetsConfiguration) {
+      return NULL;
+    }
+
     $availablePresets = $this->configuration['presets'];
-    $filteredPresets = array_filter($presetsConfiguration, function ($presetKey) use ($roles){
+
+    $filteredPresets = array_filter($presetsConfiguration, function ($presetKey) use ($roles) {
       return in_array($presetKey, $roles);
     }, ARRAY_FILTER_USE_KEY);
+
 
     $content = [];
     $availablePresetsForUser = [];
