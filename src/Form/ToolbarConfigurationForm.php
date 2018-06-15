@@ -115,6 +115,7 @@ class ToolbarConfigurationForm extends FormBase {
     $compactMode = $this->configuration->get('compact_mode');
     $availableThemes = $this->themeDiscovery->getThemes();
     $presetsConfiguration = $this->configuration->get('adminic_toolbar_presets');
+    $behaviorConfiguration = $this->configuration->get('adminic_toolbar_behavior');
 
     $form['adminic_toolbar_theme'] = [
       '#type' => 'details',
@@ -166,10 +167,41 @@ class ToolbarConfigurationForm extends FormBase {
       $defaultvalue = array_filter($defaultvalue, function ($value) {
         return $value;
       });
+
       $form['adminic_toolbar_presets'][$role->id()] = [
         '#type' => 'checkboxes',
         '#default_value' => array_keys($defaultvalue),
         '#options' => $presets,
+        '#title' => $role->label(),
+      ];
+    }
+
+    $form['adminic_toolbar_behavior'] = [
+      '#type' => 'details',
+      '#title' => t('Default behavior'),
+      '#open' => TRUE,
+      '#weight' => 3,
+      '#attributes' => [
+        'class' => [
+          'adminic-toolbar-behavior',
+          'clearfix',
+        ],
+      ],
+    ];
+
+    foreach ($roles as $index => $role) {
+      $defaultvalue = $behaviorConfiguration[$index] ?? [];
+      $defaultvalue = array_filter($defaultvalue, function ($value) {
+        return $value;
+      });
+      $options = [
+        'enabled_defaultly' => t('Enabled defaultly'),
+        'can_edit_visibility' => t('Can disable toolbar'),
+      ];
+      $form['adminic_toolbar_behavior']['behavior_' . $role->id()] = [
+        '#type' => 'checkboxes',
+        '#options' => $options,
+        '#default_value' => array_keys($defaultvalue),
         '#title' => $role->label(),
       ];
     }
@@ -231,6 +263,15 @@ class ToolbarConfigurationForm extends FormBase {
       $presetMatrix[$index] = $presets;
     }
     $this->configuration->set('adminic_toolbar_presets', $presetMatrix)->save();
+
+    $behaviorMatrix = [];
+    foreach ($roles as $index => $role) {
+      $behaviorOptions = array_map(function ($role) {
+        return ($role !== 0) ? TRUE : FALSE;
+      }, $values['behavior_' . $index]);
+      $behaviorMatrix[$index] = $behaviorOptions;
+    }
+    $this->configuration->set('adminic_toolbar_behavior', $behaviorMatrix)->save();
 
     $compactMode = $values['compact_mode'];
     $this->configuration->set('compact_mode', $compactMode)->save();
