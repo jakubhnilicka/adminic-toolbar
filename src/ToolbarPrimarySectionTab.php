@@ -7,6 +7,7 @@ namespace Drupal\adminic_toolbar;
  * ToolbarPrimarySectionTab.phpSectionTab.php.
  */
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -15,6 +16,7 @@ use Drupal\Core\Url;
  * @package Drupal\adminic_toolbar
  */
 class ToolbarPrimarySectionTab {
+  use StringTranslationTrait;
 
   /**
    * Tab ID.
@@ -199,7 +201,7 @@ class ToolbarPrimarySectionTab {
     return [
       '#theme' => 'toolbar_primary_section_tab',
       '#id' => $this->getId(),
-      '#title' => $this->getTitle(),
+      '#title' => $this->t($this->getTitle()),
       '#url' => $this->getUrl(),
       '#badge' => $this->getBadge(),
     ];

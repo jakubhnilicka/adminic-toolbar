@@ -7,6 +7,7 @@ namespace Drupal\adminic_toolbar;
  * ToolbarSecondarySectionLink.phpySectionLink.php.
  */
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -15,6 +16,7 @@ use Drupal\Core\Url;
  * @package Drupal\adminic_toolbar
  */
 class ToolbarSecondarySectionLink {
+  use StringTranslationTrait;
 
   /**
    * Widget where link belongs to.
@@ -195,7 +197,7 @@ class ToolbarSecondarySectionLink {
   public function getRenderArray() {
     return [
       '#theme' => 'toolbar_secondary_section_link',
-      '#title' => $this->getTitle(),
+      '#title' => $this->t($this->getTitle()),
       '#url' => $this->getUrl(),
       '#badge' => $this->getBadge(),
       '#level' => $this->getLevel(),
