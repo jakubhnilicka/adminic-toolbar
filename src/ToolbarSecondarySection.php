@@ -7,12 +7,15 @@ namespace Drupal\adminic_toolbar;
  * ToolbarPrimarySectionSection.php.
  */
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+
 /**
  * Class ToolbarPrimarySection.
  *
  * @package Drupal\adminic_toolbar
  */
 class ToolbarSecondarySection {
+  use StringTranslationTrait;
 
   /**
    * Section ID.
@@ -167,7 +170,7 @@ class ToolbarSecondarySection {
   public function getRenderArray() {
     return [
       '#theme' => 'toolbar_secondary_section',
-      '#title' => $this->getTitle(),
+      '#title' => $this->t($this->getTitle()),
       '#links' => $this->getLinks(),
     ];
   }

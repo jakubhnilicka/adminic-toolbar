@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="456px" viewBox="0 0 48 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+<svg width="48px" height="480px" viewBox="0 0 48 480" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
     <title>icons-default</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
@@ -187,6 +187,16 @@
             <g id="close-active" transform="translate(30.000000, 414.000000)" stroke="#9ADAFF" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M0.5,0.5 L12.0108644,12.0108644" id="Line-Copy-2"></path>
                 <path d="M11.5,0.5 L0,12" id="Line-Copy-3"></path>
+            </g>
+            <g id="preset" transform="translate(5.000000, 461.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+                <rect id="Rectangle-path" x="0" y="0" width="14" height="9.8" rx="2"></rect>
+                <path d="M4.2,12.6 L9.8,12.6" id="Shape"></path>
+                <path d="M7,9.8 L7,12.6" id="Shape"></path>
+            </g>
+            <g id="preset-active" transform="translate(29.000000, 461.000000)" stroke="#9ADAFF" stroke-linecap="round" stroke-linejoin="round">
+                <rect id="Rectangle-path" x="0" y="0" width="14" height="9.8" rx="2"></rect>
+                <path d="M4.2,12.6 L9.8,12.6" id="Shape"></path>
+                <path d="M7,9.8 L7,12.6" id="Shape"></path>
             </g>
         </g>
     </g>

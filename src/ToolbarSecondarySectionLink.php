@@ -7,6 +7,7 @@ namespace Drupal\adminic_toolbar;
  * ToolbarSecondarySectionLink.phpySectionLink.php.
  */
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -15,6 +16,7 @@ use Drupal\Core\Url;
  * @package Drupal\adminic_toolbar
  */
 class ToolbarSecondarySectionLink {
+  use StringTranslationTrait;
 
   /**
    * Widget where link belongs to.
@@ -59,6 +61,20 @@ class ToolbarSecondarySectionLink {
   private $badge;
 
   /**
+   * Link level.
+   *
+   * @var int
+   */
+  private $level;
+
+  /**
+   * Link type.
+   *
+   * @var string
+   */
+  private $type;
+
+  /**
    * Link constructor.
    *
    * @param string $widget
@@ -73,14 +89,20 @@ class ToolbarSecondarySectionLink {
    *   Link disabled state.
    * @param string $badge
    *   Link badge.
+   * @param int $level
+   *   Link level.
+   * @param string $type
+   *   Type.
    */
-  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
+  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge, int $level, string $type) {
     $this->widget = $widget;
     $this->url = $url;
     $this->title = $title;
     $this->active = $active;
     $this->disabled = $disabled;
     $this->badge = $badge;
+    $this->level = $level;
+    $this->type = $type;
   }
 
   /**
@@ -136,6 +158,16 @@ class ToolbarSecondarySectionLink {
   }
 
   /**
+   * Get link level.
+   *
+   * @return mixed
+   *   Return link level.
+   */
+  public function getLevel() {
+    return $this->level;
+  }
+
+  /**
    * Is link active.
    *
    * @return string
@@ -170,6 +202,26 @@ class ToolbarSecondarySectionLink {
   }
 
   /**
+   * Get link type.
+   *
+   * @return string
+   *   Return section type.
+   */
+  public function getType() {
+    return $this->type;
+  }
+
+  /**
+   * Has link type defined.
+   *
+   * @return bool
+   *   Return TRUE if type is defined or FALSE.
+   */
+  public function hasType() {
+    return !empty($this->type);
+  }
+
+  /**
    * Return link render array.
    *
    * @return array
@@ -178,9 +230,10 @@ class ToolbarSecondarySectionLink {
   public function getRenderArray() {
     return [
       '#theme' => 'toolbar_secondary_section_link',
-      '#title' => $this->getTitle(),
+      '#title' => $this->t($this->getTitle()),
       '#url' => $this->getUrl(),
       '#badge' => $this->getBadge(),
+      '#level' => $this->getLevel(),
     ];
   }
 

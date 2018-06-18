@@ -7,6 +7,7 @@ namespace Drupal\adminic_toolbar;
  * ToolbarPrimarySectionTab.phpSectionTab.php.
  */
 
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 
 /**
@@ -15,6 +16,7 @@ use Drupal\Core\Url;
  * @package Drupal\adminic_toolbar
  */
 class ToolbarPrimarySectionTab {
+  use StringTranslationTrait;
 
   /**
    * Tab ID.
@@ -66,6 +68,13 @@ class ToolbarPrimarySectionTab {
   private $badge;
 
   /**
+   * Type.
+   *
+   * @var string
+   */
+  private $type;
+
+  /**
    * Tab constructor.
    *
    * @param string $id
@@ -82,8 +91,10 @@ class ToolbarPrimarySectionTab {
    *   Tab disabled state.
    * @param string $badge
    *   Tab badge.
+   * @param string $type
+   *   Type.
    */
-  public function __construct(string $id, string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
+  public function __construct(string $id, string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge, string $type) {
     $this->id = $id;
     $this->widget = $widget;
     $this->url = $url;
@@ -91,6 +102,7 @@ class ToolbarPrimarySectionTab {
     $this->active = $active;
     $this->disabled = $disabled;
     $this->badge = $badge;
+    $this->type = $type;
   }
 
   /**
@@ -189,6 +201,27 @@ class ToolbarPrimarySectionTab {
     return $this->disabled;
   }
 
+
+  /**
+   * Get tab type.
+   *
+   * @return string
+   *   Return section type.
+   */
+  public function getType() {
+    return $this->type;
+  }
+
+  /**
+   * Has tab type defined.
+   *
+   * @return bool
+   *   Return TRUE if type is defined or FALSE.
+   */
+  public function hasType() {
+    return !empty($this->type);
+  }
+
   /**
    * Return tab render array.
    *
@@ -199,7 +232,7 @@ class ToolbarPrimarySectionTab {
     return [
       '#theme' => 'toolbar_primary_section_tab',
       '#id' => $this->getId(),
-      '#title' => $this->getTitle(),
+      '#title' => $this->t($this->getTitle()),
       '#url' => $this->getUrl(),
       '#badge' => $this->getBadge(),
     ];

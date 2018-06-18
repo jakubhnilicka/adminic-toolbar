@@ -20,6 +20,7 @@ primary_sections_tabs:
 secondary_sections:
   # Content Tab
   - {id: 'content.default', tab_id: 'content'}
+  - {id: 'content.user', tab_id: 'content'}
   # Media Tab
   - {id: 'media.default', tab_id: 'media'}
   - {id: 'media.settings', tab_id: 'media', title: 'Settings'}

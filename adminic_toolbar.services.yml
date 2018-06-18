@@ -13,11 +13,11 @@ services:
 
   adminic_toolbar:
     class: Drupal\adminic_toolbar\Toolbar
-    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager', '@adminic_toolbar.configuration']
+    arguments: [ '@adminic_toolbar.system_site', '@current_route_match', '@current_user', '@adminic_toolbar.widget.manager', '@adminic_toolbar.tabs_manager', '@adminic_toolbar.links_manager', '@adminic_toolbar.primary_sections_manager', '@adminic_toolbar.secondary_sections_manager', '@adminic_toolbar.configuration', '@adminic_toolbar.discovery_manager']
 
   adminic_toolbar.discovery_manager:
     class: Drupal\adminic_toolbar\ToolbarConfigDiscovery
-    arguments: ['@module_handler']
+    arguments: ['@module_handler', '@user.private_tempstore']
 
   adminic_toolbar.route_manager:
     class: Drupal\adminic_toolbar\ToolbarRouteManager
@@ -29,7 +29,7 @@ services:
 
   adminic_toolbar.primary_sections_manager:
     class: Drupal\adminic_toolbar\ToolbarPrimarySectionsManager
-    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.tabs_manager', '@module_handler']
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.tabs_manager', '@module_handler', '@adminic_toolbar.widget.manager']
 
   adminic_toolbar.secondary_sections_manager:
     class: Drupal\adminic_toolbar\ToolbarSecondarySectionsManager
@@ -46,6 +46,10 @@ services:
   adminic_toolbar.toolbar_theme_discovery:
     class: Drupal\adminic_toolbar\ToolbarThemeDiscovery
     arguments: ['@module_handler']
+
+  adminic_toolbar.toolbar_config_from_menu:
+    class: Drupal\adminic_toolbar\ToolbarConfigFromMenu
+    arguments: ['@menu.link_tree']
 
   adminic_toolbar.cache:
     class: Drupal\Core\Cache\CacheBackendInterface

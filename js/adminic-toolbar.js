@@ -14,6 +14,8 @@
 
       var activeTab = drupalSettings.adminic_toolbar.active_tab;
       if (activeTab) {
+        activeTab = activeTab.split('.').join('');
+        activeTab = activeTab.split('_').join('-');
         $('#tab--' + activeTab).addClass('active');
         $('#toolbar-' + activeTab).addClass('active');
       }
