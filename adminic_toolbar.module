@@ -129,11 +129,25 @@ function adminic_toolbar_theme($existing, $type, $theme, $path) {
  * @throws \Exception
  */
 function adminic_toolbar_page_top(array &$page_top) {
+  $current_user = \Drupal::currentUser();
   /** @var \Drupal\user\PrivateTempStore $tempstore */
   $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
   $use_adminic_toolbar = $tempstore->get('use_adminic_toolbar');
+  $can_use_adminic_toolbar = $current_user->hasPermission('can use adminic toolbar');
+  $visible_by_default = $current_user->hasPermission('adminic toolbar visible by default');
 
-  if ($use_adminic_toolbar) {
+  $can_use_toolbar = FALSE;
+  // User set visibility of the toolbar and can use the toolbar.
+  if ($use_adminic_toolbar != NULL && $can_use_adminic_toolbar) {
+    $can_use_toolbar = $use_adminic_toolbar;
+  }
+  // User didn't set visibility and can use toolbar
+  // and toolbar is visible by default.
+  if ($use_adminic_toolbar == NULL && $can_use_adminic_toolbar && $visible_by_default) {
+    $can_use_toolbar = TRUE;
+  }
+
+  if ($can_use_toolbar) {
     /** @var \Drupal\adminic_toolbar\Toolbar $adminic_toolbar */
     $adminic_toolbar = \Drupal::service('adminic_toolbar');
 
@@ -176,25 +190,43 @@ function adminic_toolbar_preprocess_html(array &$variables) {
  * {@inheritdoc}
  */
 function adminic_toolbar_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $current_user = \Drupal::currentUser();
+  $can_use_adminic_toolbar = $current_user->hasPermission('can use adminic toolbar');
+  $can_change_visibility = $current_user->hasPermission('can change visibillity of adminic toolbar');
+  $visible_by_default = $current_user->hasPermission('adminic toolbar visible by default');
+
   /** @var \Drupal\user\PrivateTempStore $tempstore */
   $tempstore = \Drupal::service('user.private_tempstore')->get('adminic_toolbar');
   $use_adminic_toolbar_value = $tempstore->get('use_adminic_toolbar');
+  if ($use_adminic_toolbar_value == NULL && $visible_by_default) {
+    $use_adminic_toolbar_value = 1;
+  }
 
-  $form['adminic_toolbar'] = [
-    '#type' => 'details',
-    '#title' => t('Adminic toolbar'),
-    '#open' => TRUE,
-    '#weight' => 99,
-  ];
+  $alter_enabled = FALSE;
+  if ($can_use_adminic_toolbar && $can_change_visibility) {
+    $alter_enabled = TRUE;
+  }
 
-  $form['adminic_toolbar']['use_adminic_toolbar'] = [
-    '#type' => 'checkbox',
-    '#default_value' => $use_adminic_toolbar_value,
-    '#title' => t('Use Adminic toolbar'),
-  ];
+  if ($alter_enabled == TRUE) {
+    $form['adminic_toolbar'] = [
+      '#type' => 'details',
+      '#title' => t('Adminic toolbar'),
+      '#open' => TRUE,
+      '#weight' => 99,
+    ];
 
-  $form['actions']['submit']['#submit'][] = '_adminic_toolbar_user_form_submit';
+    $form['adminic_toolbar']['use_adminic_toolbar'] = [
+      '#type' => 'radios',
+      '#default_value' => $use_adminic_toolbar_value,
+      '#options' => [
+        0 => t('No'),
+        1 => t('Yes'),
+      ],
+      '#title' => t('Use Adminic toolbar'),
+    ];
 
+    $form['actions']['submit']['#submit'][] = '_adminic_toolbar_user_form_submit';
+  }
 }
 
 /**

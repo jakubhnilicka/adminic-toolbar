@@ -1,6 +1,12 @@
 'can use adminic toolbar':
-  title: 'Can use Adminic Toolbar'
+  title: 'Can use the toolbar'
   description: 'User can use Adminic Toolbar.'
+'can change visibillity of adminic toolbar':
+  title: 'Can change the visibility of Adminic Toolbar'
+  description: 'User can change the visibility of Adminic Toolbar.'
+'adminic toolbar visible by default':
+  title: 'Adminic Toolbar is visible by default'
+  description: 'Adminic Toolbar is visible by default.'
 'can configure adminic toolbar':
   title: 'Can configure Adminic Toolbar'
   description: 'User can configure Adminic Toolbar.'
