@@ -191,6 +191,12 @@ function adminic_toolbar_preprocess_html(array &$variables) {
  */
 function adminic_toolbar_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $current_user = \Drupal::currentUser();
+  $current_route = \Drupal::service('current_route_match');
+  $user = $current_route->getParameter('user');
+  if ($user->id() != $current_user->id()) {
+    return;
+  }
+
   $can_use_adminic_toolbar = $current_user->hasPermission('can use adminic toolbar');
   $can_change_visibility = $current_user->hasPermission('can change visibillity of adminic toolbar');
   $visible_by_default = $current_user->hasPermission('adminic toolbar visible by default');
@@ -206,6 +212,7 @@ function adminic_toolbar_form_user_form_alter(&$form, FormStateInterface $form_s
   if ($can_use_adminic_toolbar && $can_change_visibility) {
     $alter_enabled = TRUE;
   }
+
 
   if ($alter_enabled == TRUE) {
     $form['adminic_toolbar'] = [
