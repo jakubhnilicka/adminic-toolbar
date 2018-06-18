@@ -57,7 +57,6 @@ secondary_sections:
 
 secondary_sections_links:
   # Content Tab
-  - {secondary_section_id: 'content.default', plugin_id: 'toobar_user_account'}
   - {secondary_section_id: 'content.default', route_name: 'system.admin_content', title: 'Nodes'}
   - {secondary_section_id: 'content.default', route_name: 'comment.admin'}
   - {secondary_section_id: 'content.default', route_name: 'view.media.media_page_list'}
