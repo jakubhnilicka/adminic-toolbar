@@ -1,6 +1,6 @@
 {% if links %}
   <div class="toolbar_links">
-    {% if title %}
+    {% if title is not empty %}
       <div class="toolbar_links__header">{{ title }}</div>
     {% endif %}
     <nav>
