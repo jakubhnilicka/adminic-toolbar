@@ -1,3 +1,14 @@
+Adminic Toolbar 8.x-1.0-alpha4, 2018-6-18
+------------------------
+- Introducing presets. User now can choose from available presets for toolbar. Visibility of presets can be set per roles on adminic toolbar settings page
+- Intoducing special preset which id generated from menu
+- Introducing actions button for clearing caches, run cron and update database
+- Updated privileges
+- Toolbar plugins can be set on primary sections, secondary sections, tabs and links
+- Fixed problem with roles, when administrator see own values on user forms
+- Fixed interface translation
+- Add posibility to turn visibility of toolbar per role
+
 Adminic Toolbar 8.x-1.0-alpha3, 2018-4-18
 ------------------------
 - Fixed White screen of death ToolbarPrimarySectionTabsManager.php
