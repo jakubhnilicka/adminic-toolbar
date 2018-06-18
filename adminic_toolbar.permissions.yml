@@ -10,3 +10,9 @@
 'can configure adminic toolbar':
   title: 'Can configure Adminic Toolbar'
   description: 'User can configure Adminic Toolbar.'
+'can use route info button':
+  title: 'Can use route info'
+  description: 'User can use route info button.'
+'can use refresh button':
+  title: 'Can use clear caches button'
+  description: 'User can use clear caches button.'

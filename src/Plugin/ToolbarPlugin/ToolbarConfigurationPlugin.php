@@ -93,9 +93,15 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
   public function getRenderArray() {
     $content = [];
 
-    $content[] = $this->getWizardrLink();
-    $content[] = $this->getToolbarSettingsLink();
-    $content[] = $this->getDeveloperLinks();
+    if ($this->currentUser->hasPermission('can use route info button')) {
+      $content[] = $this->getWizardrLink();
+    }
+    if ($this->currentUser->hasPermission('can configure adminic toolbar')) {
+      $content[] = $this->getToolbarSettingsLink();
+    }
+    if ($this->currentUser->hasPermission('can use developer links')) {
+      $content[] = $this->getDeveloperLinks();
+    }
     $content[] = $this->getPresetsLinks();
 
     if ($content) {
@@ -116,10 +122,6 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *   Return dropdown render array.
    */
   protected function getDeveloperLinks() {
-    if (!$this->currentUser->hasPermission('administer site configuration')) {
-      return NULL;
-    }
-
     $content = [];
 
     // Cache.
@@ -173,10 +175,6 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *   Return link render array.
    */
   private function getToolbarSettingsLink() {
-    if (!$this->currentUser->hasPermission('can configure adminic toolbar')) {
-      return NULL;
-    }
-
     return [
       '#type' => 'link',
       '#title' => Markup::create('<i class="ico ico--configuration"></i>'),
@@ -196,10 +194,6 @@ class ToolbarConfigurationPlugin extends PluginBase implements ToolbarPluginInte
    *   Return link render array.
    */
   private function getWizardrLink() {
-    if (!$this->currentUser->hasPermission('can configure adminic toolbar')) {
-      return NULL;
-    }
-
     return [
       '#type' => 'link',
       '#title' => Markup::create('<i class="ico ico--info"></i>'),

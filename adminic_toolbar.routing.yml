@@ -44,4 +44,4 @@ adminic_toolbar_configuration.use_preset:
   options:
     _admin_route: TRUE
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'can use adminic toolbar'
