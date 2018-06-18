@@ -59,10 +59,20 @@ class ToolbarSecondarySectionLink {
    * @var string
    */
   private $badge;
+
   /**
+   * Link level.
+   *
    * @var int
    */
   private $level;
+
+  /**
+   * Link type.
+   *
+   * @var string
+   */
+  private $type;
 
   /**
    * Link constructor.
@@ -81,8 +91,10 @@ class ToolbarSecondarySectionLink {
    *   Link badge.
    * @param int $level
    *   Link level.
+   * @param string $type
+   *   Type.
    */
-  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge, int $level) {
+  public function __construct(string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge, int $level, string $type) {
     $this->widget = $widget;
     $this->url = $url;
     $this->title = $title;
@@ -90,6 +102,7 @@ class ToolbarSecondarySectionLink {
     $this->disabled = $disabled;
     $this->badge = $badge;
     $this->level = $level;
+    $this->type = $type;
   }
 
   /**
@@ -186,6 +199,26 @@ class ToolbarSecondarySectionLink {
    */
   public function isDisabled() {
     return $this->disabled;
+  }
+
+  /**
+   * Get link type.
+   *
+   * @return string
+   *   Return section type.
+   */
+  public function getType() {
+    return $this->type;
+  }
+
+  /**
+   * Has link type defined.
+   *
+   * @return bool
+   *   Return TRUE if type is defined or FALSE.
+   */
+  public function hasType() {
+    return !empty($this->type);
   }
 
   /**

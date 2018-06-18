@@ -56,6 +56,13 @@ class ToolbarPrimarySectionsManager {
   private $moduleHandler;
 
   /**
+   * Toolbar plugin manager.
+   *
+   * @var \Drupal\adminic_toolbar\ToolbarPluginManager
+   */
+  private $toolbarPluginManager;
+
+  /**
    * SectionsManager constructor.
    *
    * @param \Drupal\adminic_toolbar\ToolbarConfigDiscovery $toolbarConfigDiscovery
@@ -64,14 +71,18 @@ class ToolbarPrimarySectionsManager {
    *   Toolbar tabs manager.
    * @param \Drupal\Core\Extension\ModuleHandler $moduleHandler
    *   Class that manages modules in a Drupal installation.
+   * @param \Drupal\adminic_toolbar\ToolbarPluginManager $toolbarPluginManager
+   *   Toolbar plugin manager.
    */
   public function __construct(
     ToolbarConfigDiscovery $toolbarConfigDiscovery,
     ToolbarPrimarySectionTabsManager $toolbarTabsManager,
-    ModuleHandler $moduleHandler) {
+    ModuleHandler $moduleHandler,
+    ToolbarPluginManager $toolbarPluginManager) {
     $this->toolbarConfigDiscovery = $toolbarConfigDiscovery;
     $this->toolbarTabManager = $toolbarTabsManager;
     $this->moduleHandler = $moduleHandler;
+    $this->toolbarPluginManager = $toolbarPluginManager;
   }
 
   /**
@@ -169,6 +180,7 @@ class ToolbarPrimarySectionsManager {
    *   Return renderable array or NULL.
    *
    * @throws \Drupal\Component\Discovery\DiscoveryException
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function getPrimarySection(ToolbarPrimarySection $section) {
     $tabs = $this->toolbarTabManager->getTabs();
@@ -184,7 +196,14 @@ class ToolbarPrimarySectionsManager {
     $sectionTabs = [];
     /** @var \Drupal\adminic_toolbar\ToolbarPrimarySectionTab $tab */
     foreach ($sectionValidTabs as $tab) {
-      $sectionTabs[] = $tab->getRenderArray();
+      if ($tab->hasType()) {
+        $type = $tab->getType();
+        $plugin = $this->toolbarPluginManager->createInstance($type);
+        $sectionTabs[] = $plugin->getRenderArray();
+      }
+      else {
+        $sectionTabs[] = $tab->getRenderArray();
+      }
     }
 
     if ($sectionTabs) {

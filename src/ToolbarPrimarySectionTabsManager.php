@@ -24,6 +24,7 @@ class ToolbarPrimarySectionTabsManager {
   const TAB_PRIMARY_SECTION = 'primary_section_id';
   const TAB_ROUTE_NAME = 'route_name';
   const TAB_ROUTE_PARAMETERS = 'route_parameters';
+  const TAB_PLUGIN_ID = 'plugin_id';
   const TAB_TITLE = 'title';
   const TAB_BADGE = 'badge';
   const TAB_PRESET = 'preset';
@@ -133,7 +134,7 @@ class ToolbarPrimarySectionTabsManager {
     if (empty($activeTabs)) {
       $activeRoutesName = $this->toolbarRouteManager->getCurrentRoute();
       array_walk($configTabs, function ($tab) use ($activeRoutesName, &$activeTabs) {
-        if ($tab['route_name'] === $activeRoutesName) {
+        if (isset($tab['route_name']) &&  $tab['route_name'] === $activeRoutesName) {
           $activeTabs[$tab['id']] = $tab;
         }
       });
@@ -143,7 +144,7 @@ class ToolbarPrimarySectionTabsManager {
     if (empty($activeTabs)) {
       $activeRoutes = $this->toolbarRouteManager->getActiveRoutesByPath();
       array_walk($configTabs, function ($tab) use ($activeRoutes, &$activeTabs) {
-        if (array_key_exists($tab['route_name'], $activeRoutes)) {
+        if (isset($tab['route_name']) && array_key_exists($tab['route_name'], $activeRoutes)) {
           $activeTabs[$tab['id']] = $tab;
         }
       });
@@ -155,8 +156,9 @@ class ToolbarPrimarySectionTabsManager {
 
       $id = $tab[self::TAB_ID];
       $primarySectionId = $tab[self::TAB_PRIMARY_SECTION];
-      $routeName = $tab[self::TAB_ROUTE_NAME];
+      $routeName = $tab[self::TAB_ROUTE_NAME] ?? '<none>';
       $routeParameters = $tab[self::TAB_ROUTE_PARAMETERS] ?? [];
+      $type = $tab[self::TAB_PLUGIN_ID] ?? '';
       $isRouteValid = $this->toolbarRouteManager->isRouteValid($routeName, $routeParameters);
       if ($isRouteValid) {
         $title = $tab[self::TAB_TITLE] ?? $this->toolbarRouteManager->getDefaultTitle($routeName, $routeParameters);
@@ -168,7 +170,7 @@ class ToolbarPrimarySectionTabsManager {
         if (array_key_exists($id, $activeTabs)) {
           $active = TRUE;
         }
-        $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge));
+        $this->addTab(new ToolbarPrimarySectionTab($id, $primarySectionId, $url, $title, $active, $disabled, $badge, $type));
       }
     }
   }
@@ -202,9 +204,6 @@ class ToolbarPrimarySectionTabsManager {
       }
       if (!isset($tab[self::TAB_PRIMARY_SECTION])) {
         throw new RuntimeException('Tab widget_id parameter missing ' . $obj);
-      }
-      if (!isset($tab[self::TAB_ROUTE_NAME])) {
-        throw new RuntimeException('Tab route parameter missing ' . $obj);
       }
     }
     catch (Exception $e) {

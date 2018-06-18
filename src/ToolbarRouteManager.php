@@ -128,6 +128,9 @@ class ToolbarRouteManager {
    *   TRUE if route is valid and accessible or FALSE.
    */
   public function isRouteValid(string $routeName, array $routeParams) {
+    if ($routeName == '<none>') {
+      return TRUE;
+    }
     $isValidRoute = array_key_exists($routeName, $this->getRoutes());
     if (!$isValidRoute) {
       return FALSE;

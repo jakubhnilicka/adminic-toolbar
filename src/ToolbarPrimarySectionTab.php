@@ -68,6 +68,13 @@ class ToolbarPrimarySectionTab {
   private $badge;
 
   /**
+   * Type.
+   *
+   * @var string
+   */
+  private $type;
+
+  /**
    * Tab constructor.
    *
    * @param string $id
@@ -84,8 +91,10 @@ class ToolbarPrimarySectionTab {
    *   Tab disabled state.
    * @param string $badge
    *   Tab badge.
+   * @param string $type
+   *   Type.
    */
-  public function __construct(string $id, string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge) {
+  public function __construct(string $id, string $widget, Url $url, string $title, bool $active, bool $disabled, string $badge, string $type) {
     $this->id = $id;
     $this->widget = $widget;
     $this->url = $url;
@@ -93,6 +102,7 @@ class ToolbarPrimarySectionTab {
     $this->active = $active;
     $this->disabled = $disabled;
     $this->badge = $badge;
+    $this->type = $type;
   }
 
   /**
@@ -189,6 +199,27 @@ class ToolbarPrimarySectionTab {
    */
   public function isDisabled() {
     return $this->disabled;
+  }
+
+
+  /**
+   * Get tab type.
+   *
+   * @return string
+   *   Return section type.
+   */
+  public function getType() {
+    return $this->type;
+  }
+
+  /**
+   * Has tab type defined.
+   *
+   * @return bool
+   *   Return TRUE if type is defined or FALSE.
+   */
+  public function hasType() {
+    return !empty($this->type);
   }
 
   /**

@@ -297,7 +297,14 @@ class ToolbarSecondarySectionsManager {
     $sectionLinks = [];
     /** @var \Drupal\adminic_toolbar\ToolbarSecondarySectionLink $link */
     foreach ($sectionValidLinks as $link) {
-      $sectionLinks[] = $link->getRenderArray();
+      if ($link->hasType()) {
+        $type = $link->getType();
+        $plugin = $this->toolbarPluginManager->createInstance($type);
+        $sectionLinks[] = $plugin->getRenderArray();
+      }
+      else {
+        $sectionLinks[] = $link->getRenderArray();
+      }
     }
 
     if ($sectionLinks) {

@@ -29,7 +29,7 @@ services:
 
   adminic_toolbar.primary_sections_manager:
     class: Drupal\adminic_toolbar\ToolbarPrimarySectionsManager
-    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.tabs_manager', '@module_handler']
+    arguments: ['@adminic_toolbar.discovery_manager', '@adminic_toolbar.tabs_manager', '@module_handler', '@adminic_toolbar.widget.manager']
 
   adminic_toolbar.secondary_sections_manager:
     class: Drupal\adminic_toolbar\ToolbarSecondarySectionsManager
